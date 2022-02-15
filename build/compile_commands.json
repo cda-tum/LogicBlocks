@@ -1,0 +1,37 @@
+[
+{
+  "directory": "/mnt/c/Users/Sarah/git/logicblocks/build",
+  "command": "/bin/clang++-12  -DZ3_FOUND -I../src -I../utils -I../src/Logic -I../src/Logic/LogicUtil  -W -Wall -Wextra -fno-limit-debug-info -g -O0   -std=gnu++17 -o src/Logic/LogicTerm/CMakeFiles/LogicTerm_lib.dir/TermImpl.cpp.o -c /mnt/c/Users/Sarah/git/logicblocks/src/Logic/LogicTerm/TermImpl.cpp",
+  "file": "/mnt/c/Users/Sarah/git/logicblocks/src/Logic/LogicTerm/TermImpl.cpp"
+},
+
+{
+  "directory": "/mnt/c/Users/Sarah/git/logicblocks/build",
+  "command": "/bin/clang++-12  -DZ3_FOUND -I../src -I../utils -I../src/Logic -I../src/Logic/LogicUtil  -W -Wall -Wextra -fno-limit-debug-info -g -O0   -std=gnu++17 -o src/Logic/LogicTerm/CMakeFiles/LogicTerm_lib.dir/LogicTerm.cpp.o -c /mnt/c/Users/Sarah/git/logicblocks/src/Logic/LogicTerm/LogicTerm.cpp",
+  "file": "/mnt/c/Users/Sarah/git/logicblocks/src/Logic/LogicTerm/LogicTerm.cpp"
+},
+
+{
+  "directory": "/mnt/c/Users/Sarah/git/logicblocks/build",
+  "command": "/bin/clang++-12  -DZ3_FOUND -I../src -I../src/Logic -I../src/Logic/LogicBlock  -W -Wall -Wextra -fno-limit-debug-info -g -O0   -std=gnu++17 -o src/Logic/LogicBlock/CMakeFiles/Z3Logic.dir/Z3Logic.cpp.o -c /mnt/c/Users/Sarah/git/logicblocks/src/Logic/LogicBlock/Z3Logic.cpp",
+  "file": "/mnt/c/Users/Sarah/git/logicblocks/src/Logic/LogicBlock/Z3Logic.cpp"
+},
+
+{
+  "directory": "/mnt/c/Users/Sarah/git/logicblocks/build",
+  "command": "/bin/clang++-12  -DZ3_FOUND -I../src -I../src/Logic -I../src/Logic/LogicBlock  -W -Wall -Wextra -fno-limit-debug-info -g -O0   -std=gnu++17 -o src/Logic/LogicBlock/CMakeFiles/Z3Logic.dir/Z3Model.cpp.o -c /mnt/c/Users/Sarah/git/logicblocks/src/Logic/LogicBlock/Z3Model.cpp",
+  "file": "/mnt/c/Users/Sarah/git/logicblocks/src/Logic/LogicBlock/Z3Model.cpp"
+},
+
+{
+  "directory": "/mnt/c/Users/Sarah/git/logicblocks/build",
+  "command": "/bin/clang++-12  -DZ3_FOUND -I../src -I../src/Logic -I../src/Logic/LogicBlock  -W -Wall -Wextra -fno-limit-debug-info -g -O0   -std=gnu++17 -o src/Logic/LogicBlock/CMakeFiles/SMTLibLogic.dir/SMTLibLogicBlock.cpp.o -c /mnt/c/Users/Sarah/git/logicblocks/src/Logic/LogicBlock/SMTLibLogicBlock.cpp",
+  "file": "/mnt/c/Users/Sarah/git/logicblocks/src/Logic/LogicBlock/SMTLibLogicBlock.cpp"
+},
+
+{
+  "directory": "/mnt/c/Users/Sarah/git/logicblocks/build",
+  "command": "/bin/clang++-12  -DBOOST_ALL_NO_LIB -DBOOST_ATOMIC_DYN_LINK -DBOOST_CHRONO_DYN_LINK -DBOOST_DATE_TIME_DYN_LINK -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_LOG_DYN_LINK -DBOOST_LOG_SETUP_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_THREAD_DYN_LINK -DZ3_FOUND -I../src -I../src/Logic -I../utils -I../src/Logic/LogicUtil  -W -Wall -Wextra -fno-limit-debug-info -g -O0   -std=gnu++17 -o src/App/CMakeFiles/logicblocks_app.dir/app.cpp.o -c /mnt/c/Users/Sarah/git/logicblocks/src/App/app.cpp",
+  "file": "/mnt/c/Users/Sarah/git/logicblocks/src/App/app.cpp"
+}
+]

@@ -1,0 +1,16 @@
+/mnt/c/Users/Sarah/git/logicblocks/build/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/CMakeFiles/edit_cache.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/src/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/src/CMakeFiles/edit_cache.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/src/Logic/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/src/Logic/CMakeFiles/edit_cache.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/src/Logic/LogicTerm/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/src/Logic/LogicTerm/CMakeFiles/edit_cache.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/src/Logic/LogicTerm/CMakeFiles/LogicTerm_lib.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/src/Logic/LogicBlock/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/src/Logic/LogicBlock/CMakeFiles/Z3Logic.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/src/Logic/LogicBlock/CMakeFiles/edit_cache.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/src/Logic/LogicBlock/CMakeFiles/SMTLibLogic.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/src/App/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/src/App/CMakeFiles/edit_cache.dir
+/mnt/c/Users/Sarah/git/logicblocks/build/src/App/CMakeFiles/logicblocks_app.dir

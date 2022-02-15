@@ -1,0 +1,2 @@
+add_subdirectory(LogicTerm)
+add_subdirectory(LogicBlock)
