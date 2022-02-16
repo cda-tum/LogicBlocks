@@ -1,6 +1,7 @@
 #include "Z3Logic.hpp"
 #include "Logic.hpp"
 #include "LogicTerm/LogicTerm.hpp"
+#include "LogicUtil/util_logic.h"
 #include "utils/util.hpp"
 #include <vector>
 #include <z3++.h>
@@ -117,94 +118,65 @@ expr Z3LogicBlock::convert(const TermInterface &a, CType to_type) {
     v[static_cast<int>(to_type)].first = true;
   } break;
   case OpType::EQ:
-    v[static_cast<int>(to_type)].second =
-        convert(a.getNodes()[0]) == convert(a.getNodes()[1]);
+    v[static_cast<int>(to_type)].second = convertOperator(
+        a.getNodes()[0], a.getNodes()[1], z3::operator==, to_type);
     v[static_cast<int>(to_type)].first = true;
     break;
   case OpType::XOR:
-    v[static_cast<int>(to_type)].second =
-        convert(a.getNodes()[0]) != convert(a.getNodes()[1]);
+    v[static_cast<int>(to_type)].second = convertOperator(
+        a.getNodes()[0], a.getNodes()[1], z3::operator!=, to_type);
     v[static_cast<int>(to_type)].first = true;
     break;
   case OpType::NEG:
-    v[static_cast<int>(to_type)].second = !convert(a.getNodes()[0]);
+    v[static_cast<int>(to_type)].second =
+        convertOperator(a.getNodes()[0], z3::operator!, to_type);
     v[static_cast<int>(to_type)].first = true;
     break;
   case OpType::ITE:
-    v[static_cast<int>(to_type)].second =
-        ite(convert(a.getNodes()[0]), convert(a.getNodes()[1], to_type),
-            convert(a.getNodes()[2], to_type));
+    v[static_cast<int>(to_type)].second = convertOperator(
+        a.getNodes()[0], a.getNodes()[1], a.getNodes()[2], z3::ite, to_type);
     v[static_cast<int>(to_type)].first = true;
     break;
   case OpType::IMPL:
     v[static_cast<int>(to_type)].second =
-        implies(convert(a.getNodes()[0]), convert(a.getNodes()[1])).simplify();
+        convertOperator(a.getNodes()[0], a.getNodes()[1], z3::implies, to_type);
     v[static_cast<int>(to_type)].first = true;
     break;
   case OpType::ADD: {
-    expr s = this->ctx.int_val(0);
-    CType number_type = CType::INT;
-    for (const TermInterface &lt : a.getNodes()) {
-      if (isNumber(lt.getCType()))
-        number_type = lt.getCType();
-      s = s + convert(lt, number_type);
-    }
-    v[static_cast<int>(to_type)].second = s.simplify();
+    v[static_cast<int>(to_type)].second =
+        convertOperator(a.getNodes(), z3::operator+,
+                        logicutil::extractNumberType(a.getNodes()));
     v[static_cast<int>(to_type)].first = true;
   } break;
   case OpType::SUB: {
-    expr s = this->ctx.int_val(0);
-    CType number_type = CType::INT;
-    for (const TermInterface &lt : a.getNodes()) {
-      if (isNumber(lt.getCType()))
-        number_type = lt.getCType();
-      s = s - convert(lt, number_type);
-    }
-    v[static_cast<int>(to_type)].second = s.simplify();
+    v[static_cast<int>(to_type)].second =
+        convertOperator(a.getNodes(), z3::operator-,
+                        logicutil::extractNumberType(a.getNodes()));
     v[static_cast<int>(to_type)].first = true;
   } break;
   case OpType::MUL: {
-    expr s = this->ctx.int_val(0);
-    CType number_type = CType::INT;
-    for (const TermInterface &lt : a.getNodes()) {
-      if (isNumber(lt.getCType()))
-        number_type = lt.getCType();
-      s = s * convert(lt, number_type);
-    }
-    v[static_cast<int>(to_type)].second = s.simplify();
+    v[static_cast<int>(to_type)].second =
+        convertOperator(a.getNodes(), z3::operator*,
+                        logicutil::extractNumberType(a.getNodes()));
     v[static_cast<int>(to_type)].first = true;
   } break;
   case OpType::DIV: {
-    TermInterface a_lt = a.getNodes()[0];
-    TermInterface b_lt = a.getNodes()[1];
-    if (isNumber(a_lt.getCType()) && isNumber(b_lt.getCType())) {
-      v[static_cast<int>(to_type)].second = convert(a_lt) / convert(b_lt);
-      v[static_cast<int>(to_type)].first = true;
-    } else {
-      v[static_cast<int>(to_type)].second =
-          convert(a_lt, CType::INT) / convert(b_lt, CType::INT);
-      v[static_cast<int>(to_type)].first = true;
-    }
+    v[static_cast<int>(to_type)].second =
+        convertOperator(a.getNodes()[0], a.getNodes()[1], z3::operator/,
+                        logicutil::extractNumberType(a.getNodes()));
+    v[static_cast<int>(to_type)].first = true;
   } break;
   case OpType::GT: {
-    TermInterface a_lt = a.getNodes()[0];
-    TermInterface b_lt = a.getNodes()[1];
-    if (isNumber(a_lt.getCType()) && isNumber(b_lt.getCType())) {
-      v[static_cast<int>(to_type)].second = convert(a_lt) > convert(b_lt);
-      v[static_cast<int>(to_type)].first = true;
-    } else {
-      v[static_cast<int>(to_type)].second =
-          convert(a_lt, CType::INT) > convert(b_lt, CType::INT);
-      v[static_cast<int>(to_type)].first = true;
-    }
+    v[static_cast<int>(to_type)].second =
+        convertOperator(a.getNodes()[0], a.getNodes()[1], z3::operator>,
+                        logicutil::extractNumberType(a.getNodes()));
+    v[static_cast<int>(to_type)].first = true;
   } break;
   case OpType::LT: {
-    TermInterface a_lt = a.getNodes()[0];
-    TermInterface b_lt = a.getNodes()[1];
     v[static_cast<int>(to_type)].second =
-        convert(a_lt, CType::INT) < convert(b_lt, CType::INT);
+        convertOperator(a.getNodes()[0], a.getNodes()[1], z3::operator<,
+                        logicutil::extractNumberType(a.getNodes()));
     v[static_cast<int>(to_type)].first = true;
-
   } break;
   default:
     util::fatal("Unsupported operation");
@@ -345,4 +317,34 @@ z3::expr Z3LogicBlock::convertVariableFromBitvectorTo(const TermInterface &a,
     return ctx.bv_const(ss.str().c_str(), a.getBitVectorSize());
   }
 }
+
+z3::expr Z3LogicBlock::convertOperator(const TermInterface &a,
+                                       z3::expr (*op)(const z3::expr &),
+                                       CType to_type) {
+  return op(convert(a, to_type));
+}
+
+z3::expr Z3LogicBlock::convertOperator(
+    const TermInterface &a, const TermInterface &b,
+    z3::expr (*op)(const z3::expr &, const z3::expr &), CType to_type) {
+  return op(convert(a, to_type), convert(b, to_type));
+}
+z3::expr Z3LogicBlock::convertOperator(
+    const TermInterface &a, const TermInterface &b, const TermInterface &c,
+    z3::expr (*op)(const z3::expr &, const z3::expr &, const z3::expr &),
+    CType to_type) {
+  return op(convert(a, to_type), convert(b, to_type), convert(c, to_type));
+}
+
+z3::expr Z3LogicBlock::convertOperator(std::vector<TermInterface> terms,
+                                       z3::expr (*op)(const z3::expr &,
+                                                      const z3::expr &),
+                                       CType to_type) {
+  z3::expr res = convert(*terms.begin(), to_type);
+  for (auto it = (terms.begin() + 1); it != terms.end(); ++it) {
+    res = op(res, convert(*it, to_type));
+  }
+  return res;
+}
+
 } // namespace z3logic

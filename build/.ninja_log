@@ -71,3 +71,13 @@
 4331	5281	1645011213139629700	src/Logic/LogicTerm/libLogicTerm_lib.a	6ae82d7f487b08b4
 4724	5914	1645011213772629200	src/Logic/LogicBlock/libZ3Logic.a	b4192cb5cf8f148a
 5283	6065	1645011213925629300	src/App/logicblocks_app	d8ae33a47eeb3603
+88	990	1645022387858065300	src/Logic/LogicBlock/CMakeFiles/SMTLibLogic.dir/SMTLibLogicBlock.cpp.o	a1959f896dc2cbd
+993	1136	1645022388014074800	src/Logic/LogicBlock/libSMTLibLogic.a	9bc461e010b5a382
+77	4154	1645022391012051800	src/Logic/LogicTerm/CMakeFiles/LogicTerm_lib.dir/TermImpl.cpp.o	3f584990a1600213
+79	4394	1645022391246645000	src/Logic/LogicTerm/CMakeFiles/LogicTerm_lib.dir/LogicTerm.cpp.o	714060e69d544688
+85	4561	1645022391417270500	src/Logic/LogicBlock/CMakeFiles/Z3Logic.dir/Z3Model.cpp.o	c822a170dff7263c
+91	4831	1645022391680540900	src/App/CMakeFiles/logicblocks_app.dir/app.cpp.o	8ffba8eac04cabde
+82	5078	1645022391926440500	src/Logic/LogicBlock/CMakeFiles/Z3Logic.dir/Z3Logic.cpp.o	da766ee776832f14
+4399	5322	1645022392198477200	src/Logic/LogicTerm/libLogicTerm_lib.a	6ae82d7f487b08b4
+5323	6121	1645022393000500600	src/App/logicblocks_app	d8ae33a47eeb3603
+5083	6270	1645022393143498200	src/Logic/LogicBlock/libZ3Logic.a	b4192cb5cf8f148a

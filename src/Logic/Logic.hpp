@@ -110,6 +110,17 @@ inline bool isAssociative(OpType op) {
     return false;
   }
 }
+inline bool hasNeutralElement(OpType op) {
+  switch (op) {
+  case OpType::ADD:
+  case OpType::MUL:
+  case OpType::AND:
+  case OpType::OR:
+    return true;
+  default:
+    return false;
+  }
+}
 
 inline CType getCType(OpType op) {
   switch (op) {

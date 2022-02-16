@@ -195,6 +195,8 @@ public:
 
   unsigned long long getMaxChildrenDepth() const;
 
+  static LogicTerm getNeutralElement(OpType opType);
+
   static void reset() { termType = TermType::BASE; };
 };
 

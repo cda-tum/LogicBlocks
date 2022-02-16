@@ -1,6 +1,7 @@
 #ifndef util_logicterm_h
 #define util_logicterm_h
 #include "../LogicTerm/LogicTermImpl.hpp"
+#include "Logic.hpp"
 #include "util_logic.h"
 
 namespace logicutil {
@@ -150,5 +151,6 @@ inline std::shared_ptr<TermImpl> negateTerm(const TermInterface &term,
                                            logic);
   };
 }
+
 } // namespace logicutil
 #endif // LOGICBASE_TERM_IMPL_H

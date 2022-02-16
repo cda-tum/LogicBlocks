@@ -75,6 +75,19 @@ inline std::vector<TermInterface> getFlatTerms(const TermInterface &t,
   return terms;
 };
 
+inline CType
+extractNumberType(const std::vector<TermInterface> &
+                      terms) { // TODO check if all terms are numbers, handle BV
+  CType res = CType::INT;
+  for (const TermInterface &it : terms) {
+    if (it.getCType() == CType::REAL) {
+      res = CType::REAL;
+      break;
+    }
+  }
+  return res;
+};
+
 }; // namespace logicutil
 
 #endif // UTIL_LOGIC_H

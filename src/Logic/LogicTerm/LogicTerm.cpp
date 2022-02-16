@@ -105,4 +105,19 @@ unsigned long long LogicTerm::getMaxChildrenDepth() const {
 
 Logic *LogicTerm::getLogic() const { return pImpl->getLogic(); }
 
+LogicTerm LogicTerm::getNeutralElement(OpType opType) {
+  switch (opType) {
+  case OpType::AND:
+    return LogicTerm(true);
+  case OpType::OR:
+    return LogicTerm(false);
+  case OpType::ADD:
+    return LogicTerm(0);
+  case OpType::MUL:
+    return LogicTerm(1);
+  default:
+    return LogicTerm::noneTerm();
+  }
+}
+
 } // namespace logicbase

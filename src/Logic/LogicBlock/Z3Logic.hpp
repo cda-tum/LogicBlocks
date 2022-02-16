@@ -10,6 +10,7 @@
 #include "utils/util.hpp"
 #include "z3++.h"
 #include <functional>
+#include <initializer_list>
 #include <map>
 #include <memory>
 #include <utility>
@@ -55,6 +56,20 @@ public:
   z3::expr convertVariableFromRealTo(const TermInterface &a, CType to_type);
   z3::expr convertVariableFromBitvectorTo(const TermInterface &a,
                                           CType to_type);
+
+  z3::expr convertOperator(const TermInterface &a, const TermInterface &b,
+                           z3::expr (*op)(const z3::expr &, const z3::expr &),
+                           CType to_type);
+  z3::expr convertOperator(const TermInterface &a,
+                           z3::expr (*op)(const z3::expr &), CType to_type);
+  z3::expr convertOperator(const TermInterface &a, const TermInterface &b,
+                           const TermInterface &c,
+                           z3::expr (*op)(const z3::expr &, const z3::expr &,
+                                          const z3::expr &),
+                           CType to_type);
+  z3::expr convertOperator(std::vector<TermInterface> terms,
+                           z3::expr (*op)(const z3::expr &, const z3::expr &),
+                           CType to_type);
 };
 
 } // namespace z3logic
