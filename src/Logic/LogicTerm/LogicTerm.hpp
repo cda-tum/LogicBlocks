@@ -181,7 +181,8 @@ public:
   bool getBoolValue() const;
   int getIntValue() const;
   double getFloatValue() const;
-  virtual unsigned long long getBitVectorValue() const;
+  unsigned long long getBitVectorValue() const;
+  short getBitVectorSize() const;
   const std::string &getName() const;
   std::shared_ptr<TermImpl> getImplementation() const;
   Logic *getLogic() const;

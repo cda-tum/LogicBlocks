@@ -157,6 +157,7 @@ public:
   virtual int getIntValue() const;
   virtual double getFloatValue() const;
   virtual unsigned long long getBitVectorValue() const;
+  virtual short getBitVectorSize() const;
   virtual const std::string &getName() const;
   virtual std::shared_ptr<TermImpl> getImplementation() const;
   virtual Logic *getLogic() const;

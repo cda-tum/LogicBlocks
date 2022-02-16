@@ -81,6 +81,8 @@ unsigned long long LogicTerm::getBitVectorValue() const {
   return pImpl->getBitVectorValue();
 }
 
+short LogicTerm::getBitVectorSize() const { return pImpl->getBitVectorSize(); }
+
 const std::string &LogicTerm::getName() const { return pImpl->getName(); }
 
 std::shared_ptr<TermImpl> LogicTerm::getImplementation() const { return pImpl; }

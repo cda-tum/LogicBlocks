@@ -5,6 +5,8 @@
 #include "Model.hpp"
 #include "z3++.h"
 
+namespace z3logic {
+
 using namespace logicbase;
 
 class Z3Model : public Model {
@@ -20,5 +22,5 @@ public:
   TermInterface getValue(const TermInterface &a, LogicBlock *lb);
   bool getBoolValue(const TermInterface &a, LogicBlock *lb);
 };
-
+} // namespace z3logic
 #endif // TermInterface_Z3MODEL_H

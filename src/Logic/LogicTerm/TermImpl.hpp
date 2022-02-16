@@ -123,6 +123,8 @@ public:
 
   unsigned long long getBitVectorValue() const;
 
+  short getBitVectorSize() const;
+
   std::string getValue() const;
 
   unsigned long long getDepth() const { return depth; }

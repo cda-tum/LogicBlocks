@@ -158,6 +158,8 @@ unsigned long long TermImpl::getBitVectorValue() const {
   }
 }
 
+short TermImpl::getBitVectorSize() const { return bv_size; }
+
 std::string TermImpl::getValue() const {
   if (c_type == CType::BOOL)
     return std::to_string(getBoolValue());

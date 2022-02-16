@@ -1,6 +1,11 @@
 #include "Z3Logic.hpp"
+#include "Logic.hpp"
 #include "LogicTerm/LogicTerm.hpp"
 #include "utils/util.hpp"
+#include <vector>
+#include <z3++.h>
+
+namespace z3logic {
 
 void Z3LogicBlock::setOptimizer(optimize &Optimizer) {
   this->optimizer = Optimizer;
@@ -41,8 +46,8 @@ void Z3LogicBlock::produceInstance() {
 }
 optimize &Z3LogicBlock::getOptimizer() { return optimizer; }
 
-expr Z3LogicBlock::getExprTerm(unsigned long long id) {
-  return variables.at(id);
+expr Z3LogicBlock::getExprTerm(unsigned long long id, CType type) {
+  return variables.at(id)[static_cast<int>(type)].second;
 }
 
 expr Z3LogicBlock::convert(const TermInterface &a, CType to_type) {
@@ -58,42 +63,7 @@ expr Z3LogicBlock::convert(const TermInterface &a, CType to_type) {
   }
   switch (a.getOpType()) {
   case OpType::Variable: {
-    expr e = ctx.bool_val(true);
-    if (variables.find(a.getID()) != variables.end()) {
-      e = variables.at(a.getID());
-    } else {
-      std::stringstream out;
-      out << a.getName() << a.getID();
-      if (a.getCType() == CType::BOOL)
-        e = this->ctx.bool_const(out.str().c_str());
-      else if (a.getCType() == CType::INT)
-        e = this->ctx.int_const(out.str().c_str());
-      else
-        e = this->ctx.real_const(out.str().c_str());
-      variables.insert(std::make_pair(a.getID(), e));
-    }
-    if (to_type == CType::BOOL) {
-      if (e.is_bool())
-        v[static_cast<int>(to_type)].second = e;
-      else
-        v[static_cast<int>(to_type)].second = e != 0;
-    }
-    if (to_type == CType::INT) {
-      if (e.is_bool())
-        v[static_cast<int>(to_type)].second =
-            ite(e, this->ctx.int_val(1), this->ctx.int_val(0));
-      else
-        v[static_cast<int>(to_type)].second = e;
-      v[static_cast<int>(to_type)].first = true;
-    }
-    if (to_type == CType::REAL) {
-      if (e.is_bool())
-        v[static_cast<int>(to_type)].second =
-            ite(e, this->ctx.real_val(1), this->ctx.real_val(0));
-      else
-        v[static_cast<int>(to_type)].second = e;
-      v[static_cast<int>(to_type)].first = true;
-    }
+    return convertVariableTo(a, to_type);
   } break;
   case OpType::Constant: {
     if (a.getCType() == CType::BOOL) {
@@ -259,3 +229,120 @@ void Z3LogicBlock::internal_reset() {
   variables.clear();
   cache.clear();
 }
+
+z3::expr Z3LogicBlock::convertVariableTo(const TermInterface &a,
+                                         CType to_type) {
+  std::vector<std::pair<bool, expr>> v;
+  if (variables.find(a.getID()) != variables.end()) {
+    v = variables.at(a.getID());
+    if (v[static_cast<int>(to_type)].first)
+      return v[static_cast<int>(to_type)].second;
+  } else {
+    for (int i = 0; i < 4; i++) {
+      v.push_back(std::make_pair(false, ctx.bool_val(false)));
+    }
+  }
+  v[static_cast<int>(to_type)].first = true;
+  switch (a.getCType()) {
+  case CType::BOOL:
+    v[static_cast<int>(to_type)].second = convertVariableFromBoolTo(a, to_type);
+    break;
+  case CType::INT:
+    v[static_cast<int>(to_type)].second = convertVariableFromIntTo(a, to_type);
+    break;
+  case CType::REAL:
+    v[static_cast<int>(to_type)].second = convertVariableFromRealTo(a, to_type);
+    break;
+  case CType::BITVECTOR:
+    v[static_cast<int>(to_type)].second =
+        convertVariableFromBitvectorTo(a, to_type);
+    break;
+  default:
+    util::fatal("Unsupported type");
+    break;
+  }
+  return v[static_cast<int>(to_type)].second;
+}
+z3::expr Z3LogicBlock::convertVariableFromBoolTo(const TermInterface &a,
+                                                 CType to_type) {
+  std::stringstream ss;
+  ss << a.getName() << "_" << a.getID();
+  switch (to_type) {
+  case CType::BOOL:
+    return ctx.bool_const(ss.str().c_str());
+    break;
+  case CType::INT:
+    return z3::ite(ctx.bool_const(ss.str().c_str()), ctx.int_val(1),
+                   ctx.int_val(0));
+    break;
+  case CType::REAL:
+    return z3::ite(ctx.bool_const(ss.str().c_str()), ctx.real_val(1),
+                   ctx.real_val(0));
+    break;
+  case CType::BITVECTOR:
+    return ite(ctx.bool_const(ss.str().c_str()), ctx.bv_val(1, 1),
+               ctx.bv_val(0, 1));
+    break;
+  }
+  util::fatal("Unsupported type");
+}
+z3::expr Z3LogicBlock::convertVariableFromIntTo(const TermInterface &a,
+                                                CType to_type) {
+  std::stringstream ss;
+  ss << a.getName() << "_" << a.getID();
+  switch (to_type) {
+  case CType::BOOL:
+    return ctx.int_const(ss.str().c_str()) != 0;
+    break;
+  case CType::INT:
+    return ctx.int_const(ss.str().c_str());
+    break;
+  case CType::REAL:
+    return ctx.int_const(ss.str().c_str());
+    break;
+  case CType::BITVECTOR:
+    return z3::int2bv(32, ctx.int_const(ss.str().c_str()));
+    break;
+  }
+  util::fatal("Unsupported type");
+}
+z3::expr Z3LogicBlock::convertVariableFromRealTo(const TermInterface &a,
+                                                 CType to_type) {
+  std::stringstream ss;
+  ss << a.getName() << "_" << a.getID();
+  switch (to_type) {
+  case CType::BOOL:
+    return ctx.real_const(ss.str().c_str()) != 0;
+    break;
+  case CType::INT:
+    return ctx.real_const(ss.str().c_str());
+    break;
+  case CType::REAL:
+    return ctx.real_const(ss.str().c_str());
+    break;
+  case CType::BITVECTOR:
+    return z3::int2bv(
+        32, z3::round_fpa_to_closest_integer(ctx.real_const(ss.str().c_str())));
+    break;
+  }
+  util::fatal("Unsupported type");
+}
+z3::expr Z3LogicBlock::convertVariableFromBitvectorTo(const TermInterface &a,
+                                                      CType to_type) {
+  std::stringstream ss;
+  ss << a.getName() << "_" << a.getID();
+  switch (to_type) {
+  case CType::BOOL:
+    return ctx.bv_const(ss.str().c_str(), 1) != 0;
+    break;
+  case CType::INT:
+    return z3::bv2int(ctx.bv_const(ss.str().c_str(), 32), false);
+    break;
+  case CType::REAL:
+    return z3::bv2int(ctx.bv_const(ss.str().c_str(), 32), false);
+    break;
+  case CType::BITVECTOR:
+    return ctx.bv_const(ss.str().c_str(), a.getBitVectorSize());
+  }
+}
+} // namespace z3logic
