@@ -17,8 +17,8 @@ protected:
 public:
   SMTLogicBlock(bool convertWhenAssert = false, std::ostream &out = std::cout)
       : logicbase::LogicBlock(convertWhenAssert), out(out) {}
-  TermInterface makeVariable(const std::string &name,
-                             CType type = CType::BOOL) override {
+  LogicTerm makeVariable(const std::string &name,
+                         CType type = CType::BOOL) override {
     return LogicTerm(name, type);
   }
 

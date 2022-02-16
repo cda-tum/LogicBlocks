@@ -2,16 +2,7 @@
 #define TermImpl_HPP
 #include "../Logic.hpp"
 namespace logicbase {
-class TermImpl : public TermInterface {
-private:
-  static unsigned long long getMax(const std::vector<TermInterface> &terms) {
-    unsigned long long max = 0;
-    for (auto &term : terms) {
-      max = std::max(max, term.getDepth());
-    }
-    return max + 1;
-  }
-
+class TermImpl {
 protected:
   Logic *lb = nullptr;
   long long id;
@@ -24,10 +15,10 @@ protected:
   double f_value;
   unsigned long long bv_value;
   short bv_size;
-  std::vector<TermInterface> nodes;
-
+  std::vector<LogicTerm> nodes;
   CType c_type;
 
+public:
   explicit TermImpl(bool v)
       : lb(nullptr), id(0), depth(0), name(""), opType(OpType::Constant),
         value(v), i_value(0), f_value(0), c_type(CType::BOOL) {}
@@ -84,15 +75,20 @@ protected:
       : lb(lb), id(id), depth(0), name(name), opType(OpType::Variable),
         value(false), i_value(0), f_value(0), c_type(cType) {}
 
-  explicit TermImpl(OpType ot, const std::initializer_list<TermInterface> &n,
-                    CType cType = CType::BOOL, Logic *lb = nullptr)
-      : lb(lb), id(getNextId(lb)), depth(getMax(n)), name(getStrRep(ot)),
-        opType(ot), nodes(n), c_type(cType) {}
+  explicit TermImpl(OpType ot, const std::initializer_list<LogicTerm> &n,
+                    CType cType = CType::BOOL, Logic *lb = nullptr);
 
-  explicit TermImpl(OpType ot, const std::vector<TermInterface> &n,
-                    CType cType = CType::BOOL, Logic *lb = nullptr)
-      : lb(lb), id(getNextId(lb)), depth(getMax(n)), name(getStrRep(ot)),
-        opType(ot), nodes(n), c_type(cType) {}
+  explicit TermImpl(OpType ot, const std::vector<LogicTerm> &n,
+                    CType cType = CType::BOOL, Logic *lb = nullptr);
+
+  explicit TermImpl(OpType ot, const LogicTerm &a, CType cType = CType::BOOL,
+                    Logic *lb = nullptr);
+  explicit TermImpl(OpType ot, const LogicTerm &a, const LogicTerm &b,
+                    CType cType = CType::BOOL, Logic *lb = nullptr);
+  explicit TermImpl(OpType ot, const LogicTerm &a, const LogicTerm &b,
+                    const LogicTerm &c, CType cType = CType::BOOL,
+                    Logic *lb = nullptr);
+  explicit TermImpl(const TermInterface &other);
 
 public:
   static long long getNextId(Logic *lb = nullptr) {
@@ -113,7 +109,7 @@ public:
 
   CType getCType() const { return c_type; }
 
-  const std::vector<TermInterface> &getNodes() const { return nodes; }
+  const std::vector<LogicTerm> &getNodes() const { return nodes; }
 
   bool getBoolValue() const;
 
@@ -129,7 +125,7 @@ public:
 
   unsigned long long getDepth() const { return depth; }
 
-  bool deepEquals(const TermInterface &other) const;
+  bool deepEquals(const TermImpl &other) const;
 
   Logic *getLogic() const { return lb; }
 

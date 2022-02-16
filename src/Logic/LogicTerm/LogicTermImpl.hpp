@@ -1,6 +1,7 @@
 #ifndef LogicTermImpl_HPP
 #define LogicTermImpl_HPP
 #include "../Logic.hpp"
+#include "LogicTerm.hpp"
 #include "TermImpl.hpp"
 #include <cmath>
 #include <map>
@@ -28,17 +29,31 @@ public:
       : TermImpl(opType, name, cType, lb) {}
   explicit LogicTermImpl(CType cType = CType::BOOL, Logic *lb = nullptr)
       : TermImpl(cType, lb) {}
-  explicit LogicTermImpl(OpType ot, const TermInterface &a,
-                         const TermInterface &b, CType cType = CType::BOOL,
-                         Logic *lb = nullptr)
-      : TermImpl(ot, {a, b}, cType, lb) {}
-  explicit LogicTermImpl(OpType ot, const TermInterface &a,
-                         const TermInterface &b, const TermInterface &c,
-                         CType cType = CType::BOOL, Logic *lb = nullptr)
-      : TermImpl(ot, {a, b, c}, cType, lb) {}
-  explicit LogicTermImpl(OpType ot, const TermInterface &a,
-                         CType cType = CType::BOOL, Logic *lb = nullptr)
-      : TermImpl(ot, {a}, cType, lb) {}
+  explicit LogicTermImpl(OpType ot, const LogicTerm &a, const LogicTerm &b,
+                         CType cType = CType::BOOL, Logic *lb = nullptr) {
+    opType = ot;
+    c_type = cType;
+    this->lb = lb;
+    nodes.push_back(a);
+    nodes.push_back(b);
+  }
+  explicit LogicTermImpl(OpType ot, const LogicTerm &a, const LogicTerm &b,
+                         const LogicTerm &c, CType cType = CType::BOOL,
+                         Logic *lb = nullptr) {
+    opType = ot;
+    c_type = cType;
+    this->lb = lb;
+    nodes.push_back(a);
+    nodes.push_back(b);
+    nodes.push_back(c);
+  }
+  explicit LogicTermImpl(OpType ot, const LogicTerm &a,
+                         CType cType = CType::BOOL, Logic *lb = nullptr) {
+    opType = ot;
+    c_type = cType;
+    this->lb = lb;
+    nodes.push_back(a);
+  }
   explicit LogicTermImpl(OpType ot,
                          const std::initializer_list<TermInterface> &n,
                          CType cType = CType::BOOL, Logic *lb = nullptr)
@@ -46,6 +61,23 @@ public:
   explicit LogicTermImpl(OpType ot, const std::vector<TermInterface> &n,
                          CType cType = CType::BOOL, Logic *lb = nullptr)
       : TermImpl(ot, n, cType, lb) {}
+
+  explicit LogicTermImpl(const TermInterface &other) {
+    this->id = other.getID();
+    this->name = other.getName();
+    this->nodes.clear();
+    for (auto &it : other.getNodes())
+      this->nodes.push_back(static_cast<LogicTerm>(it));
+    opType = other.getOpType();
+    c_type = other.getCType();
+    value = other.getBoolValue();
+    i_value = other.getIntValue();
+    f_value = other.getFloatValue();
+    bv_value = other.getBitVectorValue();
+    bv_size = other.getBitVectorSize();
+    lb = other.getLogic();
+    depth = other.getDepth();
+  }
 };
 }; // namespace logicbase
 

@@ -27,11 +27,11 @@ bool Z3LogicBlock::makeMaximize() {
   }
   return false;
 }
-bool Z3LogicBlock::maximize(const TermInterface &term) {
+bool Z3LogicBlock::maximize(const LogicTerm &term) {
   optimizer.maximize(convert(term));
   return true;
 }
-bool Z3LogicBlock::minimize(const TermInterface &term) {
+bool Z3LogicBlock::minimize(const LogicTerm &term) {
   optimizer.minimize(convert(term));
   return true;
 }
@@ -51,7 +51,7 @@ expr Z3LogicBlock::getExprTerm(unsigned long long id, CType type) {
   return variables.at(id)[static_cast<int>(type)].second;
 }
 
-expr Z3LogicBlock::convert(const TermInterface &a, CType to_type) {
+expr Z3LogicBlock::convert(const LogicTerm &a, CType to_type) {
   std::vector<std::pair<bool, expr>> v;
   if (cache.find(a) != cache.end()) {
     v = cache.at(a);
@@ -106,7 +106,7 @@ expr Z3LogicBlock::convert(const TermInterface &a, CType to_type) {
   case OpType::OR: {
     expr s = this->ctx.bool_val(false);
     bool alternate = false;
-    for (const TermInterface &lt : a.getNodes()) {
+    for (const LogicTerm &lt : a.getNodes()) {
       if (alternate)
         s = s || convert(lt);
       else
@@ -202,8 +202,7 @@ void Z3LogicBlock::internal_reset() {
   cache.clear();
 }
 
-z3::expr Z3LogicBlock::convertVariableTo(const TermInterface &a,
-                                         CType to_type) {
+z3::expr Z3LogicBlock::convertVariableTo(const LogicTerm &a, CType to_type) {
   std::vector<std::pair<bool, expr>> v;
   if (variables.find(a.getID()) != variables.end()) {
     v = variables.at(a.getID());
@@ -235,7 +234,7 @@ z3::expr Z3LogicBlock::convertVariableTo(const TermInterface &a,
   }
   return v[static_cast<int>(to_type)].second;
 }
-z3::expr Z3LogicBlock::convertVariableFromBoolTo(const TermInterface &a,
+z3::expr Z3LogicBlock::convertVariableFromBoolTo(const LogicTerm &a,
                                                  CType to_type) {
   std::stringstream ss;
   ss << a.getName() << "_" << a.getID();
@@ -258,7 +257,7 @@ z3::expr Z3LogicBlock::convertVariableFromBoolTo(const TermInterface &a,
   }
   util::fatal("Unsupported type");
 }
-z3::expr Z3LogicBlock::convertVariableFromIntTo(const TermInterface &a,
+z3::expr Z3LogicBlock::convertVariableFromIntTo(const LogicTerm &a,
                                                 CType to_type) {
   std::stringstream ss;
   ss << a.getName() << "_" << a.getID();
@@ -278,7 +277,7 @@ z3::expr Z3LogicBlock::convertVariableFromIntTo(const TermInterface &a,
   }
   util::fatal("Unsupported type");
 }
-z3::expr Z3LogicBlock::convertVariableFromRealTo(const TermInterface &a,
+z3::expr Z3LogicBlock::convertVariableFromRealTo(const LogicTerm &a,
                                                  CType to_type) {
   std::stringstream ss;
   ss << a.getName() << "_" << a.getID();
@@ -299,7 +298,7 @@ z3::expr Z3LogicBlock::convertVariableFromRealTo(const TermInterface &a,
   }
   util::fatal("Unsupported type");
 }
-z3::expr Z3LogicBlock::convertVariableFromBitvectorTo(const TermInterface &a,
+z3::expr Z3LogicBlock::convertVariableFromBitvectorTo(const LogicTerm &a,
                                                       CType to_type) {
   std::stringstream ss;
   ss << a.getName() << "_" << a.getID();
@@ -318,31 +317,32 @@ z3::expr Z3LogicBlock::convertVariableFromBitvectorTo(const TermInterface &a,
   }
 }
 
-z3::expr Z3LogicBlock::convertOperator(const TermInterface &a,
+z3::expr Z3LogicBlock::convertOperator(const LogicTerm &a,
                                        z3::expr (*op)(const z3::expr &),
                                        CType to_type) {
   return op(convert(a, to_type));
 }
 
-z3::expr Z3LogicBlock::convertOperator(
-    const TermInterface &a, const TermInterface &b,
-    z3::expr (*op)(const z3::expr &, const z3::expr &), CType to_type) {
+z3::expr Z3LogicBlock::convertOperator(const LogicTerm &a, const LogicTerm &b,
+                                       z3::expr (*op)(const z3::expr &,
+                                                      const z3::expr &),
+                                       CType to_type) {
   return op(convert(a, to_type), convert(b, to_type));
 }
 z3::expr Z3LogicBlock::convertOperator(
-    const TermInterface &a, const TermInterface &b, const TermInterface &c,
+    const LogicTerm &a, const LogicTerm &b, const LogicTerm &c,
     z3::expr (*op)(const z3::expr &, const z3::expr &, const z3::expr &),
     CType to_type) {
   return op(convert(a, to_type), convert(b, to_type), convert(c, to_type));
 }
 
-z3::expr Z3LogicBlock::convertOperator(std::vector<TermInterface> terms,
+z3::expr Z3LogicBlock::convertOperator(std::vector<LogicTerm> terms,
                                        z3::expr (*op)(const z3::expr &,
                                                       const z3::expr &),
                                        CType to_type) {
-  z3::expr res = convert(*terms.begin(), to_type);
+  z3::expr res = convert(static_cast<LogicTerm>(*terms.begin()), to_type);
   for (auto it = (terms.begin() + 1); it != terms.end(); ++it) {
-    res = op(res, convert(*it, to_type));
+    res = op(res, convert(static_cast<LogicTerm>(*it), to_type));
   }
   return res;
 }

@@ -2,6 +2,7 @@
 #define LOGICBLOCK_H
 
 #include "Logic.hpp"
+#include "LogicTerm/LogicTerm.hpp"
 #include "Model.hpp"
 #include <set>
 #include <sys/types.h>
@@ -10,7 +11,7 @@
 namespace logicbase {
 class LogicBlock : public Logic {
 protected:
-  std::set<TermInterface, TermDepthComparator> clauses;
+  std::set<LogicTerm, TermDepthComparator> clauses;
   Model *model{};
   bool convertWhenAssert;
   virtual void internal_reset() = 0;
@@ -34,7 +35,7 @@ public:
     }
   }
 
-  TermInterface assertFormula(const TermInterface &a) {
+  void assertFormula(const LogicTerm &a) {
     if (a.getOpType() == OpType::AND) {
       for (const auto &clause : a.getNodes()) {
         clauses.insert(clause);
@@ -42,11 +43,10 @@ public:
     } else {
       clauses.insert(a);
     }
-    return a;
   }
 
-  virtual TermInterface makeVariable(const std::string &name,
-                                     CType type = CType::BOOL) = 0;
+  virtual LogicTerm makeVariable(const std::string &name,
+                                 CType type = CType::BOOL) = 0;
 
   virtual void produceInstance() = 0;
   virtual Result solve() = 0;
@@ -61,20 +61,19 @@ public:
 
 class LogicBlockOptimizer : public LogicBlock {
 protected:
-  std::vector<std::pair<TermInterface, double>> weightedTerms;
+  std::vector<std::pair<LogicTerm, double>> weightedTerms;
   virtual void internal_reset() = 0;
 
 public:
   LogicBlockOptimizer(bool convertWhenAssert) : LogicBlock(convertWhenAssert) {}
   virtual ~LogicBlockOptimizer() {}
-  TermInterface weightedTerm(const TermInterface &a, double weight) {
+  void weightedTerm(const LogicTerm &a, double weight) {
     weightedTerms.push_back(std::make_pair(a, weight));
-    return a;
   };
   virtual bool makeMinimize() = 0;
   virtual bool makeMaximize() = 0;
-  virtual bool maximize(const TermInterface &term) = 0;
-  virtual bool minimize(const TermInterface &term) = 0;
+  virtual bool maximize(const LogicTerm &term) = 0;
+  virtual bool minimize(const LogicTerm &term) = 0;
   virtual void reset() {
     model = nullptr;
     clauses.clear();

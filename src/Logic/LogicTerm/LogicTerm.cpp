@@ -1,7 +1,6 @@
 #include "LogicTerm.hpp"
 #include "../LogicUtil/util_logic.h"
 #include "../LogicUtil/util_logicterm.h"
-#include "Logic.hpp"
 #include "utils/util.hpp"
 
 namespace logicbase {
@@ -9,30 +8,30 @@ TermType LogicTerm::termType = TermType::BASE;
 long long TermImpl::gid = 1;
 
 std::shared_ptr<TermImpl> makeLogicTerm(const bool value) {
-  return std::make_shared<LogicTermImpl>(value);
+  return std::make_shared<TermImpl>(value);
 }
 std::shared_ptr<TermImpl> makeLogicTerm(const int value) {
-  return std::make_shared<LogicTermImpl>(value);
+  return std::make_shared<TermImpl>(value);
 }
 std::shared_ptr<TermImpl> makeLogicTerm(const double value) {
-  return std::make_shared<LogicTermImpl>(value);
+  return std::make_shared<TermImpl>(value);
 }
 std::shared_ptr<TermImpl> makeLogicTerm(const unsigned long long value,
                                         short bv_size) {
-  return std::make_shared<LogicTermImpl>(value, bv_size);
+  return std::make_shared<TermImpl>(value, bv_size);
 }
 std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const std::string name,
                                         CType cType, Logic *lb) {
-  return std::make_shared<LogicTermImpl>(opType, name, cType, lb);
+  return std::make_shared<TermImpl>(opType, name, cType, lb);
 }
 
 std::shared_ptr<TermImpl> makeLogicTerm(const char *name = "", CType cType,
                                         Logic *lb) {
-  return std::make_shared<LogicTermImpl>(name, cType, lb);
+  return std::make_shared<TermImpl>(name, cType, lb);
 }
 
-std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const TermInterface &a,
-                                        const TermInterface &b) {
+std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm &a,
+                                        const LogicTerm &b) {
 
   Logic *lb = logicutil::getValidLogic_ptr(a, b);
 
@@ -42,16 +41,16 @@ std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const TermInterface &a,
   return logicutil::combineTerms(a, b, opType, lb);
 }
 
-std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const TermInterface &a,
-                                        const TermInterface &b,
-                                        const TermInterface &c) {
+std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm &a,
+                                        const LogicTerm &b,
+                                        const LogicTerm &c) {
 
   Logic *lb = logicutil::getValidLogic_ptr(a, b, c);
   CType targetCType = logicutil::getTargetCType(b, c);
-  return std::make_shared<LogicTermImpl>(opType, a, b, c, targetCType, lb);
+  return std::make_shared<TermImpl>(opType, a, b, c, targetCType, lb);
 }
 
-std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const TermInterface &a) {
+std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm &a) {
   Logic *lb = a.getLogic();
   if (opType == OpType::NEG) {
     return logicutil::negateTerm(a, lb);
@@ -59,11 +58,14 @@ std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const TermInterface &a) {
   throw std::runtime_error("Invalid opType");
 }
 
+LogicTerm::LogicTerm(const TermInterface &other)
+    : pImpl(std::make_shared<TermImpl>(other)) {}
+
 void LogicTerm::print(std::ostream &os) const { pImpl->print(os); }
 
 long long LogicTerm::getID() const { return pImpl->getID(); }
 
-const std::vector<TermInterface> &LogicTerm::getNodes() const {
+const std::vector<LogicTerm> &LogicTerm::getNodes() const {
   return pImpl->getNodes();
 }
 
@@ -87,7 +89,7 @@ const std::string &LogicTerm::getName() const { return pImpl->getName(); }
 
 std::shared_ptr<TermImpl> LogicTerm::getImplementation() const { return pImpl; }
 
-bool LogicTerm::deepEquals(const TermInterface &other) const {
+bool LogicTerm::deepEquals(const LogicTerm &other) const {
   return this->pImpl->deepEquals(*other.getImplementation());
 }
 

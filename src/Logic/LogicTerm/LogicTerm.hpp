@@ -2,7 +2,7 @@
 #define LOGIC_TERM_H
 
 #include "Logic.hpp"
-#include "LogicTermImpl.hpp"
+#include "TermImpl.hpp"
 #include <cmath>
 #include <map>
 #include <memory>
@@ -24,12 +24,11 @@ std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const std::string name,
                                         CType cType = CType::BOOL,
                                         Logic *lb = nullptr);
 
-std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const TermInterface &a,
-                                        const TermInterface &b);
-std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const TermInterface &a,
-                                        const TermInterface &b,
-                                        const TermInterface &c);
-std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const TermInterface &a);
+std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm &a,
+                                        const LogicTerm &b);
+std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm &a,
+                                        const LogicTerm &b, const LogicTerm &c);
+std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm &a);
 
 template <typename... Args>
 std::shared_ptr<TermImpl> makeLogicTerm(TermType termType, OpType opType,
@@ -72,6 +71,8 @@ public:
   LogicTerm(OpType opType, const std::string &name, CType cType = CType::BOOL,
             Logic *lb = nullptr)
       : pImpl(makeLogicTerm(opType, name, cType, lb)) {}
+
+  LogicTerm(const TermInterface &other);
 
   ~LogicTerm() = default;
 
@@ -175,7 +176,7 @@ public:
   LogicTerm operator!() const { return LogicTerm::neg(*this); }
 
   long long getID() const;
-  const std::vector<TermInterface> &getNodes() const;
+  const std::vector<LogicTerm> &getNodes() const;
   OpType getOpType() const;
   CType getCType() const;
   bool getBoolValue() const;
@@ -187,7 +188,7 @@ public:
   std::shared_ptr<TermImpl> getImplementation() const;
   Logic *getLogic() const;
 
-  bool deepEquals(const TermInterface &other) const;
+  bool deepEquals(const LogicTerm &other) const;
 
   void print(std::ostream &os) const;
 

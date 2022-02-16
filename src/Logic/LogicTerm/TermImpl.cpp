@@ -1,8 +1,53 @@
 #include "TermImpl.hpp"
+#include "../LogicUtil/util_logicterm.h"
 #include "Logic.hpp"
 #include "utils/util.hpp"
+#include <algorithm>
 
 using namespace logicbase;
+
+TermImpl::TermImpl(OpType ot, const std::initializer_list<LogicTerm> &n,
+                   CType cType, Logic *lb)
+    : lb(lb), id(getNextId(lb)), depth(logicutil::getMax(n)),
+      name(getStrRep(ot)), opType(ot), c_type(cType) {
+  nodes.clear();
+  for (auto &it : n)
+    nodes.push_back(it);
+}
+
+TermImpl::TermImpl(OpType ot, const std::vector<LogicTerm> &n, CType cType,
+                   Logic *lb)
+    : lb(lb), id(getNextId(lb)), depth(logicutil::getMax(n)),
+      name(getStrRep(ot)), opType(ot), c_type(cType) {
+  nodes.clear();
+  for (auto &it : n)
+    nodes.push_back(it);
+}
+
+TermImpl::TermImpl(OpType ot, const LogicTerm &a, CType cType, Logic *lb)
+    : TermImpl(ot, {a}, cType, lb) {}
+TermImpl::TermImpl(OpType ot, const LogicTerm &a, const LogicTerm &b,
+                   CType cType, Logic *lb)
+    : TermImpl(ot, {a, b}, cType, lb) {}
+TermImpl::TermImpl(OpType ot, const LogicTerm &a, const LogicTerm &b,
+                   const LogicTerm &c, CType cType, Logic *lb)
+    : TermImpl(ot, {a, b, c}, cType, lb) {}
+
+TermImpl::TermImpl(const TermInterface &other) {
+  lb = other.getLogic();
+  id = other.getID();
+  depth = other.getDepth();
+  name = other.getDepth();
+  opType = other.getOpType();
+  value = other.getBoolValue();
+  i_value = other.getIntValue();
+  f_value = other.getFloatValue();
+  bv_value = other.getBitVectorValue();
+  bv_size = other.getBitVectorSize();
+  c_type = other.getCType();
+  nodes.clear();
+  nodes.insert(nodes.end(), other.getNodes().begin(), other.getNodes().end());
+}
 
 std::string TermImpl::getStrRep(OpType opType) const {
   std::stringstream os;
@@ -172,7 +217,7 @@ std::string TermImpl::getValue() const {
   throw std::runtime_error("Invalid CType of LogicTerm");
 }
 
-bool TermImpl::deepEquals(const TermInterface &other) const {
+bool TermImpl::deepEquals(const TermImpl &other) const {
   if (getOpType() == OpType::Variable && getID() == other.getID())
     return true;
   if (getDepth() != other.getDepth())

@@ -5,7 +5,7 @@
 
 namespace z3logic {
 
-TermInterface Z3Model::getValue(const TermInterface &a, LogicBlock *lb) {
+LogicTerm Z3Model::getValue(const LogicTerm &a, LogicBlock *lb) {
   if (a.getOpType() != OpType::Variable) {
     throw std::runtime_error("TermInterface::getValue: not a variable");
   }
@@ -18,12 +18,12 @@ TermInterface Z3Model::getValue(const TermInterface &a, LogicBlock *lb) {
         "TermInterface::getValue: not supported for this CType");
   }
 }
-bool Z3Model::getBoolValue(const TermInterface &a, LogicBlock *lb) {
+bool Z3Model::getBoolValue(const LogicTerm &a, LogicBlock *lb) {
   return z3::eq(model.eval(static_cast<Z3LogicBlock *>(lb)->getExprTerm(
                     a.getID(), a.getCType())),
                 ctx.bool_val(true));
 }
-int Z3Model::getIntValue(const TermInterface &a, LogicBlock *lb) {
+int Z3Model::getIntValue(const LogicTerm &a, LogicBlock *lb) {
   return model
       .eval(
           static_cast<Z3LogicBlock *>(lb)->getExprTerm(a.getID(), a.getCType()))

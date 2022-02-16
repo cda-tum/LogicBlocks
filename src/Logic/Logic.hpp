@@ -160,22 +160,22 @@ public:
 class TermInterface {
 public:
   virtual ~TermInterface() = default;
-  virtual long long getID() const;
-  virtual const std::vector<TermInterface> &getNodes() const;
-  virtual OpType getOpType() const;
-  virtual CType getCType() const;
-  virtual bool getBoolValue() const;
-  virtual int getIntValue() const;
-  virtual double getFloatValue() const;
-  virtual unsigned long long getBitVectorValue() const;
-  virtual short getBitVectorSize() const;
-  virtual const std::string &getName() const;
-  virtual std::shared_ptr<TermImpl> getImplementation() const;
-  virtual Logic *getLogic() const;
-  virtual bool deepEquals(const TermInterface &other) const;
-  virtual void print(std::ostream &os) const;
-  virtual unsigned long long getDepth() const;
-  virtual unsigned long long getMaxChildrenDepth() const;
+  virtual long long getID() const = 0;
+  virtual const std::vector<LogicTerm> &getNodes() const = 0;
+  virtual OpType getOpType() const = 0;
+  virtual CType getCType() const = 0;
+  virtual bool getBoolValue() const = 0;
+  virtual int getIntValue() const = 0;
+  virtual double getFloatValue() const = 0;
+  virtual unsigned long long getBitVectorValue() const = 0;
+  virtual short getBitVectorSize() const = 0;
+  virtual const std::string &getName() const = 0;
+  virtual Logic *getLogic() const = 0;
+  virtual std::shared_ptr<TermImpl> getImplementation() const = 0;
+  virtual bool deepEquals(const LogicTerm &other) const = 0;
+  virtual void print(std::ostream &os) const = 0;
+  virtual unsigned long long getDepth() const = 0;
+  virtual unsigned long long getMaxChildrenDepth() const = 0;
 };
 
 struct TermHash {

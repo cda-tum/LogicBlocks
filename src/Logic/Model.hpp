@@ -2,6 +2,7 @@
 #define LOGICBLOCK_MODEL_H
 
 #include "Logic.hpp"
+#include "LogicTerm/LogicTerm.hpp"
 namespace logicbase {
 class Model {
 protected:
@@ -15,9 +16,9 @@ public:
   Result getResult() { return result; };
   void setResult(Result result) { this->result = result; };
 
-  virtual int getIntValue(const TermInterface &a, LogicBlock *lb) = 0;
-  virtual TermInterface getValue(const TermInterface &a, LogicBlock *lb) = 0;
-  virtual bool getBoolValue(const TermInterface &a, LogicBlock *lb) = 0;
+  virtual int getIntValue(const LogicTerm &a, LogicBlock *lb) = 0;
+  virtual LogicTerm getValue(const LogicTerm &a, LogicBlock *lb) = 0;
+  virtual bool getBoolValue(const LogicTerm &a, LogicBlock *lb) = 0;
 };
 } // namespace logicbase
 #endif // LOGICBLOCK_MODEL_H

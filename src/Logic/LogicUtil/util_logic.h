@@ -1,7 +1,7 @@
 #ifndef UTIL_LOGIC_H
 #define UTIL_LOGIC_H
 #include "../Logic.hpp"
-#include "../LogicTerm/LogicTermImpl.hpp"
+#include "LogicTerm/LogicTerm.hpp"
 #include <memory>
 #include <stdexcept>
 #include <vector>
@@ -57,15 +57,15 @@ inline Logic *getValidLogic_ptr(const TermInterface &a, const TermInterface &b,
       throw std::runtime_error("Logic mismatch");
   }
 }
-inline std::vector<TermInterface> getFlatTerms(const TermInterface &t,
-                                               OpType op = OpType::AND) {
-  std::vector<TermInterface> terms;
+inline std::vector<LogicTerm> getFlatTerms(const TermInterface &t,
+                                           OpType op = OpType::AND) {
+  std::vector<LogicTerm> terms;
   if (t.getOpType() != op) {
-    terms.push_back(t);
+    terms.push_back(LogicTerm(t));
   } else {
     for (const TermInterface &it : t.getNodes()) {
       if (it.getOpType() != op) {
-        terms.push_back(it);
+        terms.push_back(LogicTerm(it));
       } else {
         auto res = getFlatTerms(it, op);
         terms.insert(terms.end(), res.begin(), res.end());
@@ -76,10 +76,10 @@ inline std::vector<TermInterface> getFlatTerms(const TermInterface &t,
 };
 
 inline CType
-extractNumberType(const std::vector<TermInterface> &
+extractNumberType(const std::vector<LogicTerm> &
                       terms) { // TODO check if all terms are numbers, handle BV
   CType res = CType::INT;
-  for (const TermInterface &it : terms) {
+  for (const LogicTerm &it : terms) {
     if (it.getCType() == CType::REAL) {
       res = CType::REAL;
       break;

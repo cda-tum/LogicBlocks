@@ -1,5 +1,5 @@
-#ifndef TermInterface_Z3MODEL_H
-#define TermInterface_Z3MODEL_H
+#ifndef LogicTerm_Z3MODEL_H
+#define LogicTerm_Z3MODEL_H
 
 #include "Logic.hpp"
 #include "Model.hpp"
@@ -18,9 +18,9 @@ protected:
 public:
   Z3Model(z3::context &ctx, z3::optimize &optimizer, z3::model model)
       : model(model), ctx(ctx), optimizer(optimizer) {}
-  int getIntValue(const TermInterface &a, LogicBlock *lb);
-  TermInterface getValue(const TermInterface &a, LogicBlock *lb);
-  bool getBoolValue(const TermInterface &a, LogicBlock *lb);
+  int getIntValue(const LogicTerm &a, LogicBlock *lb);
+  LogicTerm getValue(const LogicTerm &a, LogicBlock *lb);
+  bool getBoolValue(const LogicTerm &a, LogicBlock *lb);
 };
 } // namespace z3logic
-#endif // TermInterface_Z3MODEL_H
+#endif // LogicTerm_Z3MODEL_H
