@@ -47,6 +47,6 @@ unsigned long long Z3Model::getBitvectorValue(const LogicTerm &a,
   return model
       .eval(
           static_cast<Z3LogicBlock *>(lb)->getExprTerm(a.getID(), a.getCType()))
-      .as_int64();
+      .as_uint64();
 }
 } // namespace z3logic
