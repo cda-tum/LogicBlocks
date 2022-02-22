@@ -54,6 +54,8 @@ public:
   expr convert(const LogicTerm &a, CType to_type = CType::BOOL);
   expr getExprTerm(unsigned long long id, CType type);
 
+  void dumpZ3State(std::ostream &stream);
+
   context &getContext() { return ctx; }
   z3::expr convertVariableTo(const LogicTerm &a, CType to_type);
   z3::expr convertVariableFromBoolTo(const LogicTerm &a, CType to_type);

@@ -44,8 +44,9 @@ double Z3Model::getRealValue(const LogicTerm &a, LogicBlock *lb) {
 }
 unsigned long long Z3Model::getBitvectorValue(const LogicTerm &a,
                                               LogicBlock *lb) {
-  return z3::bv2int(model.eval(static_cast<Z3LogicBlock *>(lb)->getExprTerm(
-                        a.getID(), a.getCType())),
-                    false);
+  return model
+      .eval(
+          static_cast<Z3LogicBlock *>(lb)->getExprTerm(a.getID(), a.getCType()))
+      .as_int64();
 }
 } // namespace z3logic

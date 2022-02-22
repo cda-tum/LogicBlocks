@@ -9,6 +9,12 @@
 
 namespace z3logic {
 
+void Z3LogicBlock::dumpZ3State(std::ostream &stream) {
+  stream << "Z3State: " << std::endl;
+  stream << "Variables: " << std::endl;
+  stream << optimizer << std::endl;
+}
+
 void Z3LogicBlock::setOptimizer(optimize &Optimizer) {
   this->optimizer = Optimizer;
 }
@@ -53,6 +59,9 @@ expr Z3LogicBlock::getExprTerm(unsigned long long id, CType type) {
 }
 
 expr Z3LogicBlock::convert(const LogicTerm &a, CType to_type) {
+  if (a.getOpType() == OpType::Constant) {
+    return convertConstant(a, to_type);
+  };
   std::vector<std::pair<bool, expr>> v;
   if (cache.find(a) != cache.end()) {
     v = cache.at(a);
@@ -67,11 +76,8 @@ expr Z3LogicBlock::convert(const LogicTerm &a, CType to_type) {
   case OpType::Variable: {
     v[static_cast<int>(to_type)].first = true;
     v[static_cast<int>(to_type)].second = convertVariableTo(a, to_type);
-    return v[static_cast<int>(to_type)].second;
   } break;
-  case OpType::Constant: {
-    return convertConstant(a, to_type);
-  }; break;
+
   case OpType::AND: {
     expr s = this->ctx.bool_val(true);
     bool alternate = false;
@@ -214,6 +220,7 @@ z3::expr Z3LogicBlock::convertVariableTo(const LogicTerm &a, CType to_type) {
     util::fatal("Unsupported type");
     break;
   }
+  variables.insert_or_assign(a.getID(), v);
   return v[static_cast<int>(to_type)].second;
 }
 z3::expr Z3LogicBlock::convertVariableFromBoolTo(const LogicTerm &a,

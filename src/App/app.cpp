@@ -1,6 +1,7 @@
 #include <boost/log/trivial.hpp>
 #include <boost/program_options.hpp>
 #include <boost/program_options/value_semantic.hpp>
+#include <iostream>
 
 #include "Logic.hpp"
 #include "Logic/LogicBlock/Z3Logic.hpp"
@@ -19,8 +20,20 @@ int main(int argc, char *argv[]) {
   logicbase::LogicTerm c =
       z3logic.makeVariable("c", logicbase::CType::BITVECTOR, 32);
   z3logic.assertFormula(a + b == c);
+  z3logic.assertFormula(a == logicbase::LogicTerm(10, 32));
   z3logic.dumpAll(std::cout);
   z3logic.produceInstance();
-  z3logic.solve();
-  z3logic.getModel()->getResult();
+  z3logic.dumpZ3State(std::cout);
+  if (z3logic.solve() == logicbase::Result::SAT) {
+    std::cout << "SAT" << std::endl;
+    std::cout << "a: ";
+    z3logic.getModel()->getValue(a, &z3logic).print(std::cout);
+    std::cout << std::endl;
+    std::cout << "b: ";
+    z3logic.getModel()->getValue(b, &z3logic).print(std::cout);
+    std::cout << std::endl;
+    std::cout << "c: ";
+    z3logic.getModel()->getValue(c, &z3logic).print(std::cout);
+    std::cout << std::endl;
+  }
 }
