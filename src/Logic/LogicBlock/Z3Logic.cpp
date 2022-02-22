@@ -11,7 +11,6 @@ namespace z3logic {
 
 void Z3LogicBlock::dumpZ3State(std::ostream &stream) {
   stream << "Z3State: " << std::endl;
-  stream << "Variables: " << std::endl;
   stream << optimizer << std::endl;
 }
 
