@@ -26,7 +26,7 @@ combineTerms(const LogicTerm &a, const LogicTerm &b, OpType op, Logic *logic) {
 inline std::shared_ptr<TermImpl> combineOneConst(const LogicTerm &constant,
                                                  const LogicTerm &other,
                                                  OpType op, Logic *logic) {
-  switch (op) {
+  switch (op) { // TODO handle other CTypes
   case OpType::AND: {
     if (constant.getBoolValue() == true)
       return other.getImplementation();
@@ -71,7 +71,7 @@ inline std::shared_ptr<TermImpl> combineOneConst(const LogicTerm &constant,
       return std::make_shared<TermImpl>(OpType::DIV, other, constant,
                                         CType::INT, logic);
   }; break;
-  default:
+  default: // TODO there are multiple ctypes
     return std::make_shared<TermImpl>(op, other, constant, getCType(op), logic);
     break;
   }

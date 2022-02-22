@@ -242,8 +242,11 @@ z3::expr Z3LogicBlock::convertVariableFromBoolTo(const LogicTerm &a,
     return ite(ctx.bool_const(ss.str().c_str()), ctx.bv_val(1, 1),
                ctx.bv_val(0, 1));
     break;
+  default:
+    util::fatal("Unsupported type");
   }
   util::fatal("Unsupported type");
+  return ctx.bool_val(false);
 }
 z3::expr Z3LogicBlock::convertVariableFromIntTo(const LogicTerm &a,
                                                 CType to_type) {
@@ -262,8 +265,11 @@ z3::expr Z3LogicBlock::convertVariableFromIntTo(const LogicTerm &a,
   case CType::BITVECTOR:
     return z3::int2bv(32, ctx.int_const(ss.str().c_str()));
     break;
+  default:
+    util::fatal("Unsupported type");
   }
   util::fatal("Unsupported type");
+  return ctx.bool_val(false);
 }
 z3::expr Z3LogicBlock::convertVariableFromRealTo(const LogicTerm &a,
                                                  CType to_type) {
@@ -283,8 +289,11 @@ z3::expr Z3LogicBlock::convertVariableFromRealTo(const LogicTerm &a,
     return z3::int2bv(
         32, z3::round_fpa_to_closest_integer(ctx.real_const(ss.str().c_str())));
     break;
+  default:
+    util::fatal("Unsupported type");
   }
   util::fatal("Unsupported type");
+  return ctx.bool_val(false);
 }
 z3::expr Z3LogicBlock::convertVariableFromBitvectorTo(const LogicTerm &a,
                                                       CType to_type) {
@@ -302,7 +311,12 @@ z3::expr Z3LogicBlock::convertVariableFromBitvectorTo(const LogicTerm &a,
     break;
   case CType::BITVECTOR:
     return ctx.bv_const(ss.str().c_str(), a.getBitVectorSize());
+    break;
+  default:
+    util::fatal("Unsupported type");
   }
+  util::fatal("Unsupported type");
+  return ctx.bool_val(false);
 }
 
 z3::expr Z3LogicBlock::convertOperator(const LogicTerm &a,
@@ -353,8 +367,11 @@ z3::expr Z3LogicBlock::convertConstant(const LogicTerm &a, CType to_type) {
     return ctx.bv_val(static_cast<uint64_t>(a.getBitVectorValue()),
                       a.getBitVectorSize());
     break;
+  default:
+    util::fatal("Unsupported type");
   }
   util::fatal("Unsupported type");
+  return ctx.bool_val(false);
 }
 
 } // namespace z3logic

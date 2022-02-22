@@ -17,7 +17,7 @@ LogicTerm Z3Model::getValue(const LogicTerm &a, LogicBlock *lb) {
   } else if (a.getCType() == CType::REAL) {
     return LogicTerm(getRealValue(a, lb));
   } else if (a.getCType() == CType::BITVECTOR) {
-    return LogicTerm(getBitvectorValue(a, lb), 32);
+    return LogicTerm(getBitvectorValue(a, lb), a.getBitVectorSize());
   } else {
     throw std::runtime_error(
         "TermInterface::getValue: not supported for this CType");

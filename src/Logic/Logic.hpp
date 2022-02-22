@@ -7,6 +7,7 @@
 #include <ostream>
 #include <sstream>
 #include <stdarg.h>
+#include <stdexcept>
 #include <string>
 #include <vector>
 namespace logicbase {
@@ -27,12 +28,24 @@ enum class OpType {
   MUL,
   DIV,
   GT,
-  LT
+  LT,
+  CALL,
+  GET,
+  SET
 };
 
 enum class TermType { BASE, CNF };
 
-enum class CType { BOOL, INT, REAL, BITVECTOR };
+enum class CType {
+  BOOL,
+  INT,
+  REAL,
+  BITVECTOR,
+  FUNCTION,
+  ARRAY,
+  SET,
+  ERRORTYPE
+};
 
 inline std::string toString(CType ctype) {
   switch (ctype) {
@@ -44,6 +57,14 @@ inline std::string toString(CType ctype) {
     return "I";
   case CType::REAL:
     return "F";
+  case CType::FUNCTION:
+    return "F(...)";
+  case CType::ARRAY:
+    return "A[...]";
+  case CType::SET:
+    return "S(...)";
+  case CType::ERRORTYPE:
+    throw std::runtime_error("Error: Unknown CType");
   }
   return "Error";
 }
@@ -56,6 +77,12 @@ inline CType CTypeFromString(std::string ctype) {
     return CType::INT;
   if (ctype == "F")
     return CType::REAL;
+  if (ctype == "F(...)")
+    return CType::FUNCTION;
+  if (ctype == "A[...]")
+    return CType::ARRAY;
+  if (ctype == "S(...)")
+    return CType::SET;
   return CType::BOOL;
 }
 
@@ -77,6 +104,7 @@ inline bool isNumber(CType ctype) {
   switch (ctype) {
   case CType::INT:
   case CType::REAL:
+  case CType::BITVECTOR:
     return true;
   default:
     return false;
