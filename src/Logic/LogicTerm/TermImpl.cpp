@@ -2,7 +2,7 @@
 #include "../LogicUtil/util_logicterm.h"
 #include "Logic.hpp"
 #include "utils/util.hpp"
-#include <algorithm>
+#include <bitset>
 
 using namespace logicbase;
 
@@ -203,7 +203,25 @@ unsigned long long TermImpl::getBitVectorValue() const {
   }
 }
 
-short TermImpl::getBitVectorSize() const { return bv_size; }
+short TermImpl::getBitVectorSize() const {
+  switch (c_type) {
+  case CType::BOOL:
+    return 1;
+    break;
+  case CType::INT:
+    return 32;
+    break;
+  case CType::REAL:
+    throw std::runtime_error("no viable conversion from real to bitvector");
+    break;
+  case CType::BITVECTOR:
+    return bv_size;
+    break;
+  default:
+    return short(INFINITY);
+    break;
+  }
+}
 
 std::string TermImpl::getValue() const {
   if (c_type == CType::BOOL)
@@ -213,7 +231,7 @@ std::string TermImpl::getValue() const {
   if (c_type == CType::REAL)
     return std::to_string(getFloatValue());
   if (c_type == CType::BITVECTOR)
-    return std::to_string(getBitVectorValue());
+    return std::bitset<32>{getBitVectorValue()}.to_string();
   throw std::runtime_error("Invalid CType of LogicTerm");
 }
 

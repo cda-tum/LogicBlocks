@@ -3,6 +3,7 @@
 #include "LogicTerm/LogicTerm.hpp"
 #include "LogicUtil/util_logic.h"
 #include "utils/util.hpp"
+#include <string>
 #include <vector>
 #include <z3++.h>
 
@@ -64,31 +65,12 @@ expr Z3LogicBlock::convert(const LogicTerm &a, CType to_type) {
   }
   switch (a.getOpType()) {
   case OpType::Variable: {
-    return convertVariableTo(a, to_type);
+    v[static_cast<int>(to_type)].first = true;
+    v[static_cast<int>(to_type)].second = convertVariableTo(a, to_type);
+    return v[static_cast<int>(to_type)].second;
   } break;
   case OpType::Constant: {
-    if (a.getCType() == CType::BOOL) {
-      if (to_type == CType::BOOL)
-        return this->ctx.bool_val(a.getBoolValue());
-      else if (to_type == CType::INT)
-        return this->ctx.int_val(a.getBoolValue() ? 1 : 0);
-      else
-        return this->ctx.real_val(a.getBoolValue() ? 1 : 0);
-    } else if (a.getCType() == CType::INT) {
-      if (to_type == CType::BOOL)
-        return this->ctx.bool_val(a.getIntValue() != 0);
-      else if (to_type == CType::INT)
-        return this->ctx.int_val(a.getIntValue());
-      else
-        return this->ctx.real_val(a.getIntValue());
-    } else if (a.getCType() == CType::REAL) {
-      if (to_type == CType::BOOL)
-        return this->ctx.bool_val(a.getFloatValue() != 0);
-      else if (to_type == CType::INT)
-        return this->ctx.int_val(static_cast<int>(a.getFloatValue()));
-      else
-        return this->ctx.real_val(std::to_string(a.getFloatValue()).c_str());
-    }
+    return convertConstant(a, to_type);
   }; break;
   case OpType::AND: {
     expr s = this->ctx.bool_val(true);
@@ -327,12 +309,15 @@ z3::expr Z3LogicBlock::convertOperator(const LogicTerm &a, const LogicTerm &b,
                                        z3::expr (*op)(const z3::expr &,
                                                       const z3::expr &),
                                        CType to_type) {
+  to_type = logicutil::getTargetCType(a, b);
   return op(convert(a, to_type), convert(b, to_type));
 }
 z3::expr Z3LogicBlock::convertOperator(
     const LogicTerm &a, const LogicTerm &b, const LogicTerm &c,
     z3::expr (*op)(const z3::expr &, const z3::expr &, const z3::expr &),
     CType to_type) {
+  to_type = logicutil::getTargetCType(a, b);
+  to_type = logicutil::getTargetCType(to_type, c);
   return op(convert(a, to_type), convert(b, to_type), convert(c, to_type));
 }
 
@@ -345,6 +330,25 @@ z3::expr Z3LogicBlock::convertOperator(std::vector<LogicTerm> terms,
     res = op(res, convert(static_cast<LogicTerm>(*it), to_type));
   }
   return res;
+}
+
+z3::expr Z3LogicBlock::convertConstant(const LogicTerm &a, CType to_type) {
+  switch (to_type) {
+  case logicbase::CType::BOOL:
+    return ctx.bool_val(a.getBoolValue());
+    break;
+  case logicbase::CType::INT:
+    return ctx.int_val(a.getIntValue());
+    break;
+  case logicbase::CType::REAL:
+    return ctx.real_val(std::to_string(a.getFloatValue()).c_str());
+    break;
+  case logicbase::CType::BITVECTOR:
+    return ctx.bv_val(static_cast<uint64_t>(a.getBitVectorValue()),
+                      a.getBitVectorSize());
+    break;
+  }
+  util::fatal("Unsupported type");
 }
 
 } // namespace z3logic

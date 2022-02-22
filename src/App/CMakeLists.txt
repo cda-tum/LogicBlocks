@@ -3,7 +3,9 @@ target_link_libraries(${PROJECT_NAME}_app PUBLIC
                     LogicTerm_lib
                     Boost::program_options
                     Boost::log
-                    Boost::log_setup)
+                    Boost::log_setup
+                    Z3Logic
+                    SMTLibLogic)
 
 target_include_directories(${PROJECT_NAME}_app PUBLIC
 						${PROJECT_SOURCE_DIR}/src

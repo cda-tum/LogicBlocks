@@ -18,8 +18,9 @@ std::shared_ptr<TermImpl> makeLogicTerm(const int value);
 std::shared_ptr<TermImpl> makeLogicTerm(const double value);
 std::shared_ptr<TermImpl> makeLogicTerm(const unsigned long long value,
                                         short bv_size);
-std::shared_ptr<TermImpl>
-makeLogicTerm(const char *name, CType cType = CType::BOOL, Logic *lb = nullptr);
+std::shared_ptr<TermImpl> makeLogicTerm(const char *name,
+                                        CType cType = CType::BOOL,
+                                        Logic *lb = nullptr, short bv_size = 0);
 std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const std::string name,
                                         CType cType = CType::BOOL,
                                         Logic *lb = nullptr);
@@ -65,8 +66,8 @@ public:
   // LogicTerm(const char *name, CType cType = CType::BOOL, Logic *lb = nullptr)
   //     : pImpl(makeLogicTerm(termType, name, cType, lb)) {}
   LogicTerm(const std::string name, CType cType = CType::BOOL,
-            Logic *lb = nullptr)
-      : pImpl(makeLogicTerm(name.c_str(), cType, lb)) {}
+            Logic *lb = nullptr, short bv_size = 0)
+      : pImpl(makeLogicTerm(name.c_str(), cType, lb, bv_size)) {}
 
   LogicTerm(OpType opType, const std::string &name, CType cType = CType::BOOL,
             Logic *lb = nullptr)

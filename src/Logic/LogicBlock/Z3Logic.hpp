@@ -4,8 +4,8 @@
 
 #ifndef CLIFFORDSATOPT_Z3LOGIC_H
 #define CLIFFORDSATOPT_Z3LOGIC_H
-#include "Logic.hpp"
-#include "LogicBlock.hpp"
+#include "../Logic.hpp"
+#include "../LogicBlock.hpp"
 #include "Z3Model.hpp"
 #include "utils/util.hpp"
 #include "z3++.h"
@@ -23,6 +23,8 @@ using namespace logicbase;
 
 class Z3LogicBlock : public LogicBlockOptimizer {
 protected:
+  z3::context internal_ctx{};
+  z3::optimize internal_optimizer{internal_ctx};
   z3::context &ctx;
   std::map<unsigned long long, std::vector<std::pair<bool, expr>>> variables;
   optimize &optimizer;
@@ -36,6 +38,9 @@ public:
   Z3LogicBlock(context &ctx, optimize &optimizer, bool convertWhenAssert = true)
       : LogicBlockOptimizer(convertWhenAssert), ctx(ctx), optimizer(optimizer) {
   }
+  Z3LogicBlock(bool convertWhenAssert = true)
+      : LogicBlockOptimizer(convertWhenAssert), ctx(internal_ctx),
+        optimizer(internal_optimizer) {}
   ~Z3LogicBlock() { internal_reset(); }
   bool makeMinimize();
   bool makeMaximize();
@@ -69,6 +74,8 @@ public:
   z3::expr convertOperator(std::vector<LogicTerm> terms,
                            z3::expr (*op)(const z3::expr &, const z3::expr &),
                            CType to_type);
+
+  z3::expr convertConstant(const LogicTerm &a, CType to_type);
 };
 
 } // namespace z3logic

@@ -26,8 +26,8 @@ std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const std::string name,
 }
 
 std::shared_ptr<TermImpl> makeLogicTerm(const char *name = "", CType cType,
-                                        Logic *lb) {
-  return std::make_shared<TermImpl>(name, cType, lb);
+                                        Logic *lb, short bv_size) {
+  return std::make_shared<TermImpl>(name, cType, lb, bv_size);
 }
 
 std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm &a,

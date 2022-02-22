@@ -1,6 +1,7 @@
 #ifndef TermImpl_HPP
 #define TermImpl_HPP
 #include "../Logic.hpp"
+#include <bitset>
 namespace logicbase {
 class TermImpl {
 protected:
@@ -47,9 +48,9 @@ public:
         c_type(CType::BOOL) {}
 
   explicit TermImpl(OpType opType, const std::string &name, CType cType,
-                    Logic *lb = nullptr)
+                    Logic *lb = nullptr, short bv_size = 0)
       : lb(lb), id(getNextId(lb)), depth(0), name(name), opType(opType),
-        value(false), i_value(0), f_value(0), c_type(cType) {}
+        value(false), i_value(0), f_value(0), bv_size(bv_size), c_type(cType) {}
 
   explicit TermImpl(const std::string &name, long long id, Logic *lb = nullptr)
       : lb(lb), id(id), depth(0), name(name), opType(OpType::Variable),
@@ -60,15 +61,11 @@ public:
         opType(OpType::Variable), value(false), i_value(0), f_value(0),
         c_type(cType) {}
 
-  explicit TermImpl(const char *name, CType cType, Logic *lb = nullptr)
+  explicit TermImpl(const std::string &name, CType cType, Logic *lb = nullptr,
+                    short bv_size = 0)
       : lb(lb), id(getNextId(lb)), depth(0), name(name),
         opType(OpType::Variable), value(false), i_value(0), f_value(0),
-        c_type(cType) {}
-
-  explicit TermImpl(const std::string &name, CType cType, Logic *lb = nullptr)
-      : lb(lb), id(getNextId(lb)), depth(0), name(name),
-        opType(OpType::Variable), value(false), i_value(0), f_value(0),
-        c_type(cType) {}
+        bv_size(bv_size), c_type(cType) {}
 
   explicit TermImpl(const std::string &name, long long id, CType cType,
                     Logic *lb = nullptr)

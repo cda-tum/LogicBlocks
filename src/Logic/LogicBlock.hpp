@@ -45,8 +45,13 @@ public:
     }
   }
 
-  virtual LogicTerm makeVariable(const std::string &name,
-                                 CType type = CType::BOOL) = 0;
+  LogicTerm makeVariable(const std::string &name, CType type = CType::BOOL,
+                         short bv_size = 32) {
+    if (type == CType::BITVECTOR && bv_size == 0) {
+      throw std::invalid_argument("bv_size must be > 0");
+    }
+    return LogicTerm(name, type, this, bv_size);
+  }
 
   virtual void produceInstance() = 0;
   virtual Result solve() = 0;

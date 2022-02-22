@@ -21,6 +21,8 @@ public:
   int getIntValue(const LogicTerm &a, LogicBlock *lb);
   LogicTerm getValue(const LogicTerm &a, LogicBlock *lb);
   bool getBoolValue(const LogicTerm &a, LogicBlock *lb);
+  double getRealValue(const LogicTerm &a, LogicBlock *lb);
+  unsigned long long getBitvectorValue(const LogicTerm &a, LogicBlock *lb);
 };
 } // namespace z3logic
 #endif // LogicTerm_Z3MODEL_H

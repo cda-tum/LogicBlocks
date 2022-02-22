@@ -17,7 +17,19 @@ inline bool isVar(const TermInterface &a) {
 inline CType getTargetCType(const TermInterface &a, const TermInterface &b) {
   if (a.getCType() == CType::REAL || b.getCType() == CType::REAL)
     return CType::REAL;
+  else if (a.getCType() == CType::BITVECTOR || b.getCType() == CType::BITVECTOR)
+    return CType::BITVECTOR;
   else if (a.getCType() == CType::INT || b.getCType() == CType::INT)
+    return CType::INT;
+  else
+    return CType::BOOL;
+}
+inline CType getTargetCType(CType targetType, const TermInterface &b) {
+  if (targetType == CType::REAL || b.getCType() == CType::REAL)
+    return CType::REAL;
+  else if (targetType == CType::BITVECTOR || b.getCType() == CType::BITVECTOR)
+    return CType::BITVECTOR;
+  else if (targetType == CType::INT || b.getCType() == CType::INT)
     return CType::INT;
   else
     return CType::BOOL;
@@ -82,6 +94,9 @@ extractNumberType(const std::vector<LogicTerm> &
   for (const LogicTerm &it : terms) {
     if (it.getCType() == CType::REAL) {
       res = CType::REAL;
+      break;
+    } else if (it.getCType() == CType::BITVECTOR) {
+      res = CType::BITVECTOR;
       break;
     }
   }

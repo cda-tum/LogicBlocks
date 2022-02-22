@@ -42,7 +42,7 @@ endif()
 # search for Boost program_options
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package( Boost 1.50 COMPONENTS program_options log log_setup)
+find_package( Boost 1.70 COMPONENTS program_options log log_setup)
 
 set(CMAKE_CXX_FLAGS "-W -Wall -Wextra -fno-limit-debug-info")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
