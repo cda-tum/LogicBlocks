@@ -230,8 +230,10 @@ std::string TermImpl::getValue() const {
     return std::to_string(getIntValue());
   if (c_type == CType::REAL)
     return std::to_string(getFloatValue());
-  if (c_type == CType::BITVECTOR)
-    return std::bitset<32>{getBitVectorValue()}.to_string();
+  if (c_type == CType::BITVECTOR) {
+    return std::bitset<256>{getBitVectorValue()}.to_string().substr(
+        256 - bv_size, bv_size);
+  }
   throw std::runtime_error("Invalid CType of LogicTerm");
 }
 

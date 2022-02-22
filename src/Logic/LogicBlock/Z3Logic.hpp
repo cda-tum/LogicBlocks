@@ -10,10 +10,13 @@
 #include "utils/util.hpp"
 #include "z3++.h"
 #include <functional>
-#include <initializer_list>
 #include <map>
 #include <memory>
+#include <stdexcept>
+#include <string>
 #include <utility>
+#include <vector>
+#include <z3++.h>
 #include <z3_api.h>
 
 namespace z3logic {

@@ -3,9 +3,6 @@
 #include "LogicTerm/LogicTerm.hpp"
 #include "LogicUtil/util_logic.h"
 #include "utils/util.hpp"
-#include <string>
-#include <vector>
-#include <z3++.h>
 
 namespace z3logic {
 
@@ -54,6 +51,9 @@ void Z3LogicBlock::produceInstance() {
 optimize &Z3LogicBlock::getOptimizer() { return optimizer; }
 
 expr Z3LogicBlock::getExprTerm(unsigned long long id, CType type) {
+  if (variables.find(id) == variables.end() ||
+      !variables.at(id)[static_cast<int>(type)].first)
+    throw std::runtime_error("Variable not found");
   return variables.at(id)[static_cast<int>(type)].second;
 }
 
