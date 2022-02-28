@@ -4,6 +4,7 @@
 #include "Logic.hpp"
 #include "LogicTerm/LogicTerm.hpp"
 #include "Model.hpp"
+#include <iostream>
 #include <set>
 #include <sys/types.h>
 #include <vector>
@@ -27,15 +28,19 @@ public:
 
   Model *getModel() { return model; }
 
-  void dump(const TermInterface &a, std::ostream &stream) { a.print(stream); }
+  void dump(const TermInterface &a, std::ostream &stream) {
+    a.print(stream);
+    stream << std::endl;
+    stream.flush();
+  }
   void dumpAll(std::ostream &stream) {
     for (const TermInterface &term : clauses) {
       dump(term, stream);
-      stream << std::endl;
     }
   }
 
   void assertFormula(const LogicTerm &a) {
+    dump(a, std::cout);
     if (a.getOpType() == OpType::AND) {
       for (const auto &clause : a.getNodes()) {
         clauses.insert(clause);
