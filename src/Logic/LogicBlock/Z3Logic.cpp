@@ -362,7 +362,7 @@ z3::expr Z3LogicBlock::convertOperator(
     CType to_type) {
   to_type = logicutil::getTargetCType(a, b);
   to_type = logicutil::getTargetCType(to_type, c);
-  return op(convert(a, to_type), convert(b, to_type), convert(c, to_type));
+  return op(convert(a, CType::BOOL), convert(b, to_type), convert(c, to_type));
 }
 
 z3::expr Z3LogicBlock::convertOperator(std::vector<LogicTerm> terms,
