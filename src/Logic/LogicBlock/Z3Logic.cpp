@@ -389,10 +389,8 @@ z3::expr Z3LogicBlock::convertOperator(std::vector<LogicTerm> terms,
                                                       const z3::expr &),
                                        CType to_type) {
   z3::expr res = convert(static_cast<LogicTerm>(*terms.begin()), to_type);
-  std::cout << res << std::endl;
   for (auto it = (terms.begin() + 1); it != terms.end(); ++it) {
     res = op(res, convert(static_cast<LogicTerm>(*it), to_type));
-    std::cout << res << std::endl;
   }
   return res;
 }
