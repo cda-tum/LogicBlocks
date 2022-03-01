@@ -5,6 +5,7 @@
 
 #include "Logic.hpp"
 #include "Logic/LogicBlock/Z3Logic.hpp"
+#include "LogicTerm/LogicTerm.hpp"
 #include "utils/util.hpp"
 
 int main(int argc, char *argv[]) {
@@ -21,6 +22,7 @@ int main(int argc, char *argv[]) {
       z3logic.makeVariable("c", logicbase::CType::BITVECTOR, 5);
   z3logic.assertFormula((a && b) == c);
   z3logic.assertFormula(c == logicbase::LogicTerm(10, 5));
+  z3logic.assertFormula(a != logicbase::LogicTerm(10, 5));
   z3logic.dumpAll(std::cout);
   z3logic.produceInstance();
   z3logic.dumpZ3State(std::cout);
