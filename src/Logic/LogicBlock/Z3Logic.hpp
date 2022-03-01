@@ -31,7 +31,7 @@ protected:
   z3::context &ctx;
   std::map<unsigned long long, std::vector<std::pair<bool, expr>>> variables;
   optimize &optimizer;
-  void internal_reset();
+  void internal_reset() override;
 
   std::unordered_map<LogicTerm, std::vector<std::pair<bool, expr>>, TermHash,
                      TermHash>
@@ -45,12 +45,13 @@ public:
       : LogicBlockOptimizer(convertWhenAssert), ctx(internal_ctx),
         optimizer(internal_optimizer) {}
   ~Z3LogicBlock() { internal_reset(); }
-  bool makeMinimize();
-  bool makeMaximize();
-  bool maximize(const LogicTerm &term);
-  bool minimize(const LogicTerm &term);
-  void produceInstance();
-  Result solve();
+  void assertFormula(const LogicTerm &a) override;
+  bool makeMinimize() override;
+  bool makeMaximize() override;
+  bool maximize(const LogicTerm &term) override;
+  bool minimize(const LogicTerm &term) override;
+  void produceInstance() override;
+  Result solve() override;
 
   void setOptimizer(optimize &Optimizer);
   optimize &getOptimizer();

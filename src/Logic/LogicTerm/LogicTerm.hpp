@@ -98,6 +98,18 @@ public:
     return LogicTerm(makeLogicTerm(OpType::AND, a, b));
   }
 
+  static LogicTerm bv_and(const LogicTerm &a, const LogicTerm &b) {
+    return LogicTerm(makeLogicTerm(OpType::BIT_AND, a, b));
+  }
+
+  static LogicTerm bv_or(const LogicTerm &a, const LogicTerm &b) {
+    return LogicTerm(makeLogicTerm(OpType::BIT_OR, a, b));
+  }
+
+  static LogicTerm bv_xor(const LogicTerm &a, const LogicTerm &b) {
+    return LogicTerm(makeLogicTerm(OpType::BIT_XOR, a, b));
+  }
+
   static LogicTerm implies(const LogicTerm &a, const LogicTerm &b) {
     return LogicTerm(makeLogicTerm(OpType::IMPL, a, b));
   }
@@ -137,6 +149,18 @@ public:
 
   LogicTerm operator&&(const LogicTerm &other) const {
     return LogicTerm::a(*this, other);
+  }
+
+  LogicTerm operator&(const LogicTerm &other) const {
+    return LogicTerm::bv_and(*this, other);
+  }
+
+  LogicTerm operator|(const LogicTerm &other) const {
+    return LogicTerm::bv_or(*this, other);
+  }
+
+  LogicTerm operator^(const LogicTerm &other) const {
+    return LogicTerm::bv_xor(*this, other);
   }
 
   LogicTerm operator||(const LogicTerm &other) const {
