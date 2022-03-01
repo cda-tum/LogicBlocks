@@ -165,6 +165,30 @@ expr Z3LogicBlock::convert(const LogicTerm &a, CType to_type) {
                         logicutil::extractNumberType(a.getNodes()));
     v[static_cast<int>(to_type)].first = true;
   } break;
+  case OpType::BIT_AND: {
+    v[static_cast<int>(to_type)].second =
+        convertOperator(a.getNodes(), z3::operator&,
+                        logicutil::extractNumberType(a.getNodes()));
+    v[static_cast<int>(to_type)].first = true;
+  } break;
+  case OpType::BIT_OR: {
+    v[static_cast<int>(to_type)].second =
+        convertOperator(a.getNodes(), z3::operator|,
+                        logicutil::extractNumberType(a.getNodes()));
+    v[static_cast<int>(to_type)].first = true;
+  } break;
+  case OpType::BIT_XOR: {
+    v[static_cast<int>(to_type)].second =
+        convertOperator(a.getNodes(), z3::operator^,
+                        logicutil::extractNumberType(a.getNodes()));
+    v[static_cast<int>(to_type)].first = true;
+  } break;
+  case OpType::BIT_EQ: {
+    v[static_cast<int>(to_type)].second =
+        convertOperator(a.getNodes()[0], a.getNodes()[1], z3::operator==,
+                        logicutil::extractNumberType(a.getNodes()));
+    v[static_cast<int>(to_type)].first = true;
+  } break;
   default:
     util::fatal("Unsupported operation");
     break;

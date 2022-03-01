@@ -79,6 +79,12 @@ std::string TermImpl::getStrRep(OpType opType) const {
   case OpType::OR:
     os << "<OR ";
     break;
+  case OpType::BIT_AND:
+    os << "<BV_AND ";
+    break;
+  case OpType::BIT_OR:
+    os << "<BV_OR ";
+    break;
   case OpType::ITE:
     os << "<ITE ";
     break;
@@ -90,6 +96,12 @@ std::string TermImpl::getStrRep(OpType opType) const {
     break;
   case OpType::XOR:
     os << "<XOR ";
+    break;
+  case OpType::BIT_EQ:
+    os << "<BV_EQ ";
+    break;
+  case OpType::BIT_XOR:
+    os << "<BV_XOR ";
     break;
   case OpType::IMPL:
     os << "<IMPL ";

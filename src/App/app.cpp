@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
       z3logic.makeVariable("b", logicbase::CType::BITVECTOR, 5);
   logicbase::LogicTerm c =
       z3logic.makeVariable("c", logicbase::CType::BITVECTOR, 5);
-  z3logic.assertFormula(a + b == c);
+  z3logic.assertFormula((a && b) == c);
   z3logic.assertFormula(c == logicbase::LogicTerm(10, 5));
   z3logic.dumpAll(std::cout);
   z3logic.produceInstance();

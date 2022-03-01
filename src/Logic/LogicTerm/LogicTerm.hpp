@@ -46,6 +46,7 @@ std::shared_ptr<TermImpl> makeLogicTerm(TermType termType, OpType opType,
 class LogicTerm : public TermInterface {
 public:
   static TermType termType;
+  static bool useBitVectorConversions;
 
 private:
   std::shared_ptr<TermImpl> pImpl;

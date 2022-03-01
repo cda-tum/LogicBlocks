@@ -9,7 +9,26 @@ namespace logicutil {
 using namespace logicbase;
 inline std::shared_ptr<TermImpl>
 combineTerms(const LogicTerm &a, const LogicTerm &b, OpType op, Logic *logic) {
-  if (a.getOpType() == op && b.getOpType() == op && isAssociative(op)) {
+  if (a.getCType() == CType::BITVECTOR && b.getCType() == CType::BITVECTOR &&
+      LogicTerm::useBitVectorConversions) {
+    switch (op) {
+    case OpType::AND:
+      op = OpType::BIT_AND;
+      break;
+    case OpType::OR:
+      op = OpType::BIT_OR;
+      break;
+    case OpType::EQ:
+      op = OpType::BIT_EQ;
+      break;
+    case OpType::XOR:
+      op = OpType::BIT_XOR;
+      break;
+    default:
+      break;
+    }
+  }
+  if ((a.getOpType() == op || b.getOpType() == op) && isAssociative(op)) {
     std::vector<LogicTerm> terms{};
     terms.reserve(a.getNodes().size() + b.getNodes().size());
 

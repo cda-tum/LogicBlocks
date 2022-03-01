@@ -7,6 +7,7 @@
 namespace logicbase {
 TermType LogicTerm::termType = TermType::BASE;
 long long TermImpl::gid = 1;
+bool LogicTerm::useBitVectorConversions = true;
 
 std::shared_ptr<TermImpl> makeLogicTerm(const bool value) {
   return std::make_shared<TermImpl>(value);

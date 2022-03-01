@@ -31,7 +31,11 @@ enum class OpType {
   LT,
   CALL,
   GET,
-  SET
+  SET,
+  BIT_AND,
+  BIT_OR,
+  BIT_EQ,
+  BIT_XOR
 };
 
 enum class TermType { BASE, CNF };
@@ -166,6 +170,11 @@ inline CType getCType(OpType op) {
     return CType::INT;
   case OpType::ITE:
     return CType::BOOL;
+  case OpType::BIT_AND:
+  case OpType::BIT_OR:
+  case OpType::BIT_EQ:
+  case OpType::BIT_XOR:
+    return CType::BITVECTOR;
   default:
     return CType::BOOL;
   }
