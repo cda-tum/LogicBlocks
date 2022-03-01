@@ -56,3 +56,17 @@ test/test_runner
 
 .cache/**/*
 .cache/
+.cache/clangd/index/app.cpp.EF890AA0A8EFF22F.idx
+.cache/clangd/index/Logic.hpp.73EB9EB62FEB99C7.idx
+.cache/clangd/index/LogicBlock.hpp.0E220E252BF305E6.idx
+.cache/clangd/index/LogicTerm.cpp.A2D8581E91157ED7.idx
+.cache/clangd/index/LogicTerm.hpp.4E14838FDA696C6D.idx
+.cache/clangd/index/Model.hpp.1BEBA75124BEE16A.idx
+.cache/clangd/index/TermImpl.cpp.96245424C2AF5103.idx
+.cache/clangd/index/TermImpl.hpp.1F1E9227E627B044.idx
+.cache/clangd/index/util_logic.h.792DF4E93D214960.idx
+.cache/clangd/index/util_logicterm.h.42A238EE328B95BC.idx
+.cache/clangd/index/Z3Logic.cpp.E9E35F2FD640AFD4.idx
+.cache/clangd/index/Z3Logic.hpp.C2C76C778999A935.idx
+.cache/clangd/index/Z3Model.cpp.CCE9340FCBAA0679.idx
+.cache/clangd/index/Z3Model.hpp.48DC49115A40FCA6.idx
