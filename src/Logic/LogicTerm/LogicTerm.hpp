@@ -130,7 +130,7 @@ public:
     return LogicTerm(makeLogicTerm(OpType::LT, a, b));
   }
 
-  static LogicTerm neg(const TermInterface &a) {
+  static LogicTerm neg(const LogicTerm &a) {
     return LogicTerm(makeLogicTerm(OpType::NEG, a));
   }
 

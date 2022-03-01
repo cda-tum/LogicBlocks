@@ -28,19 +28,18 @@ public:
 
   Model *getModel() { return model; }
 
-  void dump(const TermInterface &a, std::ostream &stream) {
+  virtual void dump(const TermInterface &a, std::ostream &stream) {
     a.print(stream);
     stream << std::endl;
     stream.flush();
   }
-  void dumpAll(std::ostream &stream) {
+  virtual void dumpAll(std::ostream &stream) {
     for (const TermInterface &term : clauses) {
       dump(term, stream);
     }
   }
 
   void assertFormula(const LogicTerm &a) {
-    dump(a, std::cout);
     if (a.getOpType() == OpType::AND) {
       for (const auto &clause : a.getNodes()) {
         clauses.insert(clause);
@@ -80,6 +79,23 @@ public:
   void weightedTerm(const LogicTerm &a, double weight) {
     weightedTerms.push_back(std::make_pair(a, weight));
   };
+
+  void dump(const TermInterface &a, std::ostream &stream) override {
+    a.print(stream);
+    stream.flush();
+  }
+  void dumpAll(std::ostream &stream) override {
+    for (const TermInterface &term : clauses) {
+      dump(term, stream);
+      stream << std::endl;
+      stream.flush();
+    }
+    for (const auto &it : weightedTerms) {
+      dump(it.first, stream);
+      stream << "(wt: " << it.second << ")" << std::endl;
+      stream.flush();
+    }
+  }
   virtual bool makeMinimize() = 0;
   virtual bool makeMaximize() = 0;
   virtual bool maximize(const LogicTerm &term) = 0;

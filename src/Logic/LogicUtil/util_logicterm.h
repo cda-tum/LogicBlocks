@@ -9,7 +9,7 @@ namespace logicutil {
 using namespace logicbase;
 inline std::shared_ptr<TermImpl>
 combineTerms(const LogicTerm &a, const LogicTerm &b, OpType op, Logic *logic) {
-  if (a.getOpType() == op && b.getOpType() == op && isAssociative(op)) {
+  if ((a.getOpType() == op || b.getOpType() == op) && isAssociative(op)) {
     std::vector<LogicTerm> terms{};
     terms.reserve(a.getNodes().size() + b.getNodes().size());
 

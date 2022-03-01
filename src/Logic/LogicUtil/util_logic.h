@@ -8,13 +8,13 @@
 
 namespace logicutil {
 using namespace logicbase;
-inline bool isConst(const TermInterface &a) {
+inline bool isConst(const LogicTerm &a) {
   return a.getOpType() == OpType::Constant;
 }
-inline bool isVar(const TermInterface &a) {
+inline bool isVar(const LogicTerm &a) {
   return a.getOpType() == OpType::Variable;
 }
-inline CType getTargetCType(const TermInterface &a, const TermInterface &b) {
+inline CType getTargetCType(const LogicTerm &a, const LogicTerm &b) {
   if (a.getCType() == CType::REAL || b.getCType() == CType::REAL)
     return CType::REAL;
   else if (a.getCType() == CType::BITVECTOR || b.getCType() == CType::BITVECTOR)
@@ -24,7 +24,7 @@ inline CType getTargetCType(const TermInterface &a, const TermInterface &b) {
   else
     return CType::BOOL;
 }
-inline CType getTargetCType(CType targetType, const TermInterface &b) {
+inline CType getTargetCType(CType targetType, const LogicTerm &b) {
   if (targetType == CType::REAL || b.getCType() == CType::REAL)
     return CType::REAL;
   else if (targetType == CType::BITVECTOR || b.getCType() == CType::BITVECTOR)
@@ -35,8 +35,7 @@ inline CType getTargetCType(CType targetType, const TermInterface &b) {
     return CType::BOOL;
 }
 
-inline Logic *getValidLogic_ptr(const TermInterface &a,
-                                const TermInterface &b) {
+inline Logic *getValidLogic_ptr(const LogicTerm &a, const LogicTerm &b) {
   if (isConst(a) || isConst(b)) {
     if (!isConst(a))
       return a.getLogic();
@@ -51,8 +50,8 @@ inline Logic *getValidLogic_ptr(const TermInterface &a,
       throw std::runtime_error("Logic mismatch");
   }
 }
-inline Logic *getValidLogic_ptr(const TermInterface &a, const TermInterface &b,
-                                const TermInterface &c) {
+inline Logic *getValidLogic_ptr(const LogicTerm &a, const LogicTerm &b,
+                                const LogicTerm &c) {
   if (isConst(a) || isConst(b) || isConst(c)) {
     if (!isConst(a))
       return a.getLogic();
@@ -69,15 +68,15 @@ inline Logic *getValidLogic_ptr(const TermInterface &a, const TermInterface &b,
       throw std::runtime_error("Logic mismatch");
   }
 }
-inline std::vector<LogicTerm> getFlatTerms(const TermInterface &t,
+inline std::vector<LogicTerm> getFlatTerms(const LogicTerm &t,
                                            OpType op = OpType::AND) {
   std::vector<LogicTerm> terms;
   if (t.getOpType() != op) {
-    terms.push_back(LogicTerm(t));
+    terms.push_back(t);
   } else {
-    for (const TermInterface &it : t.getNodes()) {
+    for (const LogicTerm &it : t.getNodes()) {
       if (it.getOpType() != op) {
-        terms.push_back(LogicTerm(it));
+        terms.push_back(it);
       } else {
         auto res = getFlatTerms(it, op);
         terms.insert(terms.end(), res.begin(), res.end());
