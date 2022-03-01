@@ -45,6 +45,26 @@ combineTerms(const LogicTerm &a, const LogicTerm &b, OpType op, Logic *logic) {
 inline std::shared_ptr<TermImpl> combineOneConst(const LogicTerm &constant,
                                                  const LogicTerm &other,
                                                  OpType op, Logic *logic) {
+  if (constant.getCType() == CType::BITVECTOR &&
+      other.getCType() == CType::BITVECTOR &&
+      LogicTerm::useBitVectorConversions) {
+    switch (op) {
+    case OpType::AND:
+      op = OpType::BIT_AND;
+      break;
+    case OpType::OR:
+      op = OpType::BIT_OR;
+      break;
+    case OpType::EQ:
+      op = OpType::BIT_EQ;
+      break;
+    case OpType::XOR:
+      op = OpType::BIT_XOR;
+      break;
+    default:
+      break;
+    }
+  }
   switch (op) { // TODO handle other CTypes
   case OpType::AND: {
     if (constant.getBoolValue() == true)
