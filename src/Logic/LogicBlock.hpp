@@ -28,13 +28,11 @@ public:
 
   Model *getModel() { return model; }
 
-  virtual void dump(const TermInterface &a, std::ostream &stream) {
+  virtual void dump(const LogicTerm &a, std::ostream &stream) {
     a.print(stream);
-    stream << std::endl;
-    stream.flush();
   }
   virtual void dumpAll(std::ostream &stream) {
-    for (const TermInterface &term : clauses) {
+    for (const LogicTerm &term : clauses) {
       dump(term, stream);
     }
   }
@@ -71,7 +69,6 @@ public:
 class LogicBlockOptimizer : public LogicBlock {
 protected:
   std::vector<std::pair<LogicTerm, double>> weightedTerms;
-  virtual void internal_reset() = 0;
 
 public:
   LogicBlockOptimizer(bool convertWhenAssert) : LogicBlock(convertWhenAssert) {}
@@ -79,13 +76,8 @@ public:
   void weightedTerm(const LogicTerm &a, double weight) {
     weightedTerms.push_back(std::make_pair(a, weight));
   };
-
-  void dump(const TermInterface &a, std::ostream &stream) override {
-    a.print(stream);
-    stream.flush();
-  }
   void dumpAll(std::ostream &stream) override {
-    for (const TermInterface &term : clauses) {
+    for (const LogicTerm &term : clauses) {
       dump(term, stream);
       stream << std::endl;
       stream.flush();
@@ -100,7 +92,7 @@ public:
   virtual bool makeMaximize() = 0;
   virtual bool maximize(const LogicTerm &term) = 0;
   virtual bool minimize(const LogicTerm &term) = 0;
-  virtual void reset() {
+  virtual void reset() override {
     model = nullptr;
     clauses.clear();
     weightedTerms.clear();

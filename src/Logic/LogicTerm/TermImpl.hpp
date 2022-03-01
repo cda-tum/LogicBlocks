@@ -85,7 +85,8 @@ public:
   explicit TermImpl(OpType ot, const LogicTerm &a, const LogicTerm &b,
                     const LogicTerm &c, CType cType = CType::BOOL,
                     Logic *lb = nullptr);
-  explicit TermImpl(const TermInterface &other);
+  explicit TermImpl(const TermImpl &other);
+  explicit TermImpl(const LogicTerm &other);
 
 public:
   static long long getNextId(Logic *lb = nullptr) {

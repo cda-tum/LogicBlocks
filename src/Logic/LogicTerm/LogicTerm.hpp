@@ -73,7 +73,7 @@ public:
             Logic *lb = nullptr)
       : pImpl(makeLogicTerm(opType, name, cType, lb)) {}
 
-  LogicTerm(const TermInterface &other);
+  LogicTerm(const LogicTerm &other);
 
   ~LogicTerm() = default;
 

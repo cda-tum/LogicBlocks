@@ -33,11 +33,26 @@ TermImpl::TermImpl(OpType ot, const LogicTerm &a, const LogicTerm &b,
                    const LogicTerm &c, CType cType, Logic *lb)
     : TermImpl(ot, {a, b, c}, cType, lb) {}
 
-TermImpl::TermImpl(const TermInterface &other) {
+TermImpl::TermImpl(const LogicTerm &other) {
   lb = other.getLogic();
   id = other.getID();
   depth = other.getDepth();
-  name = other.getDepth();
+  name = other.getName();
+  opType = other.getOpType();
+  value = other.getBoolValue();
+  i_value = other.getIntValue();
+  f_value = other.getFloatValue();
+  bv_value = other.getBitVectorValue();
+  bv_size = other.getBitVectorSize();
+  c_type = other.getCType();
+  nodes.clear();
+  nodes.insert(nodes.end(), other.getNodes().begin(), other.getNodes().end());
+}
+TermImpl::TermImpl(const TermImpl &other) {
+  lb = other.getLogic();
+  id = other.getID();
+  depth = other.getDepth();
+  name = other.getName();
   opType = other.getOpType();
   value = other.getBoolValue();
   i_value = other.getIntValue();
@@ -175,7 +190,7 @@ double TermImpl::getFloatValue() const {
     return f_value;
     break;
   case CType::BITVECTOR:
-    throw std::runtime_error("no viable conversion from real to bitvector");
+    return bv_value;
     break;
   default:
     return float(INFINITY);
@@ -192,7 +207,7 @@ unsigned long long TermImpl::getBitVectorValue() const {
     return i_value;
     break;
   case CType::REAL:
-    throw std::runtime_error("no viable conversion from real to bitvector");
+    return static_cast<unsigned long long>(f_value);
     break;
   case CType::BITVECTOR:
     return bv_value & static_cast<unsigned long long>(std::pow(2, bv_size)) - 1;
@@ -212,7 +227,7 @@ short TermImpl::getBitVectorSize() const {
     return 32;
     break;
   case CType::REAL:
-    throw std::runtime_error("no viable conversion from real to bitvector");
+    return 256;
     break;
   case CType::BITVECTOR:
     return bv_size;

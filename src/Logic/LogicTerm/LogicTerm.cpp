@@ -1,6 +1,7 @@
 #include "LogicTerm.hpp"
 #include "../LogicUtil/util_logic.h"
 #include "../LogicUtil/util_logicterm.h"
+#include "Logic.hpp"
 #include "utils/util.hpp"
 
 namespace logicbase {
@@ -58,7 +59,7 @@ std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm &a) {
   throw std::runtime_error("Invalid opType");
 }
 
-LogicTerm::LogicTerm(const TermInterface &other)
+LogicTerm::LogicTerm(const LogicTerm &other)
     : pImpl(std::make_shared<TermImpl>(other)) {}
 
 void LogicTerm::print(std::ostream &os) const { pImpl->print(os); }
@@ -97,7 +98,7 @@ unsigned long long LogicTerm::getDepth() const { return pImpl->getDepth(); }
 
 unsigned long long LogicTerm::getMaxChildrenDepth() const {
   unsigned long long max = 0;
-  for (const TermInterface &t : pImpl->getNodes()) {
+  for (const LogicTerm &t : pImpl->getNodes()) {
     unsigned long long d = t.getMaxChildrenDepth();
     if (d > max)
       max = d;

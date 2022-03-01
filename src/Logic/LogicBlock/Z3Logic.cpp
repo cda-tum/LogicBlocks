@@ -80,7 +80,7 @@ expr Z3LogicBlock::convert(const LogicTerm &a, CType to_type) {
   case OpType::AND: {
     expr s = this->ctx.bool_val(true);
     bool alternate = false;
-    for (const TermInterface &lt : a.getNodes()) {
+    for (const LogicTerm &lt : a.getNodes()) {
       if (alternate)
         s = s && convert(lt);
       else
