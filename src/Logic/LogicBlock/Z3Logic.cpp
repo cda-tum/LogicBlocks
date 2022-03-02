@@ -98,9 +98,9 @@ expr Z3LogicBlock::convert(const LogicTerm &a, CType to_type) {
     bool alternate = false;
     for (const LogicTerm &lt : a.getNodes()) {
       if (alternate)
-        s = s && convert(lt);
+        s = s && convert(lt, to_type);
       else
-        s = convert(lt) && s;
+        s = convert(lt, to_type) && s;
       alternate = !alternate;
     }
     v[static_cast<int>(to_type)].second = s.simplify();
@@ -111,9 +111,9 @@ expr Z3LogicBlock::convert(const LogicTerm &a, CType to_type) {
     bool alternate = false;
     for (const LogicTerm &lt : a.getNodes()) {
       if (alternate)
-        s = s || convert(lt);
+        s = s || convert(lt, to_type);
       else
-        s = convert(lt) || s;
+        s = convert(lt, to_type) || s;
       alternate = !alternate;
     }
 
