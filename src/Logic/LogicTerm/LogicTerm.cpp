@@ -65,7 +65,7 @@ std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm &a) {
 }
 
 LogicTerm::LogicTerm(const LogicTerm &other)
-    : pImpl(std::make_shared<TermImpl>(other)) {}
+    : pImpl(other.getImplementation()) {}
 
 void LogicTerm::print(std::ostream &os) const { pImpl->print(os); }
 

@@ -3,6 +3,7 @@
 #include "LogicTerm/LogicTerm.hpp"
 #include "LogicUtil/util_logic.h"
 #include "utils/util.hpp"
+#include <sstream>
 
 namespace z3logic {
 void Z3LogicBlock::assertFormula(const LogicTerm &a) {
@@ -60,7 +61,6 @@ void Z3LogicBlock::produceInstance() {
     expr c = ctx.bool_val(false);
     c = convert(*it, CType::BOOL);
     this->optimizer.add(c);
-    // DEBUG() << "Adding clause: " << c << "\n";f
     ++it;
   }
 }

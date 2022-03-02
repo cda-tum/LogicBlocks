@@ -10,21 +10,13 @@ TermImpl::TermImpl(OpType ot, const std::initializer_list<LogicTerm> &n,
                    CType cType, Logic *lb)
     : lb(lb), id(getNextId(lb)), depth(logicutil::getMax(n)),
       name(getStrRep(ot)), opType(ot), bv_size(logicutil::getMaxBVSize(n)),
-      c_type(cType) {
-  nodes.clear();
-  for (auto &it : n)
-    nodes.push_back(it);
-}
+      nodes(n), c_type(cType) {}
 
 TermImpl::TermImpl(OpType ot, const std::vector<LogicTerm> &n, CType cType,
                    Logic *lb)
     : lb(lb), id(getNextId(lb)), depth(logicutil::getMax(n)),
       name(getStrRep(ot)), opType(ot), bv_size(logicutil::getMaxBVSize(n)),
-      c_type(cType) {
-  nodes.clear();
-  for (auto &it : n)
-    nodes.push_back(it);
-}
+      nodes(n), c_type(cType) {}
 
 TermImpl::TermImpl(OpType ot, const LogicTerm &a, CType cType, Logic *lb)
     : TermImpl(ot, {a}, cType, lb) {}
