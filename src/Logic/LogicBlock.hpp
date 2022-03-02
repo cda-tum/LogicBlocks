@@ -37,7 +37,7 @@ public:
     }
   }
 
-  void assertFormula(const LogicTerm &a) {
+  virtual void assertFormula(const LogicTerm &a) {
     if (a.getOpType() == OpType::AND) {
       for (const auto &clause : a.getNodes()) {
         clauses.insert(clause);
