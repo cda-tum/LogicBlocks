@@ -14,7 +14,11 @@ inline bool isConst(const LogicTerm &a) {
 inline bool isVar(const LogicTerm &a) {
   return a.getOpType() == OpType::Variable;
 }
-inline CType getTargetCType(const LogicTerm &a, const LogicTerm &b) {
+inline CType getTargetCType(const LogicTerm &a, const LogicTerm &b, OpType op) {
+  if (op == OpType::EQ || op == OpType::XOR || op == OpType::AND ||
+      op == OpType::OR) {
+    return CType::BOOL;
+  }
   if (a.getCType() == CType::REAL || b.getCType() == CType::REAL)
     return CType::REAL;
   else if (a.getCType() == CType::BITVECTOR || b.getCType() == CType::BITVECTOR)

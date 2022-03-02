@@ -4,29 +4,57 @@
 #include "Logic.hpp"
 #include "util_logic.h"
 #include <algorithm>
+#include <memory>
 
 namespace logicutil {
 using namespace logicbase;
+
+inline OpType getBVConversion(OpType op) {
+  switch (op) {
+  case OpType::AND:
+    op = OpType::BIT_AND;
+    break;
+  case OpType::OR:
+    op = OpType::BIT_OR;
+    break;
+  case OpType::EQ:
+    op = OpType::BIT_EQ;
+    break;
+  case OpType::XOR:
+    op = OpType::BIT_XOR;
+    break;
+  default:
+    break;
+  }
+  return op;
+}
+
+inline LogicTerm getBoolConversion(const LogicTerm &term) {
+  if (isConst(term)) {
+    if (term.getCType() == CType::BOOL)
+      return term;
+    else
+      return LogicTerm(term.getBoolValue());
+  } else {
+    switch (term.getCType()) {
+    case CType::BOOL:
+      return term;
+    case CType::INT:
+    case CType::REAL:
+      return LogicTerm::eq(term, LogicTerm(0));
+    case CType::BITVECTOR:
+      return LogicTerm::eq(term, LogicTerm(0, term.getBitVectorSize()));
+    default:
+      throw std::runtime_error("Invalid CType");
+    }
+  }
+}
+
 inline std::shared_ptr<TermImpl>
 combineTerms(const LogicTerm &a, const LogicTerm &b, OpType op, Logic *logic) {
   if (a.getCType() == CType::BITVECTOR && b.getCType() == CType::BITVECTOR &&
       LogicTerm::useBitVectorConversions) {
-    switch (op) {
-    case OpType::AND:
-      op = OpType::BIT_AND;
-      break;
-    case OpType::OR:
-      op = OpType::BIT_OR;
-      break;
-    case OpType::EQ:
-      op = OpType::BIT_EQ;
-      break;
-    case OpType::XOR:
-      op = OpType::BIT_XOR;
-      break;
-    default:
-      break;
-    }
+    op = getBVConversion(op);
   }
   if ((a.getOpType() == op || b.getOpType() == op) && isAssociative(op)) {
     std::vector<LogicTerm> terms{};
@@ -37,9 +65,10 @@ combineTerms(const LogicTerm &a, const LogicTerm &b, OpType op, Logic *logic) {
     res = getFlatTerms(b, op);
     terms.insert(terms.end(), res.begin(), res.end());
 
-    return std::make_shared<TermImpl>(op, terms, getTargetCType(a, b), logic);
+    return std::make_shared<TermImpl>(op, terms, getTargetCType(a, b, op),
+                                      logic);
   }
-  return std::make_shared<TermImpl>(op, a, b, getTargetCType(a, b), logic);
+  return std::make_shared<TermImpl>(op, a, b, getTargetCType(a, b, op), logic);
 };
 
 inline std::shared_ptr<TermImpl> combineOneConst(const LogicTerm &constant,
@@ -48,22 +77,7 @@ inline std::shared_ptr<TermImpl> combineOneConst(const LogicTerm &constant,
   if (constant.getCType() == CType::BITVECTOR &&
       other.getCType() == CType::BITVECTOR &&
       LogicTerm::useBitVectorConversions) {
-    switch (op) {
-    case OpType::AND:
-      op = OpType::BIT_AND;
-      break;
-    case OpType::OR:
-      op = OpType::BIT_OR;
-      break;
-    case OpType::EQ:
-      op = OpType::BIT_EQ;
-      break;
-    case OpType::XOR:
-      op = OpType::BIT_XOR;
-      break;
-    default:
-      break;
-    }
+    op = getBVConversion(op);
   }
   switch (op) { // TODO handle other CTypes
   case OpType::AND: {
@@ -188,6 +202,13 @@ inline unsigned long long getMax(const std::vector<LogicTerm> &terms) {
   for (auto &it : terms)
     ret = std::max(ret, it.getDepth());
   return ret + 1;
+}
+
+inline short getMaxBVSize(const std::vector<LogicTerm> &terms) {
+  short ret = 0;
+  for (auto &it : terms)
+    ret = std::max(ret, it.getBitVectorSize());
+  return ret;
 }
 
 } // namespace logicutil

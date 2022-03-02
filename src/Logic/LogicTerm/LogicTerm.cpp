@@ -40,6 +40,10 @@ std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm &a,
   if (logicutil::isConst(a) || logicutil::isConst(b)) {
     return logicutil::combineConst(a, b, opType, lb);
   }
+  if (opType == OpType::AND || opType == OpType::OR) {
+    return logicutil::combineTerms(logicutil::getBoolConversion(a),
+                                   logicutil::getBoolConversion(b), opType, lb);
+  }
   return logicutil::combineTerms(a, b, opType, lb);
 }
 
@@ -48,7 +52,7 @@ std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm &a,
                                         const LogicTerm &c) {
 
   Logic *lb = logicutil::getValidLogic_ptr(a, b, c);
-  CType targetCType = logicutil::getTargetCType(b, c);
+  CType targetCType = logicutil::getTargetCType(b, c, opType);
   return std::make_shared<TermImpl>(opType, a, b, c, targetCType, lb);
 }
 

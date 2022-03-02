@@ -10,13 +10,13 @@ void Z3LogicBlock::assertFormula(const LogicTerm &a) {
     for (const auto &clause : a.getNodes()) {
       clauses.insert(clause);
       if (convertWhenAssert) {
-        this->optimizer.add(convert(clause));
+        this->optimizer.add(convert(clause, CType::BOOL));
       }
     }
   } else {
     clauses.insert(a);
     if (convertWhenAssert) {
-      this->optimizer.add(convert(a));
+      this->optimizer.add(convert(a, CType::BOOL));
     }
   }
 }
@@ -32,7 +32,8 @@ void Z3LogicBlock::setOptimizer(optimize &Optimizer) {
 bool Z3LogicBlock::makeMinimize() {
   auto it = weightedTerms.begin();
   while (it != weightedTerms.end()) {
-    optimizer.add(convert(LogicTerm::neg(it->first)), (*it).second);
+    optimizer.add(convert(LogicTerm::neg(it->first), CType::BOOL),
+                  (*it).second);
     ++it;
   }
   return false;
@@ -40,24 +41,24 @@ bool Z3LogicBlock::makeMinimize() {
 bool Z3LogicBlock::makeMaximize() {
   auto it = weightedTerms.begin();
   while (it != weightedTerms.end()) {
-    optimizer.add(convert((*it).first), (*it).second);
+    optimizer.add(convert((*it).first, CType::BOOL), (*it).second);
     ++it;
   }
   return false;
 }
 bool Z3LogicBlock::maximize(const LogicTerm &term) {
-  optimizer.maximize(convert(term));
+  optimizer.maximize(convert(term, CType::REAL));
   return true;
 }
 bool Z3LogicBlock::minimize(const LogicTerm &term) {
-  optimizer.minimize(convert(term));
+  optimizer.minimize(convert(term, CType::REAL));
   return true;
 }
 void Z3LogicBlock::produceInstance() {
   auto it = clauses.begin();
   while (it != clauses.end()) {
     expr c = ctx.bool_val(false);
-    c = convert(*it);
+    c = convert(*it, CType::BOOL);
     this->optimizer.add(c);
     // DEBUG() << "Adding clause: " << c << "\n";f
     ++it;
@@ -183,8 +184,7 @@ expr Z3LogicBlock::convert(const LogicTerm &a, CType to_type) {
   } break;
   case OpType::BIT_AND: {
     v[static_cast<int>(to_type)].second =
-        convertOperator(a.getNodes(), z3::operator&,
-                        logicutil::extractNumberType(a.getNodes()));
+        convertOperator(a.getNodes(), z3::operator&, to_type);
     v[static_cast<int>(to_type)].first = true;
   } break;
   case OpType::BIT_OR: {
@@ -372,14 +372,14 @@ z3::expr Z3LogicBlock::convertOperator(const LogicTerm &a, const LogicTerm &b,
                                                       const z3::expr &),
                                        CType to_type) {
   if (to_type == CType::ERRORTYPE)
-    to_type = logicutil::getTargetCType(a, b);
+    to_type = logicutil::getTargetCType(a, b, OpType::None);
   return op(convert(a, to_type), convert(b, to_type));
 }
 z3::expr Z3LogicBlock::convertOperator(
     const LogicTerm &a, const LogicTerm &b, const LogicTerm &c,
     z3::expr (*op)(const z3::expr &, const z3::expr &, const z3::expr &),
     CType to_type) {
-  to_type = logicutil::getTargetCType(a, b);
+  to_type = logicutil::getTargetCType(a, b, OpType::None);
   to_type = logicutil::getTargetCType(to_type, c);
   return op(convert(a, CType::BOOL), convert(b, to_type), convert(c, to_type));
 }

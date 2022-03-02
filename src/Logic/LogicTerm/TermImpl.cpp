@@ -9,7 +9,8 @@ using namespace logicbase;
 TermImpl::TermImpl(OpType ot, const std::initializer_list<LogicTerm> &n,
                    CType cType, Logic *lb)
     : lb(lb), id(getNextId(lb)), depth(logicutil::getMax(n)),
-      name(getStrRep(ot)), opType(ot), c_type(cType) {
+      name(getStrRep(ot)), opType(ot), bv_size(logicutil::getMaxBVSize(n)),
+      c_type(cType) {
   nodes.clear();
   for (auto &it : n)
     nodes.push_back(it);
@@ -18,7 +19,8 @@ TermImpl::TermImpl(OpType ot, const std::initializer_list<LogicTerm> &n,
 TermImpl::TermImpl(OpType ot, const std::vector<LogicTerm> &n, CType cType,
                    Logic *lb)
     : lb(lb), id(getNextId(lb)), depth(logicutil::getMax(n)),
-      name(getStrRep(ot)), opType(ot), c_type(cType) {
+      name(getStrRep(ot)), opType(ot), bv_size(logicutil::getMaxBVSize(n)),
+      c_type(cType) {
   nodes.clear();
   for (auto &it : n)
     nodes.push_back(it);

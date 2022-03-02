@@ -22,8 +22,13 @@ int main(int argc, char *argv[]) {
   LogicTerm e = z3logic.makeVariable("e", CType::BITVECTOR, 5);
   LogicTerm f = z3logic.makeVariable("f", CType::BITVECTOR, 5);
   LogicTerm g = z3logic.makeVariable("g", CType::BITVECTOR, 5);
-  LogicTerm changes = a & b;
-
+  LogicTerm changes = LogicTerm(true);
+  changes = changes && (a & b);
+  changes = changes && (c & d);
+  changes = changes && (e & (f & g));
+  changes.print(std::cout);
+  std::cout << std::endl;
+  z3logic.assertFormula(changes);
   z3logic.dumpAll(std::cout);
   z3logic.produceInstance();
   z3logic.dumpZ3State(std::cout);

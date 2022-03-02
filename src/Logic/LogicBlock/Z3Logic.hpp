@@ -55,7 +55,7 @@ public:
 
   void setOptimizer(optimize &Optimizer);
   optimize &getOptimizer();
-  expr convert(const LogicTerm &a, CType to_type = CType::BOOL);
+  expr convert(const LogicTerm &a, CType to_type = CType::ERRORTYPE);
   expr getExprTerm(unsigned long long id, CType type);
 
   void dumpZ3State(std::ostream &stream);
