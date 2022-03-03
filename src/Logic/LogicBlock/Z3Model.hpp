@@ -13,11 +13,9 @@ class Z3Model : public Model {
 protected:
   z3::model model;
   z3::context &ctx;
-  z3::optimize &optimizer;
 
 public:
-  Z3Model(z3::context &ctx, z3::optimize &optimizer, z3::model model)
-      : model(model), ctx(ctx), optimizer(optimizer) {}
+  Z3Model(z3::context &ctx, z3::model model) : model(model), ctx(ctx) {}
   int getIntValue(const LogicTerm &a, LogicBlock *lb);
   LogicTerm getValue(const LogicTerm &a, LogicBlock *lb);
   bool getBoolValue(const LogicTerm &a, LogicBlock *lb);

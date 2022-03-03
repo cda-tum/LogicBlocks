@@ -6,74 +6,15 @@
 #include <sstream>
 
 namespace z3logic {
-void Z3LogicBlock::assertFormula(const LogicTerm &a) {
-  if (a.getOpType() == OpType::AND) {
-    for (const auto &clause : a.getNodes()) {
-      clauses.insert(clause);
-      if (convertWhenAssert) {
-        this->optimizer.add(convert(clause, CType::BOOL));
-      }
-    }
-  } else {
-    clauses.insert(a);
-    if (convertWhenAssert) {
-      this->optimizer.add(convert(a, CType::BOOL));
-    }
-  }
-}
 
-void Z3LogicBlock::dumpZ3State(std::ostream &stream) {
-  stream << "Z3State: " << std::endl;
-  stream << optimizer << std::endl;
-}
-
-void Z3LogicBlock::setOptimizer(optimize &Optimizer) {
-  this->optimizer = Optimizer;
-}
-bool Z3LogicBlock::makeMinimize() {
-  auto it = weightedTerms.begin();
-  while (it != weightedTerms.end()) {
-    optimizer.add(convert(LogicTerm::neg(it->first), CType::BOOL),
-                  (*it).second);
-    ++it;
-  }
-  return false;
-}
-bool Z3LogicBlock::makeMaximize() {
-  auto it = weightedTerms.begin();
-  while (it != weightedTerms.end()) {
-    optimizer.add(convert((*it).first, CType::BOOL), (*it).second);
-    ++it;
-  }
-  return false;
-}
-bool Z3LogicBlock::maximize(const LogicTerm &term) {
-  optimizer.maximize(convert(term, CType::REAL));
-  return true;
-}
-bool Z3LogicBlock::minimize(const LogicTerm &term) {
-  optimizer.minimize(convert(term, CType::REAL));
-  return true;
-}
-void Z3LogicBlock::produceInstance() {
-  auto it = clauses.begin();
-  while (it != clauses.end()) {
-    expr c = ctx.bool_val(false);
-    c = convert(*it, CType::BOOL);
-    this->optimizer.add(c);
-    ++it;
-  }
-}
-optimize &Z3LogicBlock::getOptimizer() { return optimizer; }
-
-expr Z3LogicBlock::getExprTerm(unsigned long long id, CType type) {
+expr Z3Base::getExprTerm(unsigned long long id, CType type) {
   if (variables.find(id) == variables.end() ||
       !variables.at(id)[static_cast<int>(type)].first)
     throw std::runtime_error("Variable not found");
   return variables.at(id)[static_cast<int>(type)].second;
 }
 
-expr Z3LogicBlock::convert(const LogicTerm &a, CType to_type) {
+expr Z3Base::convert(const LogicTerm &a, CType to_type) {
   if (a.getOpType() == OpType::Constant) {
     return convertConstant(a, to_type);
   };
@@ -213,23 +154,52 @@ expr Z3LogicBlock::convert(const LogicTerm &a, CType to_type) {
   return cache.at(a)[static_cast<int>(to_type)].second;
 }
 
+void Z3LogicBlock::assertFormula(const LogicTerm &a) {
+  if (a.getOpType() == OpType::AND) {
+    for (const auto &clause : a.getNodes()) {
+      clauses.insert(clause);
+      if (convertWhenAssert) {
+        this->solver.add(convert(clause, CType::BOOL));
+      }
+    }
+  } else {
+    clauses.insert(a);
+    if (convertWhenAssert) {
+      this->solver.add(convert(a, CType::BOOL));
+    }
+  }
+}
+
+void Z3LogicBlock::dumpZ3State(std::ostream &stream) {
+  stream << "Z3State: " << std::endl;
+  stream << solver << std::endl;
+}
+
+void Z3LogicBlock::produceInstance() {
+  auto it = clauses.begin();
+  while (it != clauses.end()) {
+    expr c = ctx.bool_val(false);
+    c = convert(*it, CType::BOOL);
+    this->solver.add(c);
+    ++it;
+  }
+}
+
 Result Z3LogicBlock::solve() {
-  z3::check_result res = this->optimizer.check();
+  z3::check_result res = this->solver.check();
   if (res == z3::sat) {
-    this->model =
-        new Z3Model(this->ctx, this->optimizer, this->optimizer.get_model());
+    this->model = new Z3Model(this->ctx, this->solver.get_model());
     return Result::SAT;
   }
   return Result::UNSAT;
 }
 
 void Z3LogicBlock::internal_reset() {
-  weightedTerms.clear();
   variables.clear();
   cache.clear();
 }
 
-z3::expr Z3LogicBlock::convertVariableTo(const LogicTerm &a, CType to_type) {
+z3::expr Z3Base::convertVariableTo(const LogicTerm &a, CType to_type) {
   std::vector<std::pair<bool, expr>> v;
   if (variables.find(a.getID()) != variables.end()) {
     v = variables.at(a.getID());
@@ -262,8 +232,7 @@ z3::expr Z3LogicBlock::convertVariableTo(const LogicTerm &a, CType to_type) {
   variables.insert_or_assign(a.getID(), v);
   return v[static_cast<int>(to_type)].second;
 }
-z3::expr Z3LogicBlock::convertVariableFromBoolTo(const LogicTerm &a,
-                                                 CType to_type) {
+z3::expr Z3Base::convertVariableFromBoolTo(const LogicTerm &a, CType to_type) {
   std::stringstream ss;
   ss << a.getName() << "_" << a.getID();
   switch (to_type) {
@@ -288,8 +257,7 @@ z3::expr Z3LogicBlock::convertVariableFromBoolTo(const LogicTerm &a,
   util::fatal("Unsupported type");
   return ctx.bool_val(false);
 }
-z3::expr Z3LogicBlock::convertVariableFromIntTo(const LogicTerm &a,
-                                                CType to_type) {
+z3::expr Z3Base::convertVariableFromIntTo(const LogicTerm &a, CType to_type) {
   std::stringstream ss;
   ss << a.getName() << "_" << a.getID();
   switch (to_type) {
@@ -311,8 +279,7 @@ z3::expr Z3LogicBlock::convertVariableFromIntTo(const LogicTerm &a,
   util::fatal("Unsupported type");
   return ctx.bool_val(false);
 }
-z3::expr Z3LogicBlock::convertVariableFromRealTo(const LogicTerm &a,
-                                                 CType to_type) {
+z3::expr Z3Base::convertVariableFromRealTo(const LogicTerm &a, CType to_type) {
   std::stringstream ss;
   ss << a.getName() << "_" << a.getID();
   switch (to_type) {
@@ -335,8 +302,8 @@ z3::expr Z3LogicBlock::convertVariableFromRealTo(const LogicTerm &a,
   util::fatal("Unsupported type");
   return ctx.bool_val(false);
 }
-z3::expr Z3LogicBlock::convertVariableFromBitvectorTo(const LogicTerm &a,
-                                                      CType to_type) {
+z3::expr Z3Base::convertVariableFromBitvectorTo(const LogicTerm &a,
+                                                CType to_type) {
   std::stringstream ss;
   ss << a.getName() << "_" << a.getID();
   switch (to_type) {
@@ -359,23 +326,23 @@ z3::expr Z3LogicBlock::convertVariableFromBitvectorTo(const LogicTerm &a,
   return ctx.bool_val(false);
 }
 
-z3::expr Z3LogicBlock::convertOperator(const LogicTerm &a,
-                                       z3::expr (*op)(const z3::expr &),
-                                       CType to_type) {
+z3::expr Z3Base::convertOperator(const LogicTerm &a,
+                                 z3::expr (*op)(const z3::expr &),
+                                 CType to_type) {
   if (to_type == CType::ERRORTYPE)
     to_type = a.getCType();
   return op(convert(a, to_type));
 }
 
-z3::expr Z3LogicBlock::convertOperator(const LogicTerm &a, const LogicTerm &b,
-                                       z3::expr (*op)(const z3::expr &,
-                                                      const z3::expr &),
-                                       CType to_type) {
+z3::expr Z3Base::convertOperator(const LogicTerm &a, const LogicTerm &b,
+                                 z3::expr (*op)(const z3::expr &,
+                                                const z3::expr &),
+                                 CType to_type) {
   if (to_type == CType::ERRORTYPE)
     to_type = logicutil::getTargetCType(a, b, OpType::None);
   return op(convert(a, to_type), convert(b, to_type));
 }
-z3::expr Z3LogicBlock::convertOperator(
+z3::expr Z3Base::convertOperator(
     const LogicTerm &a, const LogicTerm &b, const LogicTerm &c,
     z3::expr (*op)(const z3::expr &, const z3::expr &, const z3::expr &),
     CType to_type) {
@@ -384,10 +351,10 @@ z3::expr Z3LogicBlock::convertOperator(
   return op(convert(a, CType::BOOL), convert(b, to_type), convert(c, to_type));
 }
 
-z3::expr Z3LogicBlock::convertOperator(std::vector<LogicTerm> terms,
-                                       z3::expr (*op)(const z3::expr &,
-                                                      const z3::expr &),
-                                       CType to_type) {
+z3::expr Z3Base::convertOperator(std::vector<LogicTerm> terms,
+                                 z3::expr (*op)(const z3::expr &,
+                                                const z3::expr &),
+                                 CType to_type) {
   z3::expr res = convert(static_cast<LogicTerm>(*terms.begin()), to_type);
   for (auto it = (terms.begin() + 1); it != terms.end(); ++it) {
     res = op(res, convert(static_cast<LogicTerm>(*it), to_type));
@@ -395,7 +362,7 @@ z3::expr Z3LogicBlock::convertOperator(std::vector<LogicTerm> terms,
   return res;
 }
 
-z3::expr Z3LogicBlock::convertConstant(const LogicTerm &a, CType to_type) {
+z3::expr Z3Base::convertConstant(const LogicTerm &a, CType to_type) {
   switch (to_type) {
   case logicbase::CType::BOOL:
     return ctx.bool_val(a.getBoolValue());
@@ -415,6 +382,78 @@ z3::expr Z3LogicBlock::convertConstant(const LogicTerm &a, CType to_type) {
   }
   util::fatal("Unsupported type");
   return ctx.bool_val(false);
+}
+
+bool Z3LogicOptimizer::makeMinimize() {
+  auto it = weightedTerms.begin();
+  while (it != weightedTerms.end()) {
+    optimizer.add(convert(LogicTerm::neg(it->first), CType::BOOL),
+                  (*it).second);
+    ++it;
+  }
+  return false;
+}
+bool Z3LogicOptimizer::makeMaximize() {
+  auto it = weightedTerms.begin();
+  while (it != weightedTerms.end()) {
+    optimizer.add(convert((*it).first, CType::BOOL), (*it).second);
+    ++it;
+  }
+  return false;
+}
+bool Z3LogicOptimizer::maximize(const LogicTerm &term) {
+  optimizer.maximize(convert(term, CType::REAL));
+  return true;
+}
+bool Z3LogicOptimizer::minimize(const LogicTerm &term) {
+  optimizer.minimize(convert(term, CType::REAL));
+  return true;
+}
+
+void Z3LogicOptimizer::assertFormula(const LogicTerm &a) {
+  if (a.getOpType() == OpType::AND) {
+    for (const auto &clause : a.getNodes()) {
+      clauses.insert(clause);
+      if (convertWhenAssert) {
+        this->optimizer.add(convert(clause, CType::BOOL));
+      }
+    }
+  } else {
+    clauses.insert(a);
+    if (convertWhenAssert) {
+      this->optimizer.add(convert(a, CType::BOOL));
+    }
+  }
+}
+
+void Z3LogicOptimizer::dumpZ3State(std::ostream &stream) {
+  stream << "Z3State: " << std::endl;
+  stream << optimizer << std::endl;
+}
+
+void Z3LogicOptimizer::produceInstance() {
+  auto it = clauses.begin();
+  while (it != clauses.end()) {
+    expr c = ctx.bool_val(false);
+    c = convert(*it, CType::BOOL);
+    this->optimizer.add(c);
+    ++it;
+  }
+}
+
+Result Z3LogicOptimizer::solve() {
+  z3::check_result res = this->optimizer.check();
+  if (res == z3::sat) {
+    this->model = new Z3Model(this->ctx, this->optimizer.get_model());
+    return Result::SAT;
+  }
+  return Result::UNSAT;
+}
+
+void Z3LogicOptimizer::internal_reset() {
+  weightedTerms.clear();
+  variables.clear();
+  cache.clear();
 }
 
 } // namespace z3logic

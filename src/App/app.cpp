@@ -2,6 +2,7 @@
 #include <boost/program_options.hpp>
 #include <boost/program_options/value_semantic.hpp>
 #include <iostream>
+#include <z3++.h>
 
 #include "Logic.hpp"
 #include "Logic/LogicBlock/Z3Logic.hpp"
@@ -13,7 +14,10 @@ int main(int argc, char *argv[]) {
   namespace po = boost::program_options;
   po::options_description desc("Allowed options");
 
-  z3logic::Z3LogicBlock z3logic(true);
+  z3::context ctx{};
+  z3::solver solver{ctx};
+
+  z3logic::Z3LogicBlock z3logic(ctx, solver, true);
 
   LogicTerm a = z3logic.makeVariable("a", CType::BITVECTOR, 5);
   LogicTerm b = z3logic.makeVariable("b", CType::BITVECTOR, 5);

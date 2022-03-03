@@ -32,7 +32,7 @@ int Z3Model::getIntValue(const LogicTerm &a, LogicBlock *lb) {
   return model
       .eval(
           static_cast<Z3LogicBlock *>(lb)->getExprTerm(a.getID(), a.getCType()))
-      .get_numeral_int();
+      .as_int64();
 }
 
 double Z3Model::getRealValue(const LogicTerm &a, LogicBlock *lb) {

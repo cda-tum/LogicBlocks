@@ -24,43 +24,22 @@ namespace z3logic {
 using namespace z3;
 using namespace logicbase;
 
-class Z3LogicBlock : public LogicBlockOptimizer {
+class Z3Base {
 protected:
-  z3::context internal_ctx{};
-  z3::optimize internal_optimizer{internal_ctx};
-  z3::context &ctx;
   std::map<unsigned long long, std::vector<std::pair<bool, expr>>> variables;
-  optimize &optimizer;
-  void internal_reset() override;
-
   std::unordered_map<LogicTerm, std::vector<std::pair<bool, expr>>, TermHash,
                      TermHash>
       cache{};
+  z3::context &ctx;
 
 public:
-  Z3LogicBlock(context &ctx, optimize &optimizer, bool convertWhenAssert = true)
-      : LogicBlockOptimizer(convertWhenAssert), ctx(ctx), optimizer(optimizer) {
-  }
-  Z3LogicBlock(bool convertWhenAssert = true)
-      : LogicBlockOptimizer(convertWhenAssert), ctx(internal_ctx),
-        optimizer(internal_optimizer) {}
-  ~Z3LogicBlock() { internal_reset(); }
-  void assertFormula(const LogicTerm &a) override;
-  bool makeMinimize() override;
-  bool makeMaximize() override;
-  bool maximize(const LogicTerm &term) override;
-  bool minimize(const LogicTerm &term) override;
-  void produceInstance() override;
-  Result solve() override;
+  Z3Base(z3::context &ctx) : ctx(ctx) {}
+  virtual ~Z3Base() {}
 
-  void setOptimizer(optimize &Optimizer);
-  optimize &getOptimizer();
   expr convert(const LogicTerm &a, CType to_type = CType::ERRORTYPE);
   expr getExprTerm(unsigned long long id, CType type);
-
-  void dumpZ3State(std::ostream &stream);
-
   context &getContext() { return ctx; }
+
   z3::expr convertVariableTo(const LogicTerm &a, CType to_type);
   z3::expr convertVariableFromBoolTo(const LogicTerm &a, CType to_type);
   z3::expr convertVariableFromIntTo(const LogicTerm &a, CType to_type);
@@ -82,6 +61,44 @@ public:
                            CType to_type);
 
   z3::expr convertConstant(const LogicTerm &a, CType to_type);
+};
+
+class Z3LogicBlock : public LogicBlock, public Z3Base {
+protected:
+  solver &solver;
+  void internal_reset() override;
+
+public:
+  Z3LogicBlock(context &ctx, z3::solver &solver, bool convertWhenAssert = true)
+      : LogicBlock(convertWhenAssert), Z3Base(ctx), solver(solver) {}
+  ~Z3LogicBlock() { internal_reset(); }
+  void assertFormula(const LogicTerm &a) override;
+  void produceInstance() override;
+  Result solve() override;
+  void dumpZ3State(std::ostream &stream);
+};
+
+class Z3LogicOptimizer : public LogicBlockOptimizer, public Z3Base {
+private:
+  z3::optimize &optimizer;
+  std::map<unsigned long long, std::vector<std::pair<bool, expr>>> variables;
+  void internal_reset() override;
+
+public:
+  Z3LogicOptimizer(context &ctx, z3::optimize &optimizer,
+                   bool convertWhenAssert = true)
+      : LogicBlockOptimizer(convertWhenAssert), Z3Base(ctx),
+        optimizer(optimizer) {}
+  ~Z3LogicOptimizer() {}
+  void assertFormula(const LogicTerm &a) override;
+  void produceInstance() override;
+  Result solve() override;
+  void dumpZ3State(std::ostream &stream);
+
+  bool makeMinimize() override;
+  bool makeMaximize() override;
+  bool maximize(const LogicTerm &term) override;
+  bool minimize(const LogicTerm &term) override;
 };
 
 } // namespace z3logic
