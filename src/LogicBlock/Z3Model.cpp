@@ -1,7 +1,5 @@
-#include "Z3Model.hpp"
-#include "Logic.hpp"
-#include "LogicTerm/LogicTerm.hpp"
-#include "Z3Logic.hpp"
+#include "LogicBlock/Z3Model.hpp"
+#include "LogicBlock/Z3Logic.hpp"
 #include <z3++.h>
 
 namespace z3logic {

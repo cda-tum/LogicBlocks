@@ -1,7 +1,6 @@
-#include "TermImpl.hpp"
-#include "../LogicUtil/util_logicterm.h"
-#include "Logic.hpp"
-#include "utils/util.hpp"
+#include "LogicTerm/TermImpl.hpp"
+#include "LogicUtil/util_logicterm.hpp"
+
 #include <bitset>
 
 using namespace logicbase;

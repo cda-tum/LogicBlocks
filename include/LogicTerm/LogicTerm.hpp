@@ -1,8 +1,8 @@
 #ifndef LOGIC_TERM_H
 #define LOGIC_TERM_H
 
-#include "Logic.hpp"
 #include "TermImpl.hpp"
+
 #include <cmath>
 #include <map>
 #include <memory>

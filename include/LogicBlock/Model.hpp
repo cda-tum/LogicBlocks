@@ -1,8 +1,8 @@
 #ifndef LOGICBLOCK_MODEL_H
 #define LOGICBLOCK_MODEL_H
 
-#include "Logic.hpp"
 #include "LogicTerm/LogicTerm.hpp"
+
 namespace logicbase {
 class Model {
 protected:

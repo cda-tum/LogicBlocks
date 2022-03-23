@@ -1,8 +1,7 @@
 #ifndef LogicTerm_Z3MODEL_H
 #define LogicTerm_Z3MODEL_H
 
-#include "Logic.hpp"
-#include "Model.hpp"
+#include "LogicBlock/Model.hpp"
 #include "z3++.h"
 
 namespace z3logic {

@@ -6,10 +6,11 @@
 #include <memory>
 #include <ostream>
 #include <sstream>
-#include <stdarg.h>
+#include <cstdarg>
 #include <stdexcept>
 #include <string>
 #include <vector>
+
 namespace logicbase {
 enum class Result { SAT, UNSAT, NDEF };
 enum class OpType {
