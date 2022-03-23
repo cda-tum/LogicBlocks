@@ -1,130 +1,153 @@
 #include "LogicTerm/LogicTerm.hpp"
+
 #include "LogicUtil/util_logic.hpp"
 #include "LogicUtil/util_logicterm.hpp"
 #include "utils/util.hpp"
 
 namespace logicbase {
-TermType LogicTerm::termType = TermType::BASE;
-long long TermImpl::gid = 1;
-bool LogicTerm::useBitVectorConversions = false;
+    TermType  LogicTerm::termType                = TermType::BASE;
+    long long TermImpl::gid                      = 1;
+    bool      LogicTerm::useBitVectorConversions = false;
 
-std::shared_ptr<TermImpl> makeLogicTerm(const bool value) {
-  return std::make_shared<TermImpl>(value);
-}
-std::shared_ptr<TermImpl> makeLogicTerm(const int value) {
-  return std::make_shared<TermImpl>(value);
-}
-std::shared_ptr<TermImpl> makeLogicTerm(const double value) {
-  return std::make_shared<TermImpl>(value);
-}
-std::shared_ptr<TermImpl> makeLogicTerm(const unsigned long long value,
-                                        short bv_size) {
-  return std::make_shared<TermImpl>(value, bv_size);
-}
-std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const std::string name,
-                                        CType cType, Logic *lb) {
-  return std::make_shared<TermImpl>(opType, name, cType, lb);
-}
+    std::shared_ptr<TermImpl> makeLogicTerm(const bool value) {
+        return std::make_shared<TermImpl>(value);
+    }
+    std::shared_ptr<TermImpl> makeLogicTerm(const int value) {
+        return std::make_shared<TermImpl>(value);
+    }
+    std::shared_ptr<TermImpl> makeLogicTerm(const double value) {
+        return std::make_shared<TermImpl>(value);
+    }
+    std::shared_ptr<TermImpl> makeLogicTerm(const unsigned long long value,
+                                            short                    bv_size) {
+        return std::make_shared<TermImpl>(value, bv_size);
+    }
+    std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const std::string name,
+                                            CType cType, Logic* lb) {
+        return std::make_shared<TermImpl>(opType, name, cType, lb);
+    }
 
-std::shared_ptr<TermImpl> makeLogicTerm(const char *name = "", CType cType,
-                                        Logic *lb, short bv_size) {
-  return std::make_shared<TermImpl>(name, cType, lb, bv_size);
-}
+    std::shared_ptr<TermImpl> makeLogicTerm(const char* name = "", CType cType,
+                                            Logic* lb, short bv_size) {
+        return std::make_shared<TermImpl>(name, cType, lb, bv_size);
+    }
 
-std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm &a,
-                                        const LogicTerm &b) {
+    std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm& a,
+                                            const LogicTerm& b) {
+        Logic* lb = logicutil::getValidLogic_ptr(a, b);
 
-  Logic *lb = logicutil::getValidLogic_ptr(a, b);
+        if (logicutil::isConst(a) || logicutil::isConst(b)) {
+            return logicutil::combineConst(a, b, opType, lb);
+        }
+        if (opType == OpType::AND || opType == OpType::OR) {
+            return logicutil::combineTerms(logicutil::getBoolConversion(a),
+                                           logicutil::getBoolConversion(b), opType, lb);
+        }
+        return logicutil::combineTerms(a, b, opType, lb);
+    }
 
-  if (logicutil::isConst(a) || logicutil::isConst(b)) {
-    return logicutil::combineConst(a, b, opType, lb);
-  }
-  if (opType == OpType::AND || opType == OpType::OR) {
-    return logicutil::combineTerms(logicutil::getBoolConversion(a),
-                                   logicutil::getBoolConversion(b), opType, lb);
-  }
-  return logicutil::combineTerms(a, b, opType, lb);
-}
+    std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm& a,
+                                            const LogicTerm& b,
+                                            const LogicTerm& c) {
+        Logic* lb          = logicutil::getValidLogic_ptr(a, b, c);
+        CType  targetCType = logicutil::getTargetCType(b, c, opType);
+        return std::make_shared<TermImpl>(opType, a, b, c, targetCType, lb);
+    }
 
-std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm &a,
-                                        const LogicTerm &b,
-                                        const LogicTerm &c) {
+    std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm& a) {
+        Logic* lb = a.getLogic();
+        if (opType == OpType::NEG) {
+            return logicutil::negateTerm(a, lb);
+        }
+        throw std::runtime_error("Invalid opType");
+    }
 
-  Logic *lb = logicutil::getValidLogic_ptr(a, b, c);
-  CType targetCType = logicutil::getTargetCType(b, c, opType);
-  return std::make_shared<TermImpl>(opType, a, b, c, targetCType, lb);
-}
+    LogicTerm::LogicTerm(const LogicTerm& other):
+        pImpl(other.getImplementation()) {}
 
-std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm &a) {
-  Logic *lb = a.getLogic();
-  if (opType == OpType::NEG) {
-    return logicutil::negateTerm(a, lb);
-  }
-  throw std::runtime_error("Invalid opType");
-}
+    void LogicTerm::print(std::ostream& os) const {
+        pImpl->print(os);
+    }
 
-LogicTerm::LogicTerm(const LogicTerm &other)
-    : pImpl(other.getImplementation()) {}
+    long long LogicTerm::getID() const {
+        return pImpl->getID();
+    }
 
-void LogicTerm::print(std::ostream &os) const { pImpl->print(os); }
+    const std::vector<LogicTerm>& LogicTerm::getNodes() const {
+        return pImpl->getNodes();
+    }
 
-long long LogicTerm::getID() const { return pImpl->getID(); }
+    OpType LogicTerm::getOpType() const {
+        return pImpl->getOpType();
+    }
 
-const std::vector<LogicTerm> &LogicTerm::getNodes() const {
-  return pImpl->getNodes();
-}
+    CType LogicTerm::getCType() const {
+        return pImpl->getCType();
+    }
 
-OpType LogicTerm::getOpType() const { return pImpl->getOpType(); }
+    bool LogicTerm::getBoolValue() const {
+        return pImpl->getBoolValue();
+    }
 
-CType LogicTerm::getCType() const { return pImpl->getCType(); }
+    int LogicTerm::getIntValue() const {
+        return pImpl->getIntValue();
+    }
 
-bool LogicTerm::getBoolValue() const { return pImpl->getBoolValue(); }
+    double LogicTerm::getFloatValue() const {
+        return pImpl->getFloatValue();
+    }
 
-int LogicTerm::getIntValue() const { return pImpl->getIntValue(); }
+    unsigned long long LogicTerm::getBitVectorValue() const {
+        return pImpl->getBitVectorValue();
+    }
 
-double LogicTerm::getFloatValue() const { return pImpl->getFloatValue(); }
+    short LogicTerm::getBitVectorSize() const {
+        return pImpl->getBitVectorSize();
+    }
 
-unsigned long long LogicTerm::getBitVectorValue() const {
-  return pImpl->getBitVectorValue();
-}
+    const std::string& LogicTerm::getName() const {
+        return pImpl->getName();
+    }
 
-short LogicTerm::getBitVectorSize() const { return pImpl->getBitVectorSize(); }
+    std::shared_ptr<TermImpl> LogicTerm::getImplementation() const {
+        return pImpl;
+    }
 
-const std::string &LogicTerm::getName() const { return pImpl->getName(); }
+    bool LogicTerm::deepEquals(const LogicTerm& other) const {
+        return this->pImpl->deepEquals(*other.getImplementation());
+    }
 
-std::shared_ptr<TermImpl> LogicTerm::getImplementation() const { return pImpl; }
+    unsigned long long LogicTerm::getDepth() const {
+        return pImpl->getDepth();
+    }
 
-bool LogicTerm::deepEquals(const LogicTerm &other) const {
-  return this->pImpl->deepEquals(*other.getImplementation());
-}
+    unsigned long long LogicTerm::getMaxChildrenDepth() const {
+        unsigned long long max = 0;
+        for (const LogicTerm& t: pImpl->getNodes()) {
+            unsigned long long d = t.getMaxChildrenDepth();
+            if (d > max)
+                max = d;
+        }
+        return max + 1;
+    };
 
-unsigned long long LogicTerm::getDepth() const { return pImpl->getDepth(); }
+    Logic* LogicTerm::getLogic() const {
+        return pImpl->getLogic();
+    }
 
-unsigned long long LogicTerm::getMaxChildrenDepth() const {
-  unsigned long long max = 0;
-  for (const LogicTerm &t : pImpl->getNodes()) {
-    unsigned long long d = t.getMaxChildrenDepth();
-    if (d > max)
-      max = d;
-  }
-  return max + 1;
-};
-
-Logic *LogicTerm::getLogic() const { return pImpl->getLogic(); }
-
-LogicTerm LogicTerm::getNeutralElement(OpType opType) {
-  switch (opType) {
-  case OpType::AND:
-    return LogicTerm(true);
-  case OpType::OR:
-    return LogicTerm(false);
-  case OpType::ADD:
-    return LogicTerm(0);
-  case OpType::MUL:
-    return LogicTerm(1);
-  default:
-    return LogicTerm::noneTerm();
-  }
-}
+    LogicTerm LogicTerm::getNeutralElement(OpType opType) {
+        switch (opType) {
+            case OpType::AND:
+                return LogicTerm(true);
+            case OpType::OR:
+                return LogicTerm(false);
+            case OpType::ADD:
+                return LogicTerm(0);
+            case OpType::MUL:
+                return LogicTerm(1);
+            default:
+                return LogicTerm::noneTerm();
+        }
+    }
 
 } // namespace logicbase
