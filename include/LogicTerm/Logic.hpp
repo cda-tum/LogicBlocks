@@ -76,7 +76,7 @@ namespace logicbase {
         }
         return "Error";
     }
-    inline CType CTypeFromString(std::string ctype) {
+    inline CType CTypeFromString(const std::string& ctype) {
         if (ctype == "B")
             return CType::BOOL;
         if (ctype == "BV")
@@ -185,7 +185,6 @@ namespace logicbase {
     }
 
     class TermImpl;
-    class LogicTermImpl;
     class LogicTerm;
 
     using LogicVector   = std::vector<LogicTerm>;
@@ -200,23 +199,23 @@ namespace logicbase {
 
     class TermInterface {
     public:
-        virtual ~TermInterface()                                                       = default;
-        virtual long long                     getID() const                            = 0;
-        virtual const std::vector<LogicTerm>& getNodes() const                         = 0;
-        virtual OpType                        getOpType() const                        = 0;
-        virtual CType                         getCType() const                         = 0;
-        virtual bool                          getBoolValue() const                     = 0;
-        virtual int                           getIntValue() const                      = 0;
-        virtual double                        getFloatValue() const                    = 0;
-        virtual unsigned long long            getBitVectorValue() const                = 0;
-        virtual short                         getBitVectorSize() const                 = 0;
-        virtual const std::string&            getName() const                          = 0;
-        virtual Logic*                        getLogic() const                         = 0;
-        virtual std::shared_ptr<TermImpl>     getImplementation() const                = 0;
-        virtual bool                          deepEquals(const LogicTerm& other) const = 0;
-        virtual void                          print(std::ostream& os) const            = 0;
-        virtual unsigned long long            getDepth() const                         = 0;
-        virtual unsigned long long            getMaxChildrenDepth() const              = 0;
+        virtual ~TermInterface()                                                                     = default;
+        [[nodiscard]] virtual long long                     getID() const                            = 0;
+        [[nodiscard]] virtual const std::vector<LogicTerm>& getNodes() const                         = 0;
+        [[nodiscard]] virtual OpType                        getOpType() const                        = 0;
+        [[nodiscard]] virtual CType                         getCType() const                         = 0;
+        [[nodiscard]] virtual bool                          getBoolValue() const                     = 0;
+        [[nodiscard]] virtual int                           getIntValue() const                      = 0;
+        [[nodiscard]] virtual double                        getFloatValue() const                    = 0;
+        [[nodiscard]] virtual unsigned long long            getBitVectorValue() const                = 0;
+        [[nodiscard]] virtual short                         getBitVectorSize() const                 = 0;
+        [[nodiscard]] virtual const std::string&            getName() const                          = 0;
+        [[nodiscard]] virtual Logic*                        getLogic() const                         = 0;
+        [[nodiscard]] virtual std::shared_ptr<TermImpl>     getImplementation() const                = 0;
+        [[nodiscard]] virtual bool                          deepEquals(const LogicTerm& other) const = 0;
+        virtual void                                        print(std::ostream& os) const            = 0;
+        [[nodiscard]] virtual unsigned long long            getDepth() const                         = 0;
+        [[nodiscard]] virtual unsigned long long            getMaxChildrenDepth() const              = 0;
     };
 
     struct TermHash {

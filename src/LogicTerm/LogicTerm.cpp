@@ -22,7 +22,7 @@ namespace logicbase {
                                             short                    bv_size) {
         return std::make_shared<TermImpl>(value, bv_size);
     }
-    std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const std::string name,
+    std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const std::string& name,
                                             CType cType, Logic* lb) {
         return std::make_shared<TermImpl>(opType, name, cType, lb);
     }
@@ -61,9 +61,6 @@ namespace logicbase {
         }
         throw std::runtime_error("Invalid opType");
     }
-
-    LogicTerm::LogicTerm(const LogicTerm& other):
-        pImpl(other.getImplementation()) {}
 
     void LogicTerm::print(std::ostream& os) const {
         pImpl->print(os);

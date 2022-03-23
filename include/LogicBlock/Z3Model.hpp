@@ -14,13 +14,13 @@ namespace z3logic {
         z3::context& ctx;
 
     public:
-        Z3Model(z3::context& ctx, z3::model model):
+        Z3Model(z3::context& ctx, const z3::model& model):
             model(model), ctx(ctx) {}
-        int                getIntValue(const LogicTerm& a, LogicBlock* lb);
-        LogicTerm          getValue(const LogicTerm& a, LogicBlock* lb);
-        bool               getBoolValue(const LogicTerm& a, LogicBlock* lb);
-        double             getRealValue(const LogicTerm& a, LogicBlock* lb);
-        unsigned long long getBitvectorValue(const LogicTerm& a, LogicBlock* lb);
+        int                getIntValue(const LogicTerm& a, LogicBlock* lb) override;
+        LogicTerm          getValue(const LogicTerm& a, LogicBlock* lb) override;
+        bool               getBoolValue(const LogicTerm& a, LogicBlock* lb) override;
+        double             getRealValue(const LogicTerm& a, LogicBlock* lb) override;
+        unsigned long long getBitvectorValue(const LogicTerm& a, LogicBlock* lb) override;
     };
 } // namespace z3logic
 #endif // LogicTerm_Z3MODEL_H

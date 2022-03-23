@@ -17,36 +17,25 @@ namespace z3logic {
         } else if (a.getCType() == CType::REAL) {
             return LogicTerm(getRealValue(a, lb));
         } else if (a.getCType() == CType::BITVECTOR) {
-            return LogicTerm(getBitvectorValue(a, lb), a.getBitVectorSize());
+            return {getBitvectorValue(a, lb), a.getBitVectorSize()};
         } else {
             throw std::runtime_error(
                     "TermInterface::getValue: not supported for this CType");
         }
     }
     bool Z3Model::getBoolValue(const LogicTerm& a, LogicBlock* lb) {
-        return z3::eq(model.eval(static_cast<Z3LogicBlock*>(lb)->getExprTerm(
-                              a.getID(), a.getCType())),
-                      ctx.bool_val(true));
+        return z3::eq(model.eval(dynamic_cast<Z3LogicBlock*>(lb)->getExprTerm(a.getID(), a.getCType())), ctx.bool_val(true));
     }
+
     int Z3Model::getIntValue(const LogicTerm& a, LogicBlock* lb) {
-        return model
-                .eval(
-                        static_cast<Z3LogicBlock*>(lb)->getExprTerm(a.getID(), a.getCType()))
-                .as_int64();
+        return static_cast<int>(model.eval(dynamic_cast<Z3LogicBlock*>(lb)->getExprTerm(a.getID(), a.getCType())).as_int64());
     }
 
     double Z3Model::getRealValue(const LogicTerm& a, LogicBlock* lb) {
-        return atof(model
-                            .eval(static_cast<Z3LogicBlock*>(lb)->getExprTerm(
-                                    a.getID(), a.getCType()))
-                            .get_decimal_string(20)
-                            .c_str());
+        return std::stod(model.eval(dynamic_cast<Z3LogicBlock*>(lb)->getExprTerm(a.getID(), a.getCType())).get_decimal_string(20));
     }
-    unsigned long long Z3Model::getBitvectorValue(const LogicTerm& a,
-                                                  LogicBlock*      lb) {
-        return model
-                .eval(
-                        static_cast<Z3LogicBlock*>(lb)->getExprTerm(a.getID(), a.getCType()))
-                .as_int64();
+
+    unsigned long long Z3Model::getBitvectorValue(const LogicTerm& a, LogicBlock* lb) {
+        return static_cast<unsigned long long>(model.eval(dynamic_cast<Z3LogicBlock*>(lb)->getExprTerm(a.getID(), a.getCType())).as_int64());
     }
 } // namespace z3logic

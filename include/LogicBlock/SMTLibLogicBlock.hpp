@@ -15,7 +15,7 @@ protected:
     void          internal_reset() override;
 
 public:
-    SMTLogicBlock(bool convertWhenAssert = false, std::ostream& out = std::cout):
+    explicit SMTLogicBlock(bool convertWhenAssert = false, std::ostream& out = std::cout):
         logicbase::LogicBlock(convertWhenAssert), out(out) {}
 
     void   produceInstance() override;

@@ -4,6 +4,7 @@
 
 #ifndef CLIFFORDSATOPT_UTIL_H
 #define CLIFFORDSATOPT_UTIL_H
+
 #include <algorithm>
 #include <boost/log/core.hpp>
 #include <boost/log/exceptions.hpp>
@@ -39,16 +40,15 @@ namespace util {
 #define TRACE() BOOST_LOG_TRIVIAL(trace)
 
     inline void init(const std::string& logfile = "") {
-        if (logfile != "" && logfile != "std") {
-            logging::add_file_log(keywords::file_name     = logfile,
-                                  keywords::rotation_size = 10 * 1024 * 1024,
-                                  keywords::time_based_rotation =
-                                          sinks::file::rotation_at_time_point(0, 0, 0),
-                                  keywords::format     = "[%TimeStamp%]: %Message%",
-                                  keywords::auto_flush = true);
-        } else if (logfile == "std")
-            logging::add_console_log(std::cout,
-                                     keywords::format = "[%TimeStamp%]: %Message%");
+        if (!logfile.empty() && logfile != "std") {
+            logging::add_file_log(keywords::file_name           = logfile,
+                                  keywords::rotation_size       = 10 * 1024 * 1024,
+                                  keywords::time_based_rotation = sinks::file::rotation_at_time_point(0, 0, 0),
+                                  keywords::format              = "[%TimeStamp%]: %Message%",
+                                  keywords::auto_flush          = true);
+        } else if (logfile == "std") {
+            logging::add_console_log(std::cout, keywords::format = "[%TimeStamp%]: %Message%");
+        }
     }
 
     inline void fatal(const std::string& msg) {
@@ -78,12 +78,11 @@ namespace util {
         if (size_s <= 0) {
             error("Error during formatting.");
         }
-        auto size = static_cast<size_t>(size_s);
+        auto size = static_cast<std::size_t>(size_s);
         auto buf  = std::make_unique<char[]>(size);
         std::snprintf(buf.get(), size, format.c_str(), args...);
-        return std::string(buf.get(),
-                           buf.get() + size - 1); // We don't want the '\0' inside
-    };
+        return {buf.get(), buf.get() + size - 1}; // We don't want the '\0' inside
+    }
 
     inline void pretty(const std::vector<std::vector<short>>& tableau,
                        std::ostream&                          os = std::cout) {
@@ -91,7 +90,7 @@ namespace util {
             debug("Empty tableau");
             return;
         }
-        for (size_t i = 0; i < tableau.back().size(); ++i) {
+        for (std::size_t i = 0; i < tableau.back().size(); ++i) {
             os << i << "\t";
         }
         os << std::endl;
@@ -105,27 +104,29 @@ namespace util {
                 os << s << '\t';
             os << std::endl;
         }
-    };
+    }
+
     inline std::string pretty_s(const std::vector<std::vector<short>>& tableau) {
         std::stringstream ss;
         pretty(tableau, ss);
         return ss.str();
-    };
+    }
 
     inline std::vector<std::set<unsigned short>>
     subsets(const std::set<unsigned short>& input, int k) {
-        size_t n = input.size();
+        std::size_t n = input.size();
 
         std::vector<std::set<unsigned short>> result;
 
-        size_t i = (1 << k) - 1;
+        std::size_t i = (1U << k) - 1U;
 
         while (!(i >> n)) {
-            std::set<unsigned short>           v;
-            std::set<unsigned short>::iterator it = input.begin();
-            for (size_t j = 0; j < n; j++) {
-                if (i & (1 << j)) {
-                    v.insert(*it);
+            std::set<unsigned short> v{};
+            auto                     it = input.begin();
+
+            for (std::size_t j = 0U; j < n; j++) {
+                if (i & (1U << j)) {
+                    v.emplace(*it);
                 }
                 std::advance(it, 1);
             }
@@ -136,24 +137,25 @@ namespace util {
         }
 
         return result;
-    };
+    }
 
     inline void
-    isFullyConnected(unsigned short                               node,
+    isFullyConnected(const unsigned short                         node,
                      const std::vector<std::set<unsigned short>>& connections,
                      std::vector<bool>&                           visited) {
-        if (visited.at(node))
+        if (visited.at(node)) {
             return;
+        }
         visited[node] = true;
 
         if (connections.at(node).empty()) {
             return;
         }
 
-        for (auto child: connections.at(node)) {
+        for (const auto child: connections.at(node)) {
             isFullyConnected(child, connections, visited);
         }
-    };
+    }
 
     inline std::set<std::pair<unsigned short, unsigned short>>
     getFullyConnectedMap(unsigned short nQubits) {
@@ -165,7 +167,7 @@ namespace util {
             }
         }
         return result;
-    };
+    }
 
     inline bool
     isFullyConnected(const std::set<std::pair<unsigned short, unsigned short>>& cm,
@@ -174,56 +176,66 @@ namespace util {
         std::vector<int>                      d;
         std::vector<bool>                     visited;
         connections.resize(nQubits);
-        for (auto edge: cm) {
+        for (const auto& edge: cm) {
             if ((qubitChoice.count(edge.first) && qubitChoice.count(edge.second)) ||
                 (qubitChoice.count(edge.second) && qubitChoice.count(edge.first))) {
                 connections.at(edge.first).insert(edge.second);
                 connections.at(edge.second).insert(edge.first);
             }
         }
-        for (auto q: qubitChoice) {
+        for (const auto q: qubitChoice) {
             visited.clear();
-            visited.resize(nQubits);
-            std::fill(visited.begin(), visited.end(), false);
+            visited.resize(nQubits, false);
             isFullyConnected(q, connections, visited);
-            for (auto p: qubitChoice) {
-                if (!visited.at(p))
+            for (const auto p: qubitChoice) {
+                if (!visited.at(p)) {
                     return false;
+                }
             }
         }
         return true;
-    };
+    }
+
     inline bool checkEquality(const std::vector<std::vector<short>>& tableau1,
                               const std::vector<std::vector<short>>& tableau2,
                               int                                    nqubits) {
-        if (tableau1.size() != tableau2.size())
+        if (tableau1.size() != tableau2.size()) {
             return false;
+        }
         for (int i = 0; i < nqubits; ++i) {
-            if (tableau1.at(i).size() != tableau2.at(i).size())
+            const auto& row1 = tableau1[i];
+            const auto& row2 = tableau2[i];
+            if (row1.size() != row2.size()) {
                 return false;
+            }
             for (int j = 0; j < 2 * nqubits + 1; ++j) {
-                if (tableau1[i][j] != tableau2[i][j])
+                const auto& col1 = row1[j];
+                const auto& col2 = row2[j];
+                if (col1 != col2) {
                     return false;
+                }
             }
         }
         return true;
-    };
+    }
 
     inline void
     printCouplingMap(const std::set<std::pair<unsigned short, unsigned short>>& cm,
                      std::ostream&                                              os) {
         os << "{";
-        for (auto edge: cm) {
+        for (const auto& edge: cm) {
             os << "(" << edge.first << " " << edge.second << ") ";
         }
         os << "}" << std::endl;
-    };
+    }
+
     inline std::string printCouplingMap(
             const std::set<std::pair<unsigned short, unsigned short>>& cm) {
         std::stringstream ss;
         printCouplingMap(cm, ss);
         return ss.str();
-    };
+    }
+
     inline void
     printFidelities(const std::vector<double>&              singleFidelities,
                     const std::vector<std::vector<double>>& doubleFidelities,
@@ -236,7 +248,7 @@ namespace util {
         os << std::endl;
         os << "Double fidelities: ";
         int j = 0;
-        for (auto f: doubleFidelities) {
+        for (const auto& f: doubleFidelities) {
             i = 0;
             for (auto f2: f) {
                 os << "Edge "
@@ -246,6 +258,7 @@ namespace util {
             j++;
         }
     }
+
     inline std::string
     printFidelities(const std::vector<double>&              singleFidelities,
                     const std::vector<std::vector<double>>& doubleFidelities) {
@@ -254,6 +267,6 @@ namespace util {
         return ss.str();
     }
 
-}; // namespace util
+} // namespace util
 
 #endif // CLIFFORDSATOPT_UTIL_H
