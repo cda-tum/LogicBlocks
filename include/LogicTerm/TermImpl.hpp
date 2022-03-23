@@ -1,6 +1,6 @@
 #ifndef TermImpl_HPP
 #define TermImpl_HPP
-#include "../Logic.hpp"
+#include "Logic.hpp"
 #include <bitset>
 namespace logicbase {
 class TermImpl {

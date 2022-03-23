@@ -1,7 +1,7 @@
 #ifndef UTIL_LOGIC_H
 #define UTIL_LOGIC_H
 #include "../Logic.hpp"
-#include "LogicTerm/LogicTerm.hpp"
+#include "../LogicTerm/LogicTerm.hpp"
 #include <memory>
 #include <stdexcept>
 #include <vector>

@@ -4,16 +4,15 @@
 
 #ifndef CLIFFORDSATOPT_Z3LOGIC_H
 #define CLIFFORDSATOPT_Z3LOGIC_H
-#include "../Logic.hpp"
-#include "../LogicBlock.hpp"
+#include "LogicBlock.hpp"
 #include "Z3Model.hpp"
-#include "utils/util.hpp"
 #include "z3++.h"
 #include <functional>
 #include <map>
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 #include <z3++.h>

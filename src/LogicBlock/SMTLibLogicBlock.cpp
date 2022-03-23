@@ -1,4 +1,4 @@
-#include "SMTLibLogicBlock.hpp"
+#include "LogicBlock/SMTLibLogicBlock.hpp"
 
 void SMTLogicBlock::produceInstance() { out << "" << std::endl; }
 

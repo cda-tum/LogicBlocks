@@ -1,8 +1,8 @@
 #ifndef SMTLIBLOGIC_H
 #define SMTLIBLOGIC_H
 
-#include "../LogicBlock.hpp"
-#include "../LogicTerm/LogicTerm.hpp"
+#include "LogicBlock.hpp"
+
 #include <functional>
 #include <iostream>
 #include <map>

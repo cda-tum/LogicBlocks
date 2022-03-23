@@ -1,7 +1,6 @@
-#include "LogicTerm.hpp"
-#include "../LogicUtil/util_logic.h"
-#include "../LogicUtil/util_logicterm.h"
-#include "Logic.hpp"
+#include "LogicTerm/LogicTerm.hpp"
+#include "LogicUtil/util_logic.hpp"
+#include "LogicUtil/util_logicterm.hpp"
 #include "utils/util.hpp"
 
 namespace logicbase {

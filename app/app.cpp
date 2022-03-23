@@ -1,13 +1,8 @@
-#include <boost/log/trivial.hpp>
 #include <boost/program_options.hpp>
-#include <boost/program_options/value_semantic.hpp>
 #include <iostream>
 #include <z3++.h>
 
-#include "Logic.hpp"
-#include "Logic/LogicBlock/Z3Logic.hpp"
-#include "LogicTerm/LogicTerm.hpp"
-#include "utils/util.hpp"
+#include "LogicBlock/Z3Logic.hpp"
 
 using namespace logicbase;
 int main(int argc, char *argv[]) {
