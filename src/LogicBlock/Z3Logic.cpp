@@ -1,7 +1,7 @@
 #include "LogicBlock/Z3Logic.hpp"
 
 #include "LogicUtil/util_logic.hpp"
-#include "utils/util.hpp"
+#include "utils/logging.hpp"
 
 #include <sstream>
 
