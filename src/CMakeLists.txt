@@ -25,7 +25,7 @@ set_target_properties(LogicTerm_lib PROPERTIES CMAKE_CXX_STANDARD_REQUIRED ON CX
 if(MSVC)
 	target_compile_options(LogicTerm_lib PUBLIC /utf-8)
 else()
-	target_compile_options(LogicTerm_lib PUBLIC -Wall -Wextra -fno-limit-debug-info $<$<CONFIG:DEBUG>:-Og>)
+	target_compile_options(LogicTerm_lib PUBLIC -Wall -Wextra $<$<CONFIG:DEBUG>:-Og>)
 	if(NOT DEPLOY)
 		# only include machine-specific optimizations when building for the host machine
 		target_compile_options(LogicTerm_lib PUBLIC -mtune=native)

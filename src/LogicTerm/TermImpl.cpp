@@ -60,7 +60,7 @@ TermImpl::TermImpl(const TermImpl& other) {
     nodes.insert(nodes.end(), other.getNodes().begin(), other.getNodes().end());
 }
 
-std::string TermImpl::getStrRep(OpType opType) const {
+std::string TermImpl::getStrRep(OpType opType) {
     std::stringstream os;
     switch (opType) {
         case OpType::Constant:
@@ -150,19 +150,14 @@ bool TermImpl::getBoolValue() const {
     switch (c_type) {
         case CType::BOOL:
             return value;
-            break;
         case CType::INT:
             return i_value != 0;
-            break;
         case CType::REAL:
             return f_value != 0;
-            break;
         case CType::BITVECTOR:
             return bv_value != 0;
-            break;
         default:
             return false;
-            break;
     }
 }
 
@@ -170,19 +165,14 @@ int TermImpl::getIntValue() const {
     switch (c_type) {
         case CType::BOOL:
             return value ? 1 : 0;
-            break;
         case CType::INT:
             return i_value;
-            break;
         case CType::REAL:
             return std::floor(f_value);
-            break;
         case CType::BITVECTOR:
-            return bv_value;
-            break;
+            return static_cast<int>(bv_value);
         default:
-            return INFINITY;
-            break;
+            return std::numeric_limits<int>::infinity();
     }
 }
 
@@ -190,19 +180,14 @@ double TermImpl::getFloatValue() const {
     switch (c_type) {
         case CType::BOOL:
             return value ? 1.0 : 0.0;
-            break;
         case CType::INT:
             return i_value;
-            break;
         case CType::REAL:
             return f_value;
-            break;
         case CType::BITVECTOR:
-            return bv_value;
-            break;
+            return static_cast<double>(bv_value);
         default:
-            return float(INFINITY);
-            break;
+            return std::numeric_limits<double>::infinity();
     }
 }
 
@@ -210,19 +195,14 @@ unsigned long long TermImpl::getBitVectorValue() const {
     switch (c_type) {
         case CType::BOOL:
             return value ? 1.0 : 0.0;
-            break;
         case CType::INT:
             return i_value;
-            break;
         case CType::REAL:
             return static_cast<unsigned long long>(f_value);
-            break;
         case CType::BITVECTOR:
-            return bv_value & static_cast<unsigned long long>(std::pow(2, bv_size)) - 1;
-            break;
+            return bv_value & (static_cast<unsigned long long>(std::pow(2, bv_size)) - 1U);
         default:
-            return float(INFINITY);
-            break;
+            return std::numeric_limits<unsigned long long>::infinity();
     }
 }
 
@@ -230,19 +210,14 @@ short TermImpl::getBitVectorSize() const {
     switch (c_type) {
         case CType::BOOL:
             return 1;
-            break;
         case CType::INT:
             return 32;
-            break;
         case CType::REAL:
             return 256;
-            break;
         case CType::BITVECTOR:
             return bv_size;
-            break;
         default:
-            return short(INFINITY);
-            break;
+            return std::numeric_limits<short>::infinity();
     }
 }
 
@@ -254,8 +229,8 @@ std::string TermImpl::getValue() const {
     if (c_type == CType::REAL)
         return std::to_string(getFloatValue());
     if (c_type == CType::BITVECTOR) {
-        return std::bitset<256>{getBitVectorValue()}.to_string().substr(
-                256 - bv_size, bv_size);
+        return std::bitset<256U>{getBitVectorValue()}.to_string().substr(
+                256U - bv_size, bv_size);
     }
     throw std::runtime_error("Invalid CType of LogicTerm");
 }
@@ -275,9 +250,10 @@ bool TermImpl::deepEquals(const TermImpl& other) const {
         return false;
     if (getCType() != other.getCType())
         return false;
-    for (size_t i = 0; i < getNodes().size(); ++i) {
-        if (!getNodes()[i].deepEquals(other.getNodes()[i]))
+    for (size_t i = 0U; i < getNodes().size(); ++i) {
+        if (!getNodes()[i].deepEquals(other.getNodes()[i])) {
             return false;
+        }
     }
     return true;
 }

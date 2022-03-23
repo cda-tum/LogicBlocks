@@ -1,13 +1,9 @@
 #include "LogicBlock/Z3Logic.hpp"
 
-#include <boost/program_options.hpp>
 #include <iostream>
 
 using namespace logicbase;
-int main(int argc, char* argv[]) {
-    namespace po = boost::program_options;
-    po::options_description desc("Allowed options");
-
+int main() {
     z3::context ctx{};
     z3::solver  solver{ctx};
 

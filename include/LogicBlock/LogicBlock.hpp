@@ -12,19 +12,19 @@
 namespace logicbase {
     class LogicBlock: public Logic {
     protected:
-        std::set<LogicTerm, TermDepthComparator> clauses;
+        std::set<LogicTerm, TermDepthComparator> clauses{};
         Model*                                   model{};
         bool                                     convertWhenAssert;
         virtual void                             internal_reset() = 0;
-        unsigned long long                       gid              = 0;
+        unsigned long long                       gid              = 0U;
 
     public:
-        LogicBlock(bool convertWhenAssert = false):
+        explicit LogicBlock(bool convertWhenAssert = false):
             convertWhenAssert(convertWhenAssert) {}
-        virtual ~LogicBlock() {}
+        virtual ~LogicBlock() = default;
 
-        unsigned long long getNextId() { return gid++; };
-        unsigned long long getId() { return gid; };
+        unsigned long long getNextId() override { return gid++; };
+        unsigned long long getId() override { return gid; };
 
         Model* getModel() { return model; }
 
@@ -62,7 +62,7 @@ namespace logicbase {
               model = nullptr;
               clauses.clear();
               internal_reset();
-              gid = 0;
+              gid = 0U;
         };
     };
 
@@ -71,11 +71,10 @@ namespace logicbase {
         std::vector<std::pair<LogicTerm, double>> weightedTerms;
 
     public:
-        LogicBlockOptimizer(bool convertWhenAssert):
+        explicit LogicBlockOptimizer(bool convertWhenAssert):
             LogicBlock(convertWhenAssert) {}
-        virtual ~LogicBlockOptimizer() {}
         void weightedTerm(const LogicTerm& a, double weight) {
-            weightedTerms.push_back(std::make_pair(a, weight));
+            weightedTerms.emplace_back(a, weight);
         };
         void dumpAll(std::ostream& stream) override {
             for (const LogicTerm& term: clauses) {
@@ -93,12 +92,12 @@ namespace logicbase {
         virtual bool makeMaximize()                  = 0;
         virtual bool maximize(const LogicTerm& term) = 0;
         virtual bool minimize(const LogicTerm& term) = 0;
-        virtual void reset() override {
+        void         reset() override {
             model = nullptr;
             clauses.clear();
             weightedTerms.clear();
             internal_reset();
-            gid = 0;
+            gid = 0U;
         };
     };
 } // namespace logicbase

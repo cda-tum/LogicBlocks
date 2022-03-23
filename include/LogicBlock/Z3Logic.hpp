@@ -20,25 +20,24 @@
 
 namespace z3logic {
 
-    using namespace z3;
     using namespace logicbase;
 
     class Z3Base {
     protected:
-        std::map<unsigned long long, std::vector<std::pair<bool, expr>>> variables;
-        std::unordered_map<LogicTerm, std::vector<std::pair<bool, expr>>, TermHash,
+        std::map<unsigned long long, std::vector<std::pair<bool, z3::expr>>> variables;
+        std::unordered_map<LogicTerm, std::vector<std::pair<bool, z3::expr>>, TermHash,
                            TermHash>
                      cache{};
         z3::context& ctx;
 
     public:
-        Z3Base(z3::context& ctx):
+        explicit Z3Base(z3::context& ctx):
             ctx(ctx) {}
-        virtual ~Z3Base() {}
+        virtual ~Z3Base() = default;
 
-        expr     convert(const LogicTerm& a, CType to_type = CType::ERRORTYPE);
-        expr     getExprTerm(unsigned long long id, CType type);
-        context& getContext() { return ctx; }
+        z3::expr     convert(const LogicTerm& a, CType to_type = CType::ERRORTYPE);
+        z3::expr     getExprTerm(unsigned long long id, CType type);
+        z3::context& getContext() { return ctx; }
 
         z3::expr convertVariableTo(const LogicTerm& a, CType to_type);
         z3::expr convertVariableFromBoolTo(const LogicTerm& a, CType to_type);
@@ -65,13 +64,16 @@ namespace z3logic {
 
     class Z3LogicBlock: public LogicBlock, public Z3Base {
     protected:
-        solver& solver;
-        void    internal_reset() override;
+        z3::solver& solver;
+        void        internal_reset() override;
 
     public:
-        Z3LogicBlock(context& ctx, z3::solver& solver, bool convertWhenAssert = true):
+        Z3LogicBlock(z3::context& ctx, z3::solver& solver, bool convertWhenAssert = true):
             LogicBlock(convertWhenAssert), Z3Base(ctx), solver(solver) {}
-        ~Z3LogicBlock() { internal_reset(); }
+        ~Z3LogicBlock() override {
+            variables.clear();
+            cache.clear();
+        }
         void   assertFormula(const LogicTerm& a) override;
         void   produceInstance() override;
         Result solve() override;
@@ -80,17 +82,17 @@ namespace z3logic {
 
     class Z3LogicOptimizer: public LogicBlockOptimizer, public Z3Base {
     private:
-        z3::optimize&                                                    optimizer;
-        std::map<unsigned long long, std::vector<std::pair<bool, expr>>> variables;
+        z3::optimize&                                                        optimizer;
+        std::map<unsigned long long, std::vector<std::pair<bool, z3::expr>>> variables;
         void                                                             internal_reset() override;
 
     public:
-        Z3LogicOptimizer(context& ctx, z3::optimize& optimizer,
+        Z3LogicOptimizer(z3::context& ctx, z3::optimize& optimizer,
                          bool convertWhenAssert = true):
             LogicBlockOptimizer(convertWhenAssert),
             Z3Base(ctx),
             optimizer(optimizer) {}
-        ~Z3LogicOptimizer() {}
+        ~Z3LogicOptimizer() override {}
         void   assertFormula(const LogicTerm& a) override;
         void   produceInstance() override;
         Result solve() override;

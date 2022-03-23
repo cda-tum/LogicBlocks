@@ -81,13 +81,13 @@ namespace logicutil {
         }
         switch (op) { // TODO handle other CTypes
             case OpType::AND: {
-                if (constant.getBoolValue() == true)
+                if (constant.getBoolValue())
                     return other.getImplementation();
                 else
                     return std::make_shared<TermImpl>(false);
             }; break;
             case OpType::OR: {
-                if (constant.getBoolValue() == false)
+                if (!constant.getBoolValue())
                     return other.getImplementation();
                 else
                     return std::make_shared<TermImpl>(true);

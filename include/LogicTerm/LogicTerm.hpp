@@ -13,15 +13,15 @@
 #include <vector>
 
 namespace logicbase {
-    std::shared_ptr<TermImpl> makeLogicTerm(const bool value);
-    std::shared_ptr<TermImpl> makeLogicTerm(const int value);
-    std::shared_ptr<TermImpl> makeLogicTerm(const double value);
-    std::shared_ptr<TermImpl> makeLogicTerm(const unsigned long long value,
-                                            short                    bv_size);
+    std::shared_ptr<TermImpl> makeLogicTerm(bool value);
+    std::shared_ptr<TermImpl> makeLogicTerm(int value);
+    std::shared_ptr<TermImpl> makeLogicTerm(double value);
+    std::shared_ptr<TermImpl> makeLogicTerm(unsigned long long value,
+                                            short              bv_size);
     std::shared_ptr<TermImpl> makeLogicTerm(const char* name,
                                             CType       cType = CType::BOOL,
                                             Logic* lb = nullptr, short bv_size = 0);
-    std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const std::string name,
+    std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const std::string& name,
                                             CType  cType = CType::BOOL,
                                             Logic* lb    = nullptr);
 
@@ -40,7 +40,7 @@ namespace logicbase {
             case TermType::CNF:
                 throw std::runtime_error("CNF not implemented");
         }
-        throw new std::invalid_argument("TermType not implemented");
+        throw std::invalid_argument("TermType not implemented");
     }
 
     class LogicTerm: public TermInterface {
@@ -51,36 +51,49 @@ namespace logicbase {
     private:
         std::shared_ptr<TermImpl> pImpl;
 
-        explicit LogicTerm(const std::shared_ptr<TermImpl>& impl):
-            pImpl(impl) {}
-        // explicit LogicTerm(OpType opType) : pImpl(makeLogicTerm(termType, opType))
-        // {}
+        explicit LogicTerm(std::shared_ptr<TermImpl> impl):
+            pImpl(std::move(impl)) {}
 
     public:
-        LogicTerm(bool value):
+        explicit LogicTerm(bool value):
             pImpl(makeLogicTerm(value)) {}
-        LogicTerm(int value):
+        explicit LogicTerm(int value):
             pImpl(makeLogicTerm(value)) {}
-        LogicTerm(double value):
+        explicit LogicTerm(double value):
             pImpl(makeLogicTerm(value)) {}
         LogicTerm(unsigned long long value, short bv_size):
             pImpl(makeLogicTerm(value, bv_size)) {}
 
-        LogicTerm(CType cType = CType::BOOL, Logic* lb = nullptr):
+        explicit LogicTerm(CType cType = CType::BOOL, Logic* lb = nullptr):
             pImpl(makeLogicTerm("", cType, lb)) {}
         // LogicTerm(const char *name, CType cType = CType::BOOL, Logic *lb = nullptr)
         //     : pImpl(makeLogicTerm(termType, name, cType, lb)) {}
-        LogicTerm(const std::string name, CType cType = CType::BOOL,
-                  Logic* lb = nullptr, short bv_size = 0):
+        explicit LogicTerm(const std::string& name, CType cType = CType::BOOL,
+                           Logic* lb = nullptr, short bv_size = 0):
             pImpl(makeLogicTerm(name.c_str(), cType, lb, bv_size)) {}
 
         LogicTerm(OpType opType, const std::string& name, CType cType = CType::BOOL,
                   Logic* lb = nullptr):
             pImpl(makeLogicTerm(opType, name, cType, lb)) {}
 
-        LogicTerm(const LogicTerm& other);
+        LogicTerm(const LogicTerm& other):
+            pImpl(other.getImplementation()) {}
+        LogicTerm(const LogicTerm&& other) noexcept:
+            pImpl(other.getImplementation()) {}
+        LogicTerm& operator=(const LogicTerm& other) {
+            if (this != &other) {
+                pImpl = other.getImplementation();
+            }
+            return *this;
+        }
+        LogicTerm& operator=(LogicTerm&& other) noexcept {
+            if (this != &other) {
+                pImpl = other.getImplementation();
+            }
+            return *this;
+        }
 
-        ~LogicTerm() = default;
+        ~LogicTerm() override = default;
 
         static LogicTerm noneTerm() {
             return LogicTerm(makeLogicTerm(OpType::None, "None", CType::BOOL, nullptr));
@@ -205,26 +218,26 @@ namespace logicbase {
 
         LogicTerm operator!() const { return LogicTerm::neg(*this); }
 
-        long long                     getID() const;
-        const std::vector<LogicTerm>& getNodes() const;
-        OpType                        getOpType() const;
-        CType                         getCType() const;
-        bool                          getBoolValue() const;
-        int                           getIntValue() const;
-        double                        getFloatValue() const;
-        unsigned long long            getBitVectorValue() const;
-        short                         getBitVectorSize() const;
-        const std::string&            getName() const;
-        std::shared_ptr<TermImpl>     getImplementation() const;
-        Logic*                        getLogic() const;
+        [[nodiscard]] long long                     getID() const override;
+        [[nodiscard]] const std::vector<LogicTerm>& getNodes() const override;
+        [[nodiscard]] OpType                        getOpType() const override;
+        [[nodiscard]] CType                         getCType() const override;
+        [[nodiscard]] bool                          getBoolValue() const override;
+        [[nodiscard]] int                           getIntValue() const override;
+        [[nodiscard]] double                        getFloatValue() const override;
+        [[nodiscard]] unsigned long long            getBitVectorValue() const override;
+        [[nodiscard]] short                         getBitVectorSize() const override;
+        [[nodiscard]] const std::string&            getName() const override;
+        [[nodiscard]] std::shared_ptr<TermImpl>     getImplementation() const override;
+        [[nodiscard]] Logic*                        getLogic() const override;
 
-        bool deepEquals(const LogicTerm& other) const;
+        [[nodiscard]] bool deepEquals(const LogicTerm& other) const override;
 
-        void print(std::ostream& os) const;
+        void print(std::ostream& os) const override;
 
-        unsigned long long getDepth() const;
+        [[nodiscard]] unsigned long long getDepth() const override;
 
-        unsigned long long getMaxChildrenDepth() const;
+        [[nodiscard]] unsigned long long getMaxChildrenDepth() const override;
 
         static LogicTerm getNeutralElement(OpType opType);
 

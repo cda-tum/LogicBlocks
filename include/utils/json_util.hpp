@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <tuple>
+#include <utility>
 
 namespace JSON {
 
@@ -30,8 +31,8 @@ namespace JSON {
             return data.subObject[std::move(name)];
         }
 
-        const Value& operator[](std::string name) const {
-            auto it = data.subObject.find(std::move(name));
+        const Value& operator[](const std::string& name) const {
+            auto it = data.subObject.find(name);
 
             if (it != data.subObject.end()) {
                 return it->second;
@@ -41,7 +42,7 @@ namespace JSON {
         }
 
         Value& operator=(std::string value) {
-            data.string = value;
+            data.string = std::move(value);
             return *this;
         }
     };

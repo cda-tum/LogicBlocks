@@ -4,79 +4,64 @@
 #include "Logic.hpp"
 
 #include <bitset>
+#include <utility>
 
 namespace logicbase {
     class TermImpl {
     protected:
-        Logic*             lb = nullptr;
-        long long          id;
-        unsigned long long depth;
-        std::string        name;
+        Logic*             lb    = nullptr;
+        long long          id    = 0;
+        unsigned long long depth = 0U;
+        std::string        name{};
 
-        OpType                 opType;
-        bool                   value;
-        int                    i_value;
-        double                 f_value;
-        unsigned long long     bv_value;
-        short                  bv_size;
-        std::vector<LogicTerm> nodes;
-        CType                  c_type;
+        OpType                 opType   = OpType::Variable;
+        bool                   value    = false;
+        int                    i_value  = 0;
+        double                 f_value  = 0.;
+        unsigned long long     bv_value = 0U;
+        short                  bv_size  = 0;
+        std::vector<LogicTerm> nodes{};
+        CType                  c_type = CType::BOOL;
 
     public:
         explicit TermImpl(bool v):
-            lb(nullptr), id(0), depth(0), name(""), opType(OpType::Constant),
-            value(v), i_value(0), f_value(0), c_type(CType::BOOL) {}
+            opType(OpType::Constant), value(v), c_type(CType::BOOL) {}
 
         explicit TermImpl(int v):
-            lb(nullptr), id(0), depth(0), name(""), opType(OpType::Constant),
-            value(v), i_value(v), f_value(0), c_type(CType::INT) {}
+            opType(OpType::Constant), i_value(v), c_type(CType::INT) {}
 
         explicit TermImpl(double v):
-            lb(nullptr), id(0), depth(0), name(""), opType(OpType::Constant),
-            value(v), i_value(0), f_value(v), c_type(CType::REAL) {}
+            opType(OpType::Constant), f_value(v), c_type(CType::REAL) {}
 
         explicit TermImpl(unsigned long long v, short bv_size):
-            lb(nullptr), id(0), depth(0), name(""), opType(OpType::Constant),
-            value(v), i_value(0), f_value(0), bv_value(v), bv_size(bv_size),
-            c_type(CType::BITVECTOR) {}
+            opType(OpType::Constant), bv_value(v), bv_size(bv_size), c_type(CType::BITVECTOR) {}
 
         explicit TermImpl(Logic* lb = nullptr):
-            lb(lb), id(getNextId(lb)), depth(0), name(std::to_string(id)),
-            opType(OpType::Variable), value(false), i_value(0), f_value(0),
-            c_type(CType::BOOL) {}
+            lb(lb), id(getNextId(lb)), name(std::to_string(id)) {}
 
-        explicit TermImpl(const std::string& name, Logic* lb = nullptr):
-            lb(lb), id(getNextId(lb)), depth(0), name(name),
-            opType(OpType::Variable), value(false), i_value(0), f_value(0),
-            c_type(CType::BOOL) {}
+        explicit TermImpl(std::string name, Logic* lb = nullptr):
+            lb(lb), id(getNextId(lb)), name(std::move(name)) {}
 
-        explicit TermImpl(OpType opType, const std::string& name, CType cType,
+        explicit TermImpl(OpType opType, std::string name, CType cType,
                           Logic* lb = nullptr, short bv_size = 0):
             lb(lb),
-            id(getNextId(lb)), depth(0), name(name), opType(opType),
-            value(false), i_value(0), f_value(0), bv_size(bv_size), c_type(cType) {}
+            id(getNextId(lb)), name(std::move(name)), opType(opType), bv_size(bv_size), c_type(cType) {}
 
-        explicit TermImpl(const std::string& name, long long id, Logic* lb = nullptr):
-            lb(lb), id(id), depth(0), name(name), opType(OpType::Variable),
-            value(false), i_value(0), f_value(0), c_type(CType::BOOL) {}
+        explicit TermImpl(std::string name, long long id, Logic* lb = nullptr):
+            lb(lb), id(id), name(std::move(name)) {}
 
         explicit TermImpl(CType cType, Logic* lb = nullptr):
-            lb(lb), id(getNextId(lb)), depth(0), name(std::to_string(id)),
-            opType(OpType::Variable), value(false), i_value(0), f_value(0),
-            c_type(cType) {}
+            lb(lb), id(getNextId(lb)), name(std::to_string(id)), c_type(cType) {}
 
-        explicit TermImpl(const std::string& name, CType cType, Logic* lb = nullptr,
+        explicit TermImpl(std::string name, CType cType, Logic* lb = nullptr,
                           short bv_size = 0):
             lb(lb),
-            id(getNextId(lb)), depth(0), name(name),
-            opType(OpType::Variable), value(false), i_value(0), f_value(0),
-            bv_size(bv_size), c_type(cType) {}
+            id(getNextId(lb)), name(std::move(name)), bv_size(bv_size), c_type(cType) {}
 
-        explicit TermImpl(const std::string& name, long long id, CType cType,
+        explicit TermImpl(std::string name, long long id, CType cType,
                           Logic* lb = nullptr):
             lb(lb),
-            id(id), depth(0), name(name), opType(OpType::Variable),
-            value(false), i_value(0), f_value(0), c_type(cType) {}
+            id(id), name(std::move(name)), c_type(cType) {}
 
         explicit TermImpl(OpType ot, const std::initializer_list<LogicTerm>& n,
                           CType cType = CType::BOOL, Logic* lb = nullptr);
@@ -91,47 +76,48 @@ namespace logicbase {
         explicit TermImpl(OpType ot, const LogicTerm& a, const LogicTerm& b,
                           const LogicTerm& c, CType cType = CType::BOOL,
                           Logic* lb = nullptr);
-        explicit TermImpl(const TermImpl& other);
+        TermImpl(const TermImpl& other);
         explicit TermImpl(const LogicTerm& other);
 
     public:
         static long long getNextId(Logic* lb = nullptr) {
-            if (lb == nullptr)
+            if (lb == nullptr) {
                 return gid++;
-            else
+            } else {
                 return lb->getNextId();
+            }
         }
-        std::string getStrRep(OpType opType) const;
+        [[nodiscard]] static std::string getStrRep(OpType opType);
 
         void print(std::ostream& os) const;
 
-        long long getID() const { return id; }
+        [[nodiscard]] long long getID() const { return id; }
 
-        const std::string& getName() const { return name; }
+        [[nodiscard]] const std::string& getName() const { return name; }
 
-        OpType getOpType() const { return opType; }
+        [[nodiscard]] OpType getOpType() const { return opType; }
 
-        CType getCType() const { return c_type; }
+        [[nodiscard]] CType getCType() const { return c_type; }
 
-        const std::vector<LogicTerm>& getNodes() const { return nodes; }
+        [[nodiscard]] const std::vector<LogicTerm>& getNodes() const { return nodes; }
 
-        bool getBoolValue() const;
+        [[nodiscard]] bool getBoolValue() const;
 
-        int getIntValue() const;
+        [[nodiscard]] int getIntValue() const;
 
-        double getFloatValue() const;
+        [[nodiscard]] double getFloatValue() const;
 
-        unsigned long long getBitVectorValue() const;
+        [[nodiscard]] unsigned long long getBitVectorValue() const;
 
-        short getBitVectorSize() const;
+        [[nodiscard]] short getBitVectorSize() const;
 
-        std::string getValue() const;
+        [[nodiscard]] std::string getValue() const;
 
-        unsigned long long getDepth() const { return depth; }
+        [[nodiscard]] unsigned long long getDepth() const { return depth; }
 
-        bool deepEquals(const TermImpl& other) const;
+        [[nodiscard]] bool deepEquals(const TermImpl& other) const;
 
-        Logic* getLogic() const { return lb; }
+        [[nodiscard]] Logic* getLogic() const { return lb; }
 
         static long long gid;
         static long long getGID() { return gid; }

@@ -6,16 +6,16 @@
 namespace logicbase {
     class Model {
     protected:
-        Result result;
+        Result result = Result::NDEF;
 
     public:
-        Model() {}
-        Model(Result result):
+        Model() = default;
+        explicit Model(Result result):
             result(result) {}
-        virtual ~Model() {}
+        virtual ~Model() = default;
 
         Result getResult() { return result; };
-        void   setResult(Result result) { this->result = result; };
+        void   setResult(Result res) { result = res; };
 
         virtual int                getIntValue(const LogicTerm& a, LogicBlock* lb)  = 0;
         virtual LogicTerm          getValue(const LogicTerm& a, LogicBlock* lb)     = 0;
