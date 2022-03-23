@@ -6,7 +6,7 @@
 #define CLIFFORDSATOPT_Z3LOGIC_H
 #include "LogicBlock.hpp"
 #include "Z3Model.hpp"
-#include "z3++.h"
+
 #include <functional>
 #include <map>
 #include <memory>

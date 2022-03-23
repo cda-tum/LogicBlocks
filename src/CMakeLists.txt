@@ -5,8 +5,8 @@ add_library(LogicTerm_lib
             ${CMAKE_CURRENT_SOURCE_DIR}/LogicTerm/LogicTerm.cpp
             ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicTerm/LogicTerm.hpp
 
-            ${${PROJECT_NAME}_SOURCE_DIR}/include/Logic.hpp
-            ${${PROJECT_NAME}_SOURCE_DIR}/include/Model.hpp
+            ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicTerm/Logic.hpp
+            ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/Model.hpp
 
             ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicUtil/util_logic.hpp
             ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicUtil/util_logicterm.hpp

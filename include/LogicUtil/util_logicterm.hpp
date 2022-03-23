@@ -1,8 +1,8 @@
 #ifndef util_logicterm_h
 #define util_logicterm_h
-#include "../LogicTerm/LogicTerm.hpp"
-#include "../Logic.hpp"
+
 #include "util_logic.hpp"
+
 #include <algorithm>
 #include <memory>
 
@@ -212,4 +212,4 @@ inline short getMaxBVSize(const std::vector<LogicTerm> &terms) {
 }
 
 } // namespace logicutil
-#endif // LOGICBASE_TERM_IMPL_H
+#endif // util_logicterm_h

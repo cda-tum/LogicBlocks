@@ -1,7 +1,10 @@
 #ifndef TermImpl_HPP
 #define TermImpl_HPP
+
 #include "Logic.hpp"
+
 #include <bitset>
+
 namespace logicbase {
 class TermImpl {
 protected:
@@ -133,4 +136,4 @@ public:
   static void reset() { gid = 0; }
 };
 };     // namespace logicbase
-#endif // LOGICBASE_TERM_IMPL_H
+#endif // TermImpl_HPP

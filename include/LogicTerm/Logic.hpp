@@ -10,6 +10,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+
 namespace logicbase {
 enum class Result { SAT, UNSAT, NDEF };
 enum class OpType {

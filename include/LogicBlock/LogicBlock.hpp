@@ -1,7 +1,6 @@
 #ifndef LOGICBLOCK_H
 #define LOGICBLOCK_H
 
-#include "Logic.hpp"
 #include "LogicTerm/LogicTerm.hpp"
 #include "Model.hpp"
 
