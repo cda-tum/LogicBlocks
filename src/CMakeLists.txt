@@ -16,6 +16,27 @@ add_library(LogicTerm_lib
 target_include_directories(LogicTerm_lib PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(LogicTerm_lib PUBLIC Boost::log Boost::log_setup)
 
+# set required C++ standard and disable compiler specific extensions
+target_compile_features(LogicTerm_lib PUBLIC cxx_std_17)
+set_target_properties(LogicTerm_lib PROPERTIES CMAKE_CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+
+# set compiler flags depending on compiler
+# since these are defined `PUBLIC` they are propagated to all linking targets
+if(MSVC)
+	target_compile_options(LogicTerm_lib PUBLIC /utf-8)
+else()
+	target_compile_options(LogicTerm_lib PUBLIC -Wall -Wextra -fno-limit-debug-info $<$<CONFIG:DEBUG>:-Og>)
+	if(NOT DEPLOY)
+		# only include machine-specific optimizations when building for the host machine
+		target_compile_options(LogicTerm_lib PUBLIC -mtune=native)
+		include(CheckCXXCompilerFlag)
+		check_cxx_compiler_flag(-march=native HAS_MARCH_NATIVE)
+		if (HAS_MARCH_NATIVE)
+			target_compile_options(LogicTerm_lib PUBLIC -march=native)
+		endif ()
+	endif ()
+endif()
+
 add_library(SMTLibLogic
             ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
             ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/SMTLibLogicBlock.hpp

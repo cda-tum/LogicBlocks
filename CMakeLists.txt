@@ -11,9 +11,6 @@ project(logicblocks
 # enable organization of targets into folders
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 # configuration options
 option(DEPLOY "Configure for deployment")
 # Add path for custom modules
@@ -41,10 +38,6 @@ endif()
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package( Boost 1.70 COMPONENTS program_options log log_setup REQUIRED)
-
-set(CMAKE_CXX_FLAGS "-W -Wall -Wextra -fno-limit-debug-info")
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 add_subdirectory(src)
 
