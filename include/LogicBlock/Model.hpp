@@ -4,24 +4,25 @@
 #include "LogicTerm/LogicTerm.hpp"
 
 namespace logicbase {
-class Model {
-protected:
-  Result result;
+    class Model {
+    protected:
+        Result result;
 
-public:
-  Model() {}
-  Model(Result result) : result(result) {}
-  virtual ~Model() {}
+    public:
+        Model() {}
+        Model(Result result):
+            result(result) {}
+        virtual ~Model() {}
 
-  Result getResult() { return result; };
-  void setResult(Result result) { this->result = result; };
+        Result getResult() { return result; };
+        void   setResult(Result result) { this->result = result; };
 
-  virtual int getIntValue(const LogicTerm &a, LogicBlock *lb) = 0;
-  virtual LogicTerm getValue(const LogicTerm &a, LogicBlock *lb) = 0;
-  virtual bool getBoolValue(const LogicTerm &a, LogicBlock *lb) = 0;
-  virtual double getRealValue(const LogicTerm &a, LogicBlock *lb) = 0;
-  virtual unsigned long long getBitvectorValue(const LogicTerm &a,
-                                               LogicBlock *lb) = 0;
-};
+        virtual int                getIntValue(const LogicTerm& a, LogicBlock* lb)  = 0;
+        virtual LogicTerm          getValue(const LogicTerm& a, LogicBlock* lb)     = 0;
+        virtual bool               getBoolValue(const LogicTerm& a, LogicBlock* lb) = 0;
+        virtual double             getRealValue(const LogicTerm& a, LogicBlock* lb) = 0;
+        virtual unsigned long long getBitvectorValue(const LogicTerm& a,
+                                                     LogicBlock*      lb)                = 0;
+    };
 } // namespace logicbase
 #endif // LOGICBLOCK_MODEL_H
