@@ -2,6 +2,7 @@
 #define LogicTerm_Z3MODEL_H
 
 #include "LogicBlock/Model.hpp"
+#include "LogicBlock/Z3Logic.hpp"
 #include "z3++.h"
 
 namespace z3logic {
