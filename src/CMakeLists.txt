@@ -10,7 +10,7 @@ add_library(LogicTerm_lib
 
             ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicUtil/util_logic.hpp
             ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicUtil/util_logicterm.hpp
-            ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/util.hpp
+            ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/logging.hpp
             ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/csv_util.hpp
             ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/json_util.hpp)
 target_include_directories(LogicTerm_lib PUBLIC ${PROJECT_SOURCE_DIR}/include)

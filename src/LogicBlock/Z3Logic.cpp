@@ -1,17 +1,19 @@
 #include "LogicBlock/Z3Logic.hpp"
 
+#include "LogicBlock/Z3Model.hpp"
 #include "LogicUtil/util_logic.hpp"
-#include "utils/util.hpp"
+#include "utils/logging.hpp"
 
+#include <iostream>
 #include <sstream>
 
 namespace z3logic {
 
-    z3::expr Z3Base::getExprTerm(unsigned long long id, CType type) {
-        if (variables.find(id) == variables.end() ||
-            !variables.at(id)[static_cast<int>(type)].first)
+    z3::expr Z3Base::getExprTerm(unsigned long long id, CType type, Z3Base* z3base) {
+        if (z3base->variables.find(id) == z3base->variables.end() ||
+            !z3base->variables.at(id)[static_cast<int>(type)].first)
             throw std::runtime_error("Variable not found");
-        return variables.at(id)[static_cast<int>(type)].second;
+        return z3base->variables.at(id)[static_cast<int>(type)].second;
     }
 
     z3::expr Z3Base::convert(const LogicTerm& a, CType to_type) {

@@ -5,7 +5,6 @@
 #ifndef CLIFFORDSATOPT_Z3LOGIC_H
 #define CLIFFORDSATOPT_Z3LOGIC_H
 #include "LogicBlock.hpp"
-#include "Z3Model.hpp"
 
 #include <functional>
 #include <map>
@@ -36,8 +35,9 @@ namespace z3logic {
         virtual ~Z3Base() = default;
 
         z3::expr     convert(const LogicTerm& a, CType to_type = CType::ERRORTYPE);
-        z3::expr     getExprTerm(unsigned long long id, CType type);
         z3::context& getContext() { return ctx; }
+
+        static z3::expr getExprTerm(unsigned long long id, CType type, Z3Base* z3base);
 
         z3::expr convertVariableTo(const LogicTerm& a, CType to_type);
         z3::expr convertVariableFromBoolTo(const LogicTerm& a, CType to_type);
@@ -64,8 +64,9 @@ namespace z3logic {
 
     class Z3LogicBlock: public LogicBlock, public Z3Base {
     protected:
-        z3::solver& solver;
-        void        internal_reset() override;
+        std::map<unsigned long long, std::vector<std::pair<bool, z3::expr>>> variables;
+        z3::solver&                                                          solver;
+        void                                                                 internal_reset() override;
 
     public:
         Z3LogicBlock(z3::context& ctx, z3::solver& solver, bool convertWhenAssert = true):
@@ -82,9 +83,9 @@ namespace z3logic {
 
     class Z3LogicOptimizer: public LogicBlockOptimizer, public Z3Base {
     private:
-        z3::optimize&                                                        optimizer;
         std::map<unsigned long long, std::vector<std::pair<bool, z3::expr>>> variables;
-        void                                                             internal_reset() override;
+        z3::optimize&                                                        optimizer;
+        void                                                                 internal_reset() override;
 
     public:
         Z3LogicOptimizer(z3::context& ctx, z3::optimize& optimizer,

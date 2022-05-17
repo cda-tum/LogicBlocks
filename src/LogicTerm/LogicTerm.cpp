@@ -2,7 +2,6 @@
 
 #include "LogicUtil/util_logic.hpp"
 #include "LogicUtil/util_logicterm.hpp"
-#include "utils/util.hpp"
 
 namespace logicbase {
     TermType  LogicTerm::termType                = TermType::BASE;
