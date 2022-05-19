@@ -70,7 +70,7 @@ namespace logicbase {
             case CType::ARRAY:
                 return "A[...]";
             case CType::SET:
-                return "S(...)";
+                return "S{...}";
             case CType::ERRORTYPE:
                 throw std::runtime_error("Error: Unknown CType");
         }
@@ -89,7 +89,7 @@ namespace logicbase {
             return CType::FUNCTION;
         if (ctype == "A[...]")
             return CType::ARRAY;
-        if (ctype == "S(...)")
+        if (ctype == "S{...}")
             return CType::SET;
         return CType::BOOL;
     }
@@ -238,6 +238,8 @@ namespace logicbase {
                         return t1.getIntValue() == t2.getIntValue();
                     case CType::REAL:
                         return t1.getFloatValue() == t2.getFloatValue();
+                    case CType::BITVECTOR:
+                        return t1.getBitVectorValue() == t2.getBitVectorValue();
                     default:
                         return false;
                 }
