@@ -5,61 +5,46 @@
 #ifndef LOGGING_UTIL_H
 #define LOGGING_UTIL_H
 
-#include <boost/log/core.hpp>
-#include <boost/log/exceptions.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/sinks/text_file_backend.hpp>
-#include <boost/log/sources/record_ostream.hpp>
-#include <boost/log/sources/severity_logger.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/file.hpp>
+#include <plog/Log.h>
+#include <plog/Init.h>
+#include <plog/Appenders/RollingFileAppender.h>
+#include <plog/Appenders/ConsoleAppender.h>
+#include <plog/Formatters/TxtFormatter.h>
 #include <exception>
 #include <iostream>
 #include <string>
 
-namespace logging  = boost::log;
-namespace sinks    = boost::log::sinks;
-namespace keywords = boost::log::keywords;
 
 namespace util {
-#define ERROR() BOOST_LOG_TRIVIAL(error)
-#define WARNING() BOOST_LOG_TRIVIAL(warning)
-#define INFO() BOOST_LOG_TRIVIAL(info)
-#define DEBUG() BOOST_LOG_TRIVIAL(debug)
-#define TRACE() BOOST_LOG_TRIVIAL(trace)
 
     inline void init(const std::string& logfile = "") {
         if (!logfile.empty() && logfile != "std") {
-            logging::add_file_log(keywords::file_name           = logfile,
-                                  keywords::rotation_size       = 10 * 1024 * 1024,
-                                  keywords::time_based_rotation = sinks::file::rotation_at_time_point(0, 0, 0),
-                                  keywords::format              = "[%TimeStamp%]: %Message%",
-                                  keywords::auto_flush          = true);
+            static plog::RollingFileAppender<plog::TxtFormatter> fileAppender(logfile.c_str());
+            plog::init(plog::verbose,&fileAppender);
         } else if (logfile == "std") {
-            logging::add_console_log(std::cout, keywords::format = "[%TimeStamp%]: %Message%");
+            static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
+            plog::init(plog::verbose, &consoleAppender);
         }
     }
 
     inline void fatal(const std::string& msg) {
-        BOOST_LOG_TRIVIAL(fatal) << msg;
+        PLOG_FATAL << msg;
         throw std::runtime_error(msg);
     }
     inline void error(const std::string& msg) {
-        BOOST_LOG_TRIVIAL(error) << msg;
+        PLOG_ERROR << msg;
     }
     inline void warning(const std::string& msg) {
-        BOOST_LOG_TRIVIAL(warning) << msg;
+        PLOG_WARNING << msg;
     }
     inline void info(const std::string& msg) {
-        BOOST_LOG_TRIVIAL(info) << msg;
+        PLOG_INFO << msg;
     }
     inline void debug(const std::string& msg) {
-        BOOST_LOG_TRIVIAL(debug) << msg;
+        PLOG_DEBUG << msg;
     }
     inline void trace(const std::string& msg) {
-        BOOST_LOG_TRIVIAL(trace) << msg;
+        PLOG_VERBOSE << msg;
     }
 } // namespace util
 
