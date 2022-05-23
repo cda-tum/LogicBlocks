@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.14...3.19)
 
 project(logicblocks
         LANGUAGES CXX
-        VERSION 1.3.2
+        VERSION 1.3.3
         DESCRIPTION "lb-core"
         )
 
@@ -37,7 +37,7 @@ endif()
 # search for Boost program_options
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package( Boost 1.70 COMPONENTS program_options log log_setup REQUIRED)
+find_package( Boost 1.70 COMPONENTS program_options REQUIRED)
 
 add_subdirectory(src)
 
