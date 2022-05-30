@@ -44,6 +44,13 @@ add_library(SMTLibLogic
 target_link_libraries(SMTLibLogic PUBLIC LogicTerm_lib)
 add_library(logicblocks::SMTLibLogic ALIAS SMTLibLogic)
 
+add_library(CNFLogic
+		${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
+		${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/CNFLogicBlock.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/LogicBlock/CNFLogicBlock.cpp)
+target_link_libraries(CNFLogic PUBLIC LogicTerm_lib)
+add_library(logicblocks::CNFLogic ALIAS SMTLibLogic)
+
 add_library(Z3Logic
             ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
             ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/Z3Logic.hpp
