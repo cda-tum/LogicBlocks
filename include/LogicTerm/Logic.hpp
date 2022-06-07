@@ -9,7 +9,9 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <unordered_set>
 #include <vector>
+#include <limits>
 
 namespace logicbase {
     enum class Result { SAT,
@@ -262,6 +264,18 @@ namespace logicbase {
             } else {
                 return t1.getDepth() > t2.getDepth();
             }
+        }
+    };
+
+    struct UnorderedLongHash {
+        std::size_t operator()(const std::unordered_set<long long>& t) const {
+            std::size_t result{};
+            for (const auto& item:t)
+                result+=std::numeric_limits<unsigned long>::max() * item;
+            return result;
+        }
+        bool operator()(const std::unordered_set<long long>& t1, const std::unordered_set<long long>& t2) const {
+            return t1 == t2;
         }
     };
 
