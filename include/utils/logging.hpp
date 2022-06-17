@@ -23,15 +23,16 @@ namespace util {
 #define ERROR() PLOG_ERROR
 #define FATAL() PLOG_FATAL
 
-    inline void init(const std::string& logfile = "") {
+    inline void init(const std::string& logfile = "", plog::Severity severity = plog::verbose) {
         if (!logfile.empty() && logfile != "std") {
             static plog::RollingFileAppender<plog::TxtFormatter> fileAppender(logfile.c_str());
-            plog::init(plog::verbose, &fileAppender);
+            plog::init(severity, &fileAppender);
         } else if (logfile == "std") {
             static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
-            plog::init(plog::verbose, &consoleAppender);
+            plog::init(severity, &consoleAppender);
         }
     }
+
 
     inline void fatal(const std::string& msg) {
         PLOG_FATAL << msg;
