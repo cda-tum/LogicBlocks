@@ -38,4 +38,8 @@ int main() {
         z3logic.getModel()->getValue(c, &z3logic).print(std::cout);
         std::cout << std::endl;
     }
+
+    LogicTerm aa = (a < LogicTerm(1));
+
+    aa.print(std::cout);
 }

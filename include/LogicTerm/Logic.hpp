@@ -166,13 +166,13 @@ namespace logicbase {
             case OpType::IMPL:
             case OpType::AND:
             case OpType::OR:
+            case OpType::GT:
+            case OpType::LT:
                 return CType::BOOL;
             case OpType::ADD:
             case OpType::SUB:
             case OpType::MUL:
             case OpType::DIV:
-            case OpType::GT:
-            case OpType::LT:
                 return CType::INT;
             case OpType::ITE:
                 return CType::BOOL;
