@@ -14,6 +14,15 @@
 #include <limits>
 
 namespace logicbase {
+
+    inline bool hasZ3() {
+    #ifdef Z3_FOUND
+        return true;
+    #else
+        return false;
+    #endif
+    }
+
     enum class Result { SAT,
                         UNSAT,
                         NDEF };

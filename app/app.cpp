@@ -1,4 +1,5 @@
 #include "LogicBlock/Z3Logic.hpp"
+#include "Encodings/Encodings.hpp"
 
 #include <iostream>
 
@@ -42,4 +43,10 @@ int main() {
     LogicTerm aa = (a < LogicTerm(1));
 
     aa.print(std::cout);
+
+    std::vector<LogicTerm> clauseVars;
+    for (int i = 0; i < 5; ++i) {
+        clauseVars.push_back(LogicTerm(i));
+    }
+    AtMostOneBiMander(clauseVars, z3logic);
 }

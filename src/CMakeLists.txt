@@ -60,6 +60,13 @@ add_library(Z3Logic
 target_link_libraries(Z3Logic PUBLIC LogicTerm_lib z3::z3lib)
 add_library(logicblocks::Z3Logic ALIAS Z3Logic)
 
+add_library(Encodings
+			${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
+			${${PROJECT_NAME}_SOURCE_DIR}/include/Encodings/Encodings.hpp
+			${CMAKE_CURRENT_SOURCE_DIR}/Encodings/Encodings.cpp)
+target_link_libraries(Encodings PUBLIC LogicTerm_lib )
+add_library(logicblocks::Encodings ALIAS Encodings)
+
 add_library(Logic INTERFACE)
 target_link_libraries(Logic INTERFACE SMTLibLogic Z3Logic)
 add_library(logicblocks::Logic ALIAS Logic)
