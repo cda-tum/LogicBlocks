@@ -156,6 +156,10 @@ namespace logicutil {
                     return std::make_shared<TermImpl>(a.getIntValue() > b.getIntValue());
                 case OpType::LT:
                     return std::make_shared<TermImpl>(a.getIntValue() < b.getIntValue());
+                case OpType::GTE:
+                    return std::make_shared<TermImpl>(a.getIntValue() >= b.getIntValue());
+                case OpType::LTE:
+                    return std::make_shared<TermImpl>(a.getIntValue() <= b.getIntValue());
                 case OpType::EQ:
                     return std::make_shared<TermImpl>(a.getFloatValue() == b.getFloatValue());
                 case OpType::XOR:

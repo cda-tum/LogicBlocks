@@ -43,6 +43,8 @@ namespace logicbase {
         DIV,
         GT,
         LT,
+        GTE,
+        LTE,
         CALL,
         GET,
         SET,
@@ -177,6 +179,8 @@ namespace logicbase {
             case OpType::OR:
             case OpType::GT:
             case OpType::LT:
+            case OpType::GTE:
+            case OpType::LTE:
                 return CType::BOOL;
             case OpType::ADD:
             case OpType::SUB:

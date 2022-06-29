@@ -160,6 +160,14 @@ namespace logicbase {
             return LogicTerm(makeLogicTerm(OpType::LT, a, b));
         }
 
+        static LogicTerm gte(const LogicTerm& a, const LogicTerm& b) {
+            return LogicTerm(makeLogicTerm(OpType::GTE, a, b));
+        }
+
+        static LogicTerm lte(const LogicTerm& a, const LogicTerm& b) {
+            return LogicTerm(makeLogicTerm(OpType::LTE, a, b));
+        }
+
         static LogicTerm neg(const LogicTerm& a) {
             return LogicTerm(makeLogicTerm(OpType::NEG, a));
         }
@@ -214,6 +222,14 @@ namespace logicbase {
 
         LogicTerm operator<(const LogicTerm& other) const {
             return LogicTerm::lt(*this, other);
+        }
+
+        LogicTerm operator>=(const LogicTerm& other) const {
+            return LogicTerm::gte(*this, other);
+        }
+
+        LogicTerm operator<=(const LogicTerm& other) const {
+            return LogicTerm::lte(*this, other);
         }
 
         LogicTerm operator!() const { return LogicTerm::neg(*this); }

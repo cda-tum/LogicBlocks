@@ -120,6 +120,12 @@ std::string TermImpl::getStrRep(OpType opType) {
         case OpType::LT:
             os << "<LT ";
             break;
+        case OpType::GTE:
+            os << "<GTE ";
+            break;
+        case OpType::LTE:
+            os << "<LTE ";
+            break;
         default:
             os << "<ERROR TYPE";
             break;

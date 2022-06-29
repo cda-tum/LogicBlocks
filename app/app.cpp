@@ -40,7 +40,8 @@ int main() {
         std::cout << std::endl;
     }
 
-    LogicTerm aa = (a < LogicTerm(1));
+    LogicTerm a_ = z3logic.makeVariable("a", CType::INT);
+    LogicTerm aa = (a_ <= LogicTerm(1));
 
     aa.print(std::cout);
 
@@ -48,5 +49,6 @@ int main() {
     for (int i = 0; i < 5; ++i) {
         clauseVars.push_back(LogicTerm(i));
     }
-    AtMostOneBiMander(clauseVars, &z3logic);
+
+
 }
