@@ -29,8 +29,9 @@ LogicTerm AtMostOneBiMander(const std::vector<LogicTerm>& vars, LogicBlock* logi
     LogicTerm              ret     = LogicTerm(true);
     std::vector<LogicTerm> binary_vars{};
     auto                   m = subords.size();
+    binary_vars.reserve(std::ceil(std::log2(m)));
     for (int j = 0; j < std::ceil(std::log2(m)); j++) {
-        binary_vars.emplace_back();
+        binary_vars.emplace_back(logic->makeVariable("binary_var_" + std::to_string(j)));
     }
     for (std::size_t i = 0U; i < m; i++) {
         LogicTerm binary = LogicTerm(true);

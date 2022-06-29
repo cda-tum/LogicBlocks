@@ -48,5 +48,5 @@ int main() {
     for (int i = 0; i < 5; ++i) {
         clauseVars.push_back(LogicTerm(i));
     }
-    AtMostOneBiMander(clauseVars, z3logic);
+    AtMostOneBiMander(clauseVars, *z3logic);
 }
