@@ -77,9 +77,9 @@ std::vector<std::vector<LogicTerm>>
 groupVarsBimander(const std::vector<LogicTerm>& vars, std::size_t groupCount);
 
 LogicTerm BuildBDD(const std::set<WeightedVar>&  inputLiterals,
-                   const std::vector<LogicTerm>& vars, int leq);
+                   const std::vector<LogicTerm>& vars, int leq, LogicBlock *lb);
 LogicTerm BuildBDD(unsigned long index, long curSum, long maxSum, long k,
                    const std::vector<WeightedVar>& inputLiterals,
                    const std::vector<LogicTerm>& vars, LogicTerm& formula,
-                   LogicTerm& true_lit);
+                   LogicTerm& true_lit, LogicBlock *lb);
 #endif //QMAP_ENCODINGS_HPP

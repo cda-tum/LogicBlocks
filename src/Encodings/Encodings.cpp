@@ -141,7 +141,7 @@ groupVarsBimander(const std::vector<LogicTerm>& vars, std::size_t groupCount) {
 }
 
 LogicTerm BuildBDD(const std::set<WeightedVar>&  inputLiterals,
-                   const std::vector<LogicTerm>& vars, int leq) {
+                   const std::vector<LogicTerm>& vars, int leq, LogicBlock *lb) {
     std::vector<WeightedVar> literals(inputLiterals.begin(), inputLiterals.end());
     history.clear();
     long k      = leq;
@@ -151,14 +151,14 @@ LogicTerm BuildBDD(const std::set<WeightedVar>&  inputLiterals,
     }
     LogicTerm true_lit{};
     LogicTerm formula{};
-    LogicTerm result = BuildBDD(0U, 0, maxSum, k, literals, vars, formula, true_lit);
+    LogicTerm result = BuildBDD(0U, 0, maxSum, k, literals, vars, formula, true_lit, lb);
     return result && formula;
 }
 
 LogicTerm BuildBDD(unsigned long index, long curSum, long maxSum, long k,
                    const std::vector<WeightedVar>& inputLiterals,
                    const std::vector<LogicTerm>& vars, LogicTerm& formula,
-                   LogicTerm& true_lit) {
+                   LogicTerm& true_lit, LogicBlock *lb) {
     if (curSum + maxSum < k) {
         return true_lit;
     }
