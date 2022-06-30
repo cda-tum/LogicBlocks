@@ -149,8 +149,8 @@ LogicTerm BuildBDD(const std::set<WeightedVar>&  inputLiterals,
     for (const auto& l: literals) {
         maxSum += l.weight;
     }
-    LogicTerm true_lit{};
-    LogicTerm formula{};
+    LogicTerm true_lit = lb->makeVariable("true_lit");
+    LogicTerm formula = lb->makeVariable("formula");
     LogicTerm result = BuildBDD(0U, 0, maxSum, k, literals, vars, formula, true_lit, lb);
     return result && formula;
 }
