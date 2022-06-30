@@ -190,7 +190,7 @@ LogicTerm BuildBDD(unsigned long index, long curSum, long maxSum, long k,
         node                                                              = !(inputLiterals[index].var);
         history[std::make_pair(inputLiterals[index].var.getID(), curSum)] = SavedLit(Type::ProgramVar, inputLiterals[index].var);
     } else {
-        node = LogicTerm();
+        node = lb->makeVariable("node");
         if (!low.deepEquals(true_lit)) {
             formula = formula && (low || !(node));
         }
