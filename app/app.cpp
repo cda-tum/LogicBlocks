@@ -82,7 +82,7 @@ int main() {
 //            }
 //        }
 //    }
-
+    using namespace cnflogic;
     CNFLogicBlock cnflogic(true, std::cout);
     LogicTerm a       = cnflogic.makeVariable("a", CType::BOOL);
     LogicTerm b       = cnflogic.makeVariable("b", CType::BOOL);

@@ -95,7 +95,7 @@ target_link_libraries(Encodings PUBLIC LogicTerm_lib)
 add_library(logicblocks::Encodings ALIAS Encodings)
 
 add_library(Logic INTERFACE)
-target_link_libraries(Logic INTERFACE SMTLibLogic)
+target_link_libraries(Logic INTERFACE SMTLibLogic CNFLogic)
 if (Z3_FOUND)
 	target_link_libraries(Logic INTERFACE Z3Logic)
 endif ()
