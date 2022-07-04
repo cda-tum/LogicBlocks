@@ -145,5 +145,8 @@ namespace logicbase {
                 return LogicTerm::noneTerm();
         }
     }
+    void LogicTerm::prettyPrint(std::ostream& os, int depth) const {
+        pImpl->prettyPrint(os, depth);
+    }
 
 } // namespace logicbase

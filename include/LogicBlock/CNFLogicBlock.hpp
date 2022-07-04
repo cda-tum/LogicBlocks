@@ -15,15 +15,34 @@
 
 using namespace logicbase;
 
-class CNFLogicBlock: logicbase::LogicBlock {
+class CNFLogicBlock: public LogicBlock {
 protected:
     std::ostream&                                                        out;
-    void                                                                 internal_reset() override;
     std::unordered_set<std::unordered_set<long long>, UnorderedLongHash> convertedClauses{};
+    std::unordered_map<unsigned long long, long long> variables{};
+    unsigned long long varId = 0;
+    LogicTerm trueTerm;
+    LogicTerm falseTerm;
+    void                                                                 internal_reset() override;
 
 public:
     explicit CNFLogicBlock(bool convertWhenAssert = false, std::ostream& out = std::cout):
-        logicbase::LogicBlock(convertWhenAssert), out(out) {}
+        LogicBlock(convertWhenAssert), out(out) {
+        trueTerm = makeVariable("true", CType::BOOL);
+        falseTerm = makeVariable("false", CType::BOOL);
+        clauses.insert(trueTerm);
+        clauses.insert(falseTerm);
+        variables.insert(std::make_pair(trueTerm.getID(), 1));
+        variables.insert(std::make_pair(falseTerm.getID(), 2));
+        varId = 3;
+        convertedClauses.insert({1}); //True Literal
+        convertedClauses.insert({-2}); //False Literal
+    }
+    ~CNFLogicBlock() override {
+        variables.clear();
+        convertedClauses.clear();
+        varId = 0;
+    }
 
     void   produceInstance() override;
     Result solve() override;
@@ -34,6 +53,8 @@ public:
     void assertFormula(const LogicTerm& a) override;
 
     void convert();
+    std::unordered_set<long long> convert(const LogicTerm& a);
+    LogicTerm convertToCNF(const LogicTerm& a);
 
     void reset() override {
         delete model;

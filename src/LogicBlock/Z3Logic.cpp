@@ -12,7 +12,7 @@ namespace z3logic {
     z3::expr Z3Base::getExprTerm(unsigned long long id, CType type, Z3Base* z3base) {
         if (z3base->variables.find(id) == z3base->variables.end() ||
             !z3base->variables.at(id)[static_cast<int>(type)].first)
-            throw std::runtime_error("Variable not found");
+            util::fatal("Variable not found");
         return z3base->variables.at(id)[static_cast<int>(type)].second;
     }
 

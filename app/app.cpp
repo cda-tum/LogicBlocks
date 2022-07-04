@@ -1,5 +1,6 @@
 #include "Encodings/Encodings.hpp"
 #include "LogicBlock/Z3Logic.hpp"
+#include "LogicBlock/CNFLogicBlock.hpp"
 
 #include <iostream>
 
@@ -41,14 +42,14 @@ int main() {
     //    }
 
 
-    std::vector<std::vector<LogicTerm>> a_nodes;
+        std::vector<std::vector<LogicTerm>> a_nodes;
 
-    for (int i = 0; i < 4; ++i) {
-        a_nodes.emplace_back();
-        for (int j = 0; j < 4; ++j) {
-            a_nodes.back().emplace_back(z3logic.makeVariable("a_" + std::to_string(i) + "_" + std::to_string(j), CType::BOOL));
+        for (int i = 0; i < 4; ++i) {
+            a_nodes.emplace_back();
+            for (int j = 0; j < 4; ++j) {
+                a_nodes.back().emplace_back(z3logic.makeVariable("a_" + std::to_string(i) + "_" + std::to_string(j), CType::BOOL));
+            }
         }
-    }
 
         for (int i = 0; i < 4; ++i) {
             LogicTerm a_ = LogicTerm(0);
@@ -70,16 +71,33 @@ int main() {
 
 
 
-    z3logic.dumpAll(std::cout);
-    z3logic.dumpZ3State(std::cout);
-    if (z3logic.solve() == Result::SAT) {
-        for (int i = 0; i < 4; ++i) {
-            for (int j = 0; j < 4; ++j) {
-                std::cout << "a_" << i << "_" << j << ": ";
-                z3logic.getModel()->getValue(a_nodes[i][j], &z3logic).print(std::cout);
-                std::cout << std::endl;
-            }
-        }
-    }
+//    z3logic.dumpAll(std::cout);
+//    z3logic.dumpZ3State(std::cout);
+//    if (z3logic.solve() == Result::SAT) {
+//        for (int i = 0; i < 4; ++i) {
+//            for (int j = 0; j < 4; ++j) {
+//                std::cout << "a_" << i << "_" << j << ": ";
+//                z3logic.getModel()->getValue(a_nodes[i][j], &z3logic).print(std::cout);
+//                std::cout << std::endl;
+//            }
+//        }
+//    }
+
+    CNFLogicBlock cnflogic(true, std::cout);
+    LogicTerm a       = cnflogic.makeVariable("a", CType::BOOL);
+    LogicTerm b       = cnflogic.makeVariable("b", CType::BOOL);
+    LogicTerm c      = cnflogic.makeVariable("c", CType::BOOL);
+    LogicTerm d       = cnflogic.makeVariable("d", CType::BOOL);
+    LogicTerm e       = cnflogic.makeVariable("e", CType::BOOL);
+    LogicTerm f       = cnflogic.makeVariable("f", CType::BOOL);
+    LogicTerm g       = cnflogic.makeVariable("g", CType::BOOL);
+    LogicTerm h       = cnflogic.makeVariable("h", CType::BOOL);
+    LogicTerm i       = cnflogic.makeVariable("i", CType::BOOL);
+    LogicTerm j       = cnflogic.makeVariable("j", CType::BOOL);
+//    cnflogic.assertFormula(a || b);
+//    cnflogic.assertFormula(c && d);
+    cnflogic.assertFormula(((a && b) || (c && d)));
+
+    cnflogic.dumpAll(std::cout);
 
 }

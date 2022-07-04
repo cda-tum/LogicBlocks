@@ -138,14 +138,14 @@ void TermImpl::print(std::ostream& os) const {
     if (opType == OpType::Variable) {
         os << " " << toString(c_type);
         os << " " << (name.empty() ? std::to_string(id) : name);
-    }
-    if (opType == OpType::Constant) {
+    } else if (opType == OpType::Constant) {
         os << " " << toString(c_type);
         os << " " << getValue();
-    }
-    for (const auto& n: nodes) {
-        n.print(os);
-        os << ", ";
+    } else {
+        for (const auto& n: nodes) {
+            n.print(os);
+            os << ", ";
+        }
     }
     if (opType != OpType::Variable && opType != OpType::Constant) {
         os << ">";
@@ -262,4 +262,30 @@ bool TermImpl::deepEquals(const TermImpl& other) const {
         }
     }
     return true;
+}
+void TermImpl::prettyPrint(std::ostream& os, int depth) const {
+    for (int i = 0; i < depth; ++i) {
+        os << "  ";
+    }
+    os << getStrRep(opType);
+    if (opType == OpType::Variable) {
+        os << " " << toString(c_type);
+        os << " " << (name.empty() ? std::to_string(id) : name);
+    } else if (opType == OpType::Constant) {
+        os << " " << toString(c_type);
+        os << " " << getValue();
+    } else {
+        os << std::endl;
+        for (const auto& n: nodes) {
+            n.prettyPrint(os, depth + 1);
+        }
+    }
+    if (opType != OpType::Variable && opType != OpType::Constant) {
+        os << std::endl;
+        for (int i = 0; i < depth; ++i) {
+            os << "  ";
+        }
+        os << ">";
+        os << std::endl;
+    }
 }

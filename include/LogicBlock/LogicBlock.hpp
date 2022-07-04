@@ -29,11 +29,12 @@ namespace logicbase {
         Model* getModel() { return model; }
 
         virtual void dump(const LogicTerm& a, std::ostream& stream) {
-            a.print(stream);
+            a.prettyPrint(stream);
         }
         virtual void dumpAll(std::ostream& stream) {
             for (const LogicTerm& term: clauses) {
                 dump(term, stream);
+                stream << "  ";
             }
         }
 

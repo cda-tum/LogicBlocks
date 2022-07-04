@@ -15,6 +15,11 @@ namespace logicutil {
     inline bool isVar(const LogicTerm& a) {
         return a.getOpType() == OpType::Variable;
     }
+
+    inline bool isUnit(const LogicTerm& a) {
+        return isConst(a) || isVar(a) || (a.getOpType() == OpType::NEG && a.getNodes()[0].getOpType() == OpType::Constant) || (a.getOpType() == OpType::NEG && a.getNodes()[0].getOpType() == OpType::Variable);
+    }
+
     inline CType getTargetCType(const LogicTerm& a, const LogicTerm& b, OpType op) {
         if (op == OpType::EQ || op == OpType::XOR || op == OpType::AND ||
             op == OpType::OR) {
