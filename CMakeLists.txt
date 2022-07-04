@@ -32,10 +32,7 @@ if(Z3_FOUND AND NOT TARGET z3::z3lib)
 	set_property(TARGET z3::z3lib PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Z3_CXX_INCLUDE_DIRS})
 	set_property(TARGET z3::z3lib PROPERTY INTERFACE_LINK_LIBRARIES ${Z3_LIBRARIES})
 	add_definitions(-DZ3_FOUND)
-endif()
-
-add_subdirectory("${PROJECT_SOURCE_DIR}/extern/plog" "extern/plog")
-
+endif ()
 
 add_subdirectory(src)
 

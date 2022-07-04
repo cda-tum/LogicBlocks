@@ -1,3 +1,6 @@
+# add logging library target
+add_subdirectory("${PROJECT_SOURCE_DIR}/extern/plog" "extern/plog")
+
 add_library(LogicTerm_lib
             ${CMAKE_CURRENT_SOURCE_DIR}/LogicTerm/TermImpl.cpp
             ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicTerm/TermImpl.hpp
