@@ -13,29 +13,49 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # configuration options
 option(DEPLOY "Configure for deployment")
-# Add path for custom modules
-list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+option(BINDINGS "Configure for building Python bindings")
+option(COVERAGE "Configure for coverage report generation")
+option(GENERATE_POSITION_INDEPENDENT_CODE "Generate position independent code")
+
+if (DEFINED ENV{DEPLOY})
+	set(DEPLOY $ENV{DEPLOY} CACHE BOOL "Use deployment configuration from environment" FORCE)
+	message(STATUS "Setting deployment configuration to '${DEPLOY}' from environment")
+endif ()
+
+# set deployment specific options
+if (DEPLOY)
+	# set the macOS deployment target appropriately
+	set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "" FORCE)
+endif ()
+
+macro(check_submodule_present MODULENAME)
+	if (NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/${MODULENAME}/CMakeLists.txt")
+		message(FATAL_ERROR "${MODULENAME} submodule not cloned properly. Please run `git submodule update --init --recursive` from the main project directory")
+	endif ()
+endmacro()
 
 # build type settings
 set(default_build_type "Release")
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 	message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
 	set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Choose the type of build." FORCE)
 	set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
-endif()
+endif ()
+
+check_submodule_present(plog)
+
+# Add path for custom modules
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # search for Z3
 find_package(Z3)
-if(Z3_FOUND AND NOT TARGET z3::z3lib)
+if (Z3_FOUND AND NOT TARGET z3::z3lib)
 	message(STATUS "Found Z3 with version ${Z3_VERSION_STRING}")
 	add_library(z3::z3lib IMPORTED INTERFACE)
 	set_property(TARGET z3::z3lib PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Z3_CXX_INCLUDE_DIRS})
 	set_property(TARGET z3::z3lib PROPERTY INTERFACE_LINK_LIBRARIES ${Z3_LIBRARIES})
 	add_definitions(-DZ3_FOUND)
-endif()
-
-add_subdirectory("${PROJECT_SOURCE_DIR}/extern/plog" "extern/plog")
-
+endif ()
 
 add_subdirectory(src)
 
