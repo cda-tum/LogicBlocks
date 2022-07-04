@@ -18,7 +18,7 @@ list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # build type settings
 set(default_build_type "Release")
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 	message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
 	set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Choose the type of build." FORCE)
 	set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
@@ -26,7 +26,7 @@ endif()
 
 # search for Z3
 find_package(Z3)
-if(Z3_FOUND AND NOT TARGET z3::z3lib)
+if (Z3_FOUND AND NOT TARGET z3::z3lib)
 	message(STATUS "Found Z3 with version ${Z3_VERSION_STRING}")
 	add_library(z3::z3lib IMPORTED INTERFACE)
 	set_property(TARGET z3::z3lib PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Z3_CXX_INCLUDE_DIRS})

@@ -16,8 +16,13 @@ add_library(LogicTerm_lib
             ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/logging.hpp
             ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/csv_util.hpp
             ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/json_util.hpp)
+
+# set include directories
 target_include_directories(LogicTerm_lib PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
+# add logging library
 target_link_libraries(LogicTerm_lib PUBLIC plog)
+
 # set required C++ standard and disable compiler specific extensions
 target_compile_features(LogicTerm_lib PUBLIC cxx_std_17)
 set_target_properties(LogicTerm_lib PROPERTIES CMAKE_CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
@@ -31,9 +36,9 @@ endif ()
 
 # set compiler flags depending on compiler
 # since these are defined `PUBLIC` they are propagated to all linking targets
-if(MSVC)
+if (MSVC)
 	target_compile_options(LogicTerm_lib PUBLIC /utf-8)
-else()
+else ()
 	target_compile_options(LogicTerm_lib PUBLIC -Wall -Wextra $<$<CONFIG:DEBUG>:-Og>)
 	if(NOT DEPLOY)
 		# only include machine-specific optimizations when building for the host machine
@@ -55,9 +60,9 @@ target_link_libraries(SMTLibLogic PUBLIC LogicTerm_lib)
 add_library(logicblocks::SMTLibLogic ALIAS SMTLibLogic)
 
 add_library(CNFLogic
-		${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
-		${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/CNFLogicBlock.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/LogicBlock/CNFLogicBlock.cpp)
+            ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
+            ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/CNFLogicBlock.hpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/LogicBlock/CNFLogicBlock.cpp)
 target_link_libraries(CNFLogic PUBLIC LogicTerm_lib)
 add_library(logicblocks::CNFLogic ALIAS CNFLogic)
 
@@ -73,10 +78,10 @@ if (Z3_FOUND)
 endif ()
 
 add_library(Encodings
-			${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
-			${${PROJECT_NAME}_SOURCE_DIR}/include/Encodings/Encodings.hpp
-			${CMAKE_CURRENT_SOURCE_DIR}/Encodings/Encodings.cpp)
-target_link_libraries(Encodings PUBLIC LogicTerm_lib )
+            ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
+            ${${PROJECT_NAME}_SOURCE_DIR}/include/Encodings/Encodings.hpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/Encodings/Encodings.cpp)
+target_link_libraries(Encodings PUBLIC LogicTerm_lib)
 add_library(logicblocks::Encodings ALIAS Encodings)
 
 add_library(Logic INTERFACE)
