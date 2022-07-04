@@ -49,7 +49,13 @@ else ()
 			target_compile_options(LogicTerm_lib PUBLIC -march=native)
 		endif ()
 	endif ()
-endif()
+endif ()
+
+# add coverage compiler and linker flag to the library and all targets that link against it, if COVERAGE is set
+if (COVERAGE)
+	target_compile_options(LogicTerm_lib PUBLIC --coverage)
+	target_link_libraries(LogicTerm_lib PUBLIC --coverage)
+endif ()
 
 
 add_library(SMTLibLogic
