@@ -22,6 +22,13 @@ target_link_libraries(LogicTerm_lib PUBLIC plog)
 target_compile_features(LogicTerm_lib PUBLIC cxx_std_17)
 set_target_properties(LogicTerm_lib PROPERTIES CMAKE_CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
 
+# enable interprocedural optimization if it is supported
+include(CheckIPOSupported)
+check_ipo_supported(RESULT ipo_supported)
+if (ipo_supported)
+	set_target_properties(LogicTerm_lib PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+endif ()
+
 # set compiler flags depending on compiler
 # since these are defined `PUBLIC` they are propagated to all linking targets
 if(MSVC)
