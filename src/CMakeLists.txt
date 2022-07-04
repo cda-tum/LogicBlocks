@@ -61,14 +61,16 @@ add_library(CNFLogic
 target_link_libraries(CNFLogic PUBLIC LogicTerm_lib)
 add_library(logicblocks::CNFLogic ALIAS CNFLogic)
 
-add_library(Z3Logic
-            ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
-            ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/Z3Logic.hpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/LogicBlock/Z3Logic.cpp
-            ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/Z3Model.hpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/LogicBlock/Z3Model.cpp)
-target_link_libraries(Z3Logic PUBLIC LogicTerm_lib z3::z3lib)
-add_library(logicblocks::Z3Logic ALIAS Z3Logic)
+if (Z3_FOUND)
+	add_library(Z3Logic
+	            ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
+	            ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/Z3Logic.hpp
+	            ${CMAKE_CURRENT_SOURCE_DIR}/LogicBlock/Z3Logic.cpp
+	            ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/Z3Model.hpp
+	            ${CMAKE_CURRENT_SOURCE_DIR}/LogicBlock/Z3Model.cpp)
+	target_link_libraries(Z3Logic PUBLIC LogicTerm_lib z3::z3lib)
+	add_library(logicblocks::Z3Logic ALIAS Z3Logic)
+endif ()
 
 add_library(Encodings
 			${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
@@ -78,5 +80,8 @@ target_link_libraries(Encodings PUBLIC LogicTerm_lib )
 add_library(logicblocks::Encodings ALIAS Encodings)
 
 add_library(Logic INTERFACE)
-target_link_libraries(Logic INTERFACE SMTLibLogic Z3Logic)
+target_link_libraries(Logic INTERFACE SMTLibLogic)
+if (Z3_FOUND)
+	target_link_libraries(Logic INTERFACE Z3Logic)
+endif ()
 add_library(logicblocks::Logic ALIAS Logic)
