@@ -96,7 +96,9 @@ int main() {
     LogicTerm j       = cnflogic.makeVariable("j", CType::BOOL);
 //    cnflogic.assertFormula(a || b);
 //    cnflogic.assertFormula(c && d);
-    cnflogic.assertFormula(((a && b) || (c && d)));
+    LogicTerm ch = !(a && b);
+    cnflogic.assertFormula(ch);
+    ch.prettyPrint(std::cout);
 
     cnflogic.dumpAll(std::cout);
 
