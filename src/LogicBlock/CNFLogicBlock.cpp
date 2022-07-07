@@ -51,7 +51,11 @@ namespace cnflogic {
                 if (a.getCType() != CType::BOOL) {
                     throw std::runtime_error("Constant is not a boolean");
                 }
-                return a;
+                if (a.getBoolValue()) {
+                    return trueTerm;
+                } else {
+                    return falseTerm;
+                }
             case OpType::NEG: {
                 if (subnodes[0].getOpType() == OpType::Variable) {
                     return !subnodes[0];
@@ -59,17 +63,21 @@ namespace cnflogic {
                     if (subnodes[0].getCType() != CType::BOOL) {
                         throw std::runtime_error("Constant is not a boolean");
                     }
-                    return LogicTerm(!subnodes[0].getBoolValue());
+                    if (subnodes[0].getBoolValue()) {
+                        return falseTerm;
+                    } else {
+                        return trueTerm;
+                    }
                 } else if (subnodes[0].getOpType() == OpType::NEG) {
                     return convertToCNF(subnodes[0].getNodes()[0]);
                 } else if (subnodes[0].getOpType() == OpType::AND) {
-                    LogicTerm negatedClause = LogicTerm(true);
+                    LogicTerm negatedClause = LogicTerm(false);
                     for (const auto& subnode: subnodes[0].getNodes()) {
                         negatedClause = negatedClause || !subnode;
                     }
                     return convertToCNF(negatedClause);
                 } else if (subnodes[0].getOpType() == OpType::OR) {
-                    LogicTerm negatedClause = LogicTerm(false);
+                    LogicTerm negatedClause = LogicTerm(true);
                     for (const auto& subnode: subnodes[0].getNodes()) {
                         negatedClause = negatedClause && !subnode;
                     }

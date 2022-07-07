@@ -1,6 +1,7 @@
 #include "Encodings/Encodings.hpp"
 #include "LogicBlock/Z3Logic.hpp"
 #include "LogicBlock/CNFLogicBlock.hpp"
+#include "utils/logging.hpp"
 
 #include <iostream>
 
@@ -96,10 +97,12 @@ int main() {
     LogicTerm j       = cnflogic.makeVariable("j", CType::BOOL);
 //    cnflogic.assertFormula(a || b);
 //    cnflogic.assertFormula(c && d);
-    LogicTerm ch = !(a && b);
+    LogicTerm ch = c || (a == b);
     cnflogic.assertFormula(ch);
-    ch.prettyPrint(std::cout);
+//    ch.prettyPrint(std::cout);
 
     cnflogic.dumpAll(std::cout);
+    util::init("", plog::error);
+    ERROR() << "TESTING";
 
 }

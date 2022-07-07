@@ -7,7 +7,7 @@
 
 #include <exception>
 #include <iostream>
-#include <plog/Appenders/ConsoleAppender.h>
+#include <plog/Appenders/ColorConsoleAppender.h>
 #include <plog/Appenders/RollingFileAppender.h>
 #include <plog/Formatters/TxtFormatter.h>
 #include <plog/Init.h>
@@ -27,8 +27,8 @@ namespace util {
         if (!logfile.empty() && logfile != "std") {
             static plog::RollingFileAppender<plog::TxtFormatter> fileAppender(logfile.c_str());
             plog::init(severity, &fileAppender);
-        } else if (logfile == "std") {
-            static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
+        } else if (logfile == "std" || logfile == "") {
+            static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
             plog::init(severity, &consoleAppender);
         }
     }
