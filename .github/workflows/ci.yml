@@ -57,9 +57,6 @@ jobs:
       - name: Build
         run:  |
           cmake --build "${{github.workspace}}/build" --config $BUILD_TYPE --target logicblocks_app
-      - name: Test
-        working-directory: ${{github.workspace}}/build/test
-        run: ctest -C $BUILD_TYPE --output-on-failure
 
 
   macOS-ci:
