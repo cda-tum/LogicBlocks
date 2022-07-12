@@ -68,6 +68,61 @@ namespace logicbase {
         ERRORTYPE
     };
 
+    inline std::string toString(OpType opType) {
+        switch (opType) {
+            case OpType::Variable:
+                return "Variable";
+            case OpType::Constant:
+                return "Constant";
+            case OpType::EQ:
+                return "EQ";
+            case OpType::XOR:
+                return "XOR";
+            case OpType::AND:
+                return "AND";
+            case OpType::OR:
+                return "OR";
+            case OpType::ITE:
+                return "ITE";
+            case OpType::NEG:
+                return "NEG";
+            case OpType::IMPL:
+                return "IMPL";
+            case OpType::ADD:
+                return "ADD";
+            case OpType::SUB:
+                return "SUB";
+            case OpType::MUL:
+                return "MUL";
+            case OpType::DIV:
+                return "DIV";
+            case OpType::GT:
+                return "GT";
+            case OpType::LT:
+                return "LT";
+            case OpType::GTE:
+                return "GTE";
+            case OpType::LTE:
+                return "LTE";
+            case OpType::BIT_AND:
+                return "BIT_AND";
+            case OpType::BIT_OR:
+                return "BIT_OR";
+            case OpType::BIT_EQ:
+                return "BIT_EQ";
+            case OpType::BIT_XOR:
+                return "BIT_XOR";
+            case OpType::CALL:
+                return "CALL";
+            case OpType::GET:
+                return "GET";
+            case OpType::SET:
+                return "SET";
+            default:
+                return "Unknown";
+        }
+    }
+
     inline std::string toString(CType ctype) {
         switch (ctype) {
             case CType::BOOL:

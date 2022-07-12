@@ -16,6 +16,7 @@ option(DEPLOY "Configure for deployment")
 option(BINDINGS "Configure for building Python bindings")
 option(COVERAGE "Configure for coverage report generation")
 option(GENERATE_POSITION_INDEPENDENT_CODE "Generate position independent code")
+option(BUILD_LB_TESTS "Also build tests for LogicBlocks project")
 
 if (DEFINED ENV{DEPLOY})
 	set(DEPLOY $ENV{DEPLOY} CACHE BOOL "Use deployment configuration from environment" FORCE)
@@ -60,3 +61,11 @@ endif ()
 add_subdirectory(src)
 
 add_subdirectory(app)
+
+set(BUILD_LB_TESTS ON)
+# add test code
+if (BUILD_LB_TESTS)
+	enable_testing()
+	include(GoogleTest)
+	add_subdirectory(test)
+endif ()
