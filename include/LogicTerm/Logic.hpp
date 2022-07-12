@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cstdarg>
 #include <functional>
+#include <limits>
 #include <memory>
 #include <ostream>
 #include <sstream>
@@ -11,16 +12,15 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
-#include <limits>
 
 namespace logicbase {
 
     inline bool hasZ3() {
-    #ifdef Z3_FOUND
+#ifdef Z3_FOUND
         return true;
-    #else
+#else
         return false;
-    #endif
+#endif
     }
 
     enum class Result { SAT,
@@ -283,8 +283,8 @@ namespace logicbase {
     struct UnorderedLongHash {
         std::size_t operator()(const std::unordered_set<long long>& t) const {
             std::size_t result{};
-            for (const auto& item:t)
-                result+=std::numeric_limits<unsigned long>::max() * item;
+            for (const auto& item: t)
+                result += std::numeric_limits<unsigned long>::max() * item;
             return result;
         }
         bool operator()(const std::unordered_set<long long>& t1, const std::unordered_set<long long>& t2) const {

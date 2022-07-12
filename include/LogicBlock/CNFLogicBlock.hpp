@@ -11,9 +11,8 @@
 #include <iostream>
 #include <map>
 #include <memory>
-#include <unordered_set>
 #include <unordered_map>
-
+#include <unordered_set>
 
 namespace cnflogic {
     using namespace logicbase;

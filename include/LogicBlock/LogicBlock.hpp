@@ -59,11 +59,11 @@ namespace logicbase {
         virtual void   produceInstance() = 0;
         virtual Result solve()           = 0;
         virtual void   reset() {
-              delete model;
-              model = nullptr;
-              clauses.clear();
-              internal_reset();
-              gid = 0U;
+            delete model;
+            model = nullptr;
+            clauses.clear();
+            internal_reset();
+            gid = 0U;
         };
     };
 

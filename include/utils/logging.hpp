@@ -33,7 +33,6 @@ namespace util {
         }
     }
 
-
     inline void fatal(const std::string& msg) {
         PLOG_FATAL << msg;
         throw std::runtime_error(msg);

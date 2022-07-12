@@ -144,73 +144,73 @@ namespace cnflogic {
             case OpType::XOR: {
                 auto P = convertToCNF(subnodes[0]);
                 auto Q = convertToCNF(subnodes[1]);
-                return convertToCNF((P && convertToCNF(!Q)) || (convertToCNF(!P )&& Q));
+                return convertToCNF((P && convertToCNF(!Q)) || (convertToCNF(!P) && Q));
             }
             default:
                 throw std::runtime_error("Unsupported operation type");
         }
     }
     std::unordered_set<long long> CNFLogicBlock::convert(const LogicTerm& a) {
-            switch (a.getOpType()) {
-                case logicbase::OpType::Variable: {
-                    auto it = variables.find(a.getID());
-                    if (it == variables.end()) {
-                        variables[a.getID()] = varId++;
-                        return {variables[a.getID()]};
-                    } else {
-                        return {it->second};
-                    }
+        switch (a.getOpType()) {
+            case logicbase::OpType::Variable: {
+                auto it = variables.find(a.getID());
+                if (it == variables.end()) {
+                    variables[a.getID()] = varId++;
+                    return {variables[a.getID()]};
+                } else {
+                    return {it->second};
                 }
-                case OpType::Constant: {
-                    if (a.getBoolValue())
-                        return {1}; //True Literal
-                    else
-                        return {2}; //False Literal
-                }
-                case OpType::NEG: {
-                    auto subnodes = a.getNodes();
-                    if (subnodes[0].getOpType() == OpType::Variable) {
-                        auto it = variables.find(a.getNodes()[0].getID());
-                        if (it == variables.end()) {
-                            variables[a.getNodes()[0].getID()] = varId++;
-                            return {-variables[a.getNodes()[0].getID()]};
-                        } else {
-                            return {-it->second};
-                        }
-                    } else if (subnodes[0].getOpType() == OpType::Constant) {
-                        if (subnodes[0].getBoolValue())
-                            return {-1}; //True Literal
-                        else
-                            return {-2}; //False Literal
-                    } else if (subnodes[0].getOpType() == OpType::NEG) {
-                        return convert(subnodes[0].getNodes()[0]);
-                    } else if (subnodes[0].getOpType() == OpType::AND) {
-                        LogicTerm negatedClause = LogicTerm(true);
-                        for (const auto& subnode: subnodes[0].getNodes()) {
-                            negatedClause = negatedClause || !subnode;
-                        }
-                        return convert(negatedClause);
-                    } else if (subnodes[0].getOpType() == OpType::OR) {
-                        LogicTerm negatedClause = LogicTerm(false);
-                        for (const auto& subnode: subnodes[0].getNodes()) {
-                            negatedClause = negatedClause && !subnode;
-                        }
-                        return convert(negatedClause);
-                    } else {
-                        throw std::runtime_error("Unsupported operation type");
-                    }
-                }
-                case OpType::OR: {
-                    std::unordered_set<long long> convertedClause;
-                    for (const auto& subnode: a.getNodes()) {
-                        convertedClause.insert(convert(subnode).begin(), convert(subnode).end());
-                    }
-                    return convertedClause;
-                }
-                default:
-                    throw std::runtime_error("Unsupported operation type");
             }
+            case OpType::Constant: {
+                if (a.getBoolValue())
+                    return {1}; //True Literal
+                else
+                    return {2}; //False Literal
+            }
+            case OpType::NEG: {
+                auto subnodes = a.getNodes();
+                if (subnodes[0].getOpType() == OpType::Variable) {
+                    auto it = variables.find(a.getNodes()[0].getID());
+                    if (it == variables.end()) {
+                        variables[a.getNodes()[0].getID()] = varId++;
+                        return {-variables[a.getNodes()[0].getID()]};
+                    } else {
+                        return {-it->second};
+                    }
+                } else if (subnodes[0].getOpType() == OpType::Constant) {
+                    if (subnodes[0].getBoolValue())
+                        return {-1}; //True Literal
+                    else
+                        return {-2}; //False Literal
+                } else if (subnodes[0].getOpType() == OpType::NEG) {
+                    return convert(subnodes[0].getNodes()[0]);
+                } else if (subnodes[0].getOpType() == OpType::AND) {
+                    LogicTerm negatedClause = LogicTerm(true);
+                    for (const auto& subnode: subnodes[0].getNodes()) {
+                        negatedClause = negatedClause || !subnode;
+                    }
+                    return convert(negatedClause);
+                } else if (subnodes[0].getOpType() == OpType::OR) {
+                    LogicTerm negatedClause = LogicTerm(false);
+                    for (const auto& subnode: subnodes[0].getNodes()) {
+                        negatedClause = negatedClause && !subnode;
+                    }
+                    return convert(negatedClause);
+                } else {
+                    throw std::runtime_error("Unsupported operation type");
+                }
+            }
+            case OpType::OR: {
+                std::unordered_set<long long> convertedClause;
+                for (const auto& subnode: a.getNodes()) {
+                    convertedClause.insert(convert(subnode).begin(), convert(subnode).end());
+                }
+                return convertedClause;
+            }
+            default:
+                throw std::runtime_error("Unsupported operation type");
+        }
         return {};
     }
 
-}
+} // namespace cnflogic
