@@ -11,7 +11,6 @@
 
 class TestBaseGates: public testing::TestWithParam<logicbase::OpType> {
 protected:
-
     void SetUp() override {
     }
 };
@@ -23,4 +22,33 @@ TEST(TestBaseGates, VanishingConstant) {
 
     result = LogicTerm(true) || LogicTerm(false);
     EXPECT_EQ(result.getBoolValue(), true);
+
+    result = LogicTerm(false) && LogicTerm(true);
+    EXPECT_EQ(result.getBoolValue(), false);
+
+    result = LogicTerm(false) || LogicTerm(true);
+    EXPECT_EQ(result.getBoolValue(), true);
+
+    result = LogicTerm(true) == LogicTerm(false);
+    EXPECT_EQ(result.getBoolValue(), false);
+
+    result = LogicTerm(true) != LogicTerm(false);
+    EXPECT_EQ(result.getBoolValue(), true);
 }
+TEST(TestBaseGates, LeftOverVariable) {
+    using namespace logicbase;
+    LogicTerm variable = LogicTerm("x", CType::BOOL);
+    LogicTerm result   = LogicTerm(true) && variable;
+    EXPECT_EQ(result.getOpType(), OpType::Variable);
+
+    result = variable || LogicTerm(false);
+    EXPECT_EQ(result.getOpType(), OpType::Variable);
+
+    result = LogicTerm(false) && variable;
+    EXPECT_EQ(result.getBoolValue(), false);
+
+    result = variable || LogicTerm(true);
+    EXPECT_EQ(result.getBoolValue(), true);
+}
+
+

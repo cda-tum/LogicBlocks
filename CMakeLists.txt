@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.14...3.19)
 
 project(logicblocks
         LANGUAGES CXX
-        VERSION 1.3.3
+        VERSION 1.3.5
         DESCRIPTION "lb-core"
         )
 
