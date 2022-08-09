@@ -29,6 +29,8 @@ namespace z3logic {
                      cache{};
         z3::context& ctx;
 
+        bool producedInstance = false;
+
     public:
         explicit Z3Base(z3::context& ctx):
             ctx(ctx) {}

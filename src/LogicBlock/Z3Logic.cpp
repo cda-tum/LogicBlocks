@@ -197,6 +197,7 @@ namespace z3logic {
     }
 
     Result Z3LogicBlock::solve() {
+        produceInstance();
         z3::check_result res = solver.check();
         if (res == z3::sat) {
             model = new Z3Model(ctx, solver.get_model());
@@ -208,6 +209,7 @@ namespace z3logic {
     void Z3LogicBlock::internal_reset() {
         variables.clear();
         cache.clear();
+        solver.reset();
     }
 
     z3::expr Z3Base::convertVariableTo(const LogicTerm& a, CType to_type) {
@@ -421,6 +423,7 @@ namespace z3logic {
     }
 
     Result Z3LogicOptimizer::solve() {
+        produceInstance();
         z3::check_result res = optimizer.check();
         if (res == z3::sat) {
             model = new Z3Model(ctx, optimizer.get_model());
