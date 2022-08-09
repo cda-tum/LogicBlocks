@@ -56,8 +56,11 @@ jobs:
           cmake -S "${{github.workspace}}" -B "${{github.workspace}}/build" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_QMAP_TESTS=ON -DBINDINGS=ON
       - name: Build
         run:  |
-          cmake --build "${{github.workspace}}/build" --config $BUILD_TYPE --target logicblocks_app
+          cmake --build "${{github.workspace}}/build" --config $BUILD_TYPE --target logicblocks_z3Logic_test
 
+      - name: Test
+        working-directory: ${{github.workspace}}/build/test
+        run: ctest -C $BUILD_TYPE --output-on-failure
 
   macOS-ci:
     runs-on: macos-latest
@@ -75,7 +78,11 @@ jobs:
 
       - name: Build
         run:  |
-          cmake --build "${{github.workspace}}/build" --config $BUILD_TYPE --target logicblocks_app
+          cmake --build "${{github.workspace}}/build" --config $BUILD_TYPE --target logicblocks_z3Logic_test
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build/test
+        run: ctest -C $BUILD_TYPE --output-on-failure
 
 
   windows-ci:
@@ -105,3 +112,9 @@ jobs:
 
       - name:  Build
         run:   cmake --build "${{github.workspace}}/build" --config $BUILD_TYPE
+
+      - name:  Test
+        working-directory: ${{github.workspace}}/build/test
+        run: |
+          cd $BUILD_TYPE
+          ./logicblocks_z3Logic_test
