@@ -50,5 +50,3 @@ TEST(TestBaseGates, LeftOverVariable) {
     result = variable || LogicTerm(true);
     EXPECT_EQ(result.getBoolValue(), true);
 }
-
-
