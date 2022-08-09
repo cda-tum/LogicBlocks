@@ -22,7 +22,7 @@ namespace logicutil {
 
     inline CType getTargetCType(const LogicTerm& a, const LogicTerm& b, OpType op) {
         if (op == OpType::EQ || op == OpType::XOR || op == OpType::AND ||
-            op == OpType::OR) {
+            op == OpType::OR || op == OpType::GT || op == OpType::LT || op == OpType::GTE || op == OpType::LTE) {
             return CType::BOOL;
         }
         if (a.getCType() == CType::REAL || b.getCType() == CType::REAL)
