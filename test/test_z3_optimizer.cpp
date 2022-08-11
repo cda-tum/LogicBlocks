@@ -28,6 +28,11 @@ TEST(TestZ3Opt, ConstructDestruct) {
     z3logic->dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic->solve(), Result::SAT);
+    std::stringstream ss{};
+    ss << opt;
+
+    z3logic->reset();
+
 }
 
 

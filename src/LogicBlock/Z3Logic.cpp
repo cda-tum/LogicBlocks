@@ -210,6 +210,7 @@ namespace z3logic {
         variables.clear();
         cache.clear();
         solver.reset();
+        Z3Base::variables.clear();
     }
 
     z3::expr Z3Base::convertVariableTo(const LogicTerm& a, CType to_type) {
@@ -436,6 +437,7 @@ namespace z3logic {
         weightedTerms.clear();
         variables.clear();
         cache.clear();
+        Z3Base::variables.clear();
     }
 
 } // namespace z3logic
