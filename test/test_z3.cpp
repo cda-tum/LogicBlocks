@@ -10,6 +10,14 @@ protected:
     void SetUp() override {
     }
 };
+TEST(TestZ3, ConstructDestruct) {
+    using namespace logicbase;
+
+    z3::context ctx{};
+    z3::solver  solver{ctx};
+
+    std::unique_ptr<z3logic::Z3LogicBlock> z3logic =std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, false);
+}
 
 TEST(TestZ3, SimpleTrue) {
     using namespace logicbase;

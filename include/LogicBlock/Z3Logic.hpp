@@ -95,7 +95,10 @@ namespace z3logic {
             LogicBlockOptimizer(convertWhenAssert),
             Z3Base(ctx),
             optimizer(optimizer) {}
-        ~Z3LogicOptimizer() override {}
+        ~Z3LogicOptimizer() override {
+            variables.clear();
+            cache.clear();
+        }
         void   assertFormula(const LogicTerm& a) override;
         void   produceInstance() override;
         Result solve() override;
