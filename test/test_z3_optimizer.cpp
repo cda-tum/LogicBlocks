@@ -14,7 +14,7 @@ protected:
 TEST(TestZ3Opt, ConstructDestruct) {
     using namespace logicbase;
 
-    z3::context ctx{};
+    z3::context  ctx{};
     z3::optimize opt{ctx};
 
     std::unique_ptr<z3logic::Z3LogicOptimizer> z3logic = std::make_unique<z3logic::Z3LogicOptimizer>(ctx, opt, false);
@@ -32,8 +32,4 @@ TEST(TestZ3Opt, ConstructDestruct) {
     ss << opt;
 
     z3logic->reset();
-
 }
-
-
-
