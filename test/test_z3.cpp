@@ -495,3 +495,46 @@ TEST(TestZ3, IntNumbers) {
     z3logic.reset();
 }
 
+TEST(TestZ3, AMOAndExactlyOneNaive) {
+    {
+        using namespace logicbase;
+
+        z3::context ctx{};
+        z3::solver  solver{ctx};
+
+        std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, false);
+
+        std::vector<std::vector<LogicTerm>> a_nodes;
+
+        for (int i = 0; i < 4; ++i) {
+            a_nodes.emplace_back();
+            for (int j = 0; j < 4; ++j) {
+                a_nodes.back().emplace_back(z3logic->makeVariable("a_" + std::to_string(i) + "_" + std::to_string(j), CType::BOOL));
+            }
+        }
+
+        for (int i = 0; i < 4; ++i) {
+            LogicTerm a_ = LogicTerm(0);
+            for (int j = 0; j < 4; ++j) {
+                a_ = a_ + LogicTerm::ite(a_nodes[i][j], LogicTerm(1), LogicTerm(0));
+            }
+            LogicTerm aa = (a_ <= LogicTerm(1));
+            z3logic->assertFormula(aa);
+        }
+        for (int i = 0; i < 4; ++i) {
+            LogicTerm a_ = LogicTerm(0);
+            for (int j = 0; j < 4; ++j) {
+                a_ = a_ + LogicTerm::ite(a_nodes[j][i], LogicTerm(1), LogicTerm(0));
+            }
+            LogicTerm aa = (a_ == LogicTerm(1));
+            z3logic->assertFormula(aa);
+        }
+
+        z3logic->produceInstance();
+        z3logic->dumpZ3State(std::cout);
+
+        EXPECT_EQ(z3logic->solve(), Result::SAT);
+
+        z3logic.reset();
+    }
+}

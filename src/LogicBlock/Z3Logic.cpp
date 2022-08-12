@@ -294,7 +294,7 @@ namespace z3logic {
             case CType::REAL:
                 return ctx.real_const(ss.str().c_str());
             case CType::BITVECTOR:
-                return z3::int2bv(32U, z3::round_fpa_to_closest_integer(ctx.real_const(ss.str().c_str())));
+                //return z3::int2bv(32U, z3::round_fpa_to_closest_integer(ctx.real_const(ss.str().c_str())));
             default:
                 util::fatal("Unsupported type");
         }
