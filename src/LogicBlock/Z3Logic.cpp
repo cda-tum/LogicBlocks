@@ -438,6 +438,7 @@ namespace z3logic {
         variables.clear();
         cache.clear();
         Z3Base::variables.clear();
+        optimizer = z3::optimize{ctx};
     }
 
 } // namespace z3logic
