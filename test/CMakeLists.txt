@@ -19,7 +19,7 @@ macro(package_add_test TESTNAME LIBRARY)
 	# create an exectuable in which the tests will be stored
 	add_executable(${TESTNAME} ${ARGN})
 	# link the Google test infrastructure and a default main fuction to the test executable.
-	target_link_libraries(${TESTNAME} PRIVATE ${PROJECT_NAME}::${LIBRARY} gmock gtest_main)
+	target_link_libraries(${TESTNAME} PRIVATE ${PROJECT_NAME}::${LIBRARY} gmock gtest_main Encodings)
 	# discover tests
 	gtest_discover_tests(${TESTNAME} WORKING_DIRECTORY ${PROJECT_DIR} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_DIR}")
 	set_target_properties(${TESTNAME} PROPERTIES FOLDER tests)
