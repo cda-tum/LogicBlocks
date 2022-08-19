@@ -50,3 +50,13 @@ TEST(TestBaseGates, LeftOverVariable) {
     result = variable || LogicTerm(true);
     EXPECT_EQ(result.getBoolValue(), true);
 }
+
+TEST(TestBaseGates, NeutralElement) {
+    using namespace logicbase;
+    EXPECT_EQ(LogicTerm::getNeutralElement(OpType::AND).getBoolValue(), true);
+    EXPECT_EQ(LogicTerm::getNeutralElement(OpType::OR).getBoolValue(), false);
+    EXPECT_EQ(LogicTerm::getNeutralElement(OpType::ADD).getIntValue(), 0);
+    EXPECT_EQ(LogicTerm::getNeutralElement(OpType::MUL).getIntValue(), 1);
+
+}
+

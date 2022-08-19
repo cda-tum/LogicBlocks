@@ -177,7 +177,6 @@ namespace logicutil {
             // combineTerms respects order of operands
             return combineTerms(a, b, op, logic);
         }
-        throw std::runtime_error("Invalid combination");
     };
 
     inline std::shared_ptr<TermImpl> negateTerm(const LogicTerm& term,

@@ -18,6 +18,31 @@ TEST(TestZ3, ConstructDestruct) {
     z3::solver  solver{ctx};
 
     std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, false);
+
+    LogicTerm t = LogicTerm("x", CType::BOOL);
+    LogicTerm b = t;
+}
+
+TEST(TestZ3, TestPrint) {
+    using namespace logicbase;
+
+    z3::context ctx{};
+    z3::solver  solver{ctx};
+
+    std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, false);
+
+    LogicTerm a = z3logic->makeVariable("a", CType::BOOL);
+    LogicTerm b = z3logic->makeVariable("b", CType::INT);
+    LogicTerm c = z3logic->makeVariable("c", CType::REAL);
+    LogicTerm d = z3logic->makeVariable("d", CType::BITVECTOR, 8);
+
+    LogicTerm t = a && (b == LogicTerm(1));
+    t.print(std::cout);
+    t.prettyPrint(std::cout);
+
+    LogicTerm f = (c == LogicTerm(1.0)) && (d == LogicTerm(1, 8));
+    f.print(std::cout);
+    f.prettyPrint(std::cout);
 }
 
 TEST(TestZ3, SimpleTrue) {
@@ -26,7 +51,7 @@ TEST(TestZ3, SimpleTrue) {
     z3::context ctx{};
     z3::solver  solver{ctx};
 
-    z3logic::Z3LogicBlock z3logic(ctx, solver, false);
+    z3logic::Z3LogicBlock z3logic(ctx, solver, true);
 
     LogicTerm a = z3logic.makeVariable("a", CType::BOOL);
     LogicTerm b = z3logic.makeVariable("b", CType::BOOL);
@@ -34,9 +59,11 @@ TEST(TestZ3, SimpleTrue) {
 
     z3logic.assertFormula(a && b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
+    EXPECT_EQ(a.getMaxChildrenDepth(), 1);
 
     z3logic.reset();
 
@@ -45,6 +72,7 @@ TEST(TestZ3, SimpleTrue) {
 
     z3logic.assertFormula(a || b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -56,6 +84,7 @@ TEST(TestZ3, SimpleTrue) {
 
     z3logic.assertFormula(a == b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -67,6 +96,7 @@ TEST(TestZ3, SimpleTrue) {
 
     z3logic.assertFormula(a != b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -78,6 +108,7 @@ TEST(TestZ3, SimpleTrue) {
 
     z3logic.assertFormula(a && !b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -89,6 +120,7 @@ TEST(TestZ3, SimpleTrue) {
 
     z3logic.assertFormula(!a || !b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -100,6 +132,7 @@ TEST(TestZ3, SimpleTrue) {
 
     z3logic.assertFormula(LogicTerm::implies(a, b));
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -111,6 +144,7 @@ TEST(TestZ3, SimpleTrue) {
 
     z3logic.assertFormula(a);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -122,6 +156,7 @@ TEST(TestZ3, SimpleTrue) {
 
     z3logic.assertFormula(b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -134,6 +169,7 @@ TEST(TestZ3, SimpleTrue) {
 
     z3logic.assertFormula(a && b && c);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -147,6 +183,7 @@ TEST(TestZ3, SimpleTrue) {
 
     z3logic.assertFormula((a && b) || (c && d));
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -168,6 +205,7 @@ TEST(TestZ3, SimpleFalse) {
     z3logic.assertFormula(!a);
     z3logic.assertFormula(a);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::UNSAT);
@@ -180,6 +218,7 @@ TEST(TestZ3, SimpleFalse) {
     z3logic.assertFormula(!b);
     z3logic.assertFormula(b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::UNSAT);
@@ -193,6 +232,7 @@ TEST(TestZ3, SimpleFalse) {
     z3logic.assertFormula(b);
     z3logic.assertFormula(a == b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::UNSAT);
@@ -206,6 +246,7 @@ TEST(TestZ3, SimpleFalse) {
     z3logic.assertFormula(!b);
     z3logic.assertFormula(a == b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::UNSAT);
@@ -219,6 +260,7 @@ TEST(TestZ3, SimpleFalse) {
     z3logic.assertFormula(b);
     z3logic.assertFormula(a == b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::UNSAT);
@@ -232,6 +274,7 @@ TEST(TestZ3, SimpleFalse) {
     z3logic.assertFormula(b);
     z3logic.assertFormula(a != b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::UNSAT);
@@ -245,6 +288,7 @@ TEST(TestZ3, SimpleFalse) {
     z3logic.assertFormula(!b);
     z3logic.assertFormula(a != b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::UNSAT);
@@ -258,6 +302,7 @@ TEST(TestZ3, SimpleFalse) {
     z3logic.assertFormula(!b);
     z3logic.assertFormula(a && !b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::UNSAT);
@@ -271,6 +316,7 @@ TEST(TestZ3, SimpleFalse) {
     z3logic.assertFormula(b);
     z3logic.assertFormula(a && !b);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::UNSAT);
@@ -284,6 +330,7 @@ TEST(TestZ3, SimpleFalse) {
     z3logic.assertFormula(!b);
     z3logic.assertFormula(LogicTerm::implies(a, b));
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::UNSAT);
@@ -305,6 +352,7 @@ TEST(TestZ3, IntBase) {
 
     z3logic.assertFormula(a + b == c);
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -318,6 +366,7 @@ TEST(TestZ3, IntBase) {
     z3logic.assertFormula(a - b == c);
 
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -331,6 +380,7 @@ TEST(TestZ3, IntBase) {
     z3logic.assertFormula(a * b == c);
 
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -344,6 +394,7 @@ TEST(TestZ3, IntBase) {
     z3logic.assertFormula(a / b == c);
 
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -356,6 +407,7 @@ TEST(TestZ3, IntBase) {
     z3logic.assertFormula(a > b);
 
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -368,6 +420,7 @@ TEST(TestZ3, IntBase) {
     z3logic.assertFormula(a < c);
 
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -380,6 +433,7 @@ TEST(TestZ3, IntBase) {
     z3logic.assertFormula(a >= b);
 
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -392,6 +446,7 @@ TEST(TestZ3, IntBase) {
     z3logic.assertFormula(a <= c);
 
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -416,6 +471,7 @@ TEST(TestZ3, IntNumbers) {
     z3logic.assertFormula(a - b == c);
 
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -432,6 +488,7 @@ TEST(TestZ3, IntNumbers) {
     z3logic.assertFormula(c + b == a);
 
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -449,6 +506,7 @@ TEST(TestZ3, IntNumbers) {
     z3logic.assertFormula((b > c) == LogicTerm(true));
 
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -466,6 +524,7 @@ TEST(TestZ3, IntNumbers) {
     z3logic.assertFormula((a < LogicTerm(4)) == LogicTerm(true));
 
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -484,6 +543,7 @@ TEST(TestZ3, IntNumbers) {
     z3logic.assertFormula(LogicTerm::ite(bool_a, a, b) == a);
 
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -502,6 +562,7 @@ TEST(TestZ3, IntNumbers) {
     z3logic.assertFormula(LogicTerm::ite(bool_a, a, b) == b);
 
     z3logic.produceInstance();
+    z3logic.dumpAll(std::cout);
     z3logic.dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic.solve(), Result::SAT);
@@ -575,7 +636,7 @@ TEST(TestZ3, AMOAndExactlyOneCMDR) {
         for (int j = 0; j < n; ++j) {
             a_.emplace_back(a_nodes[i][j]);
         }
-        LogicTerm aa = ExactlyOneCMDR(groupVars(a_, 3), LogicTerm::noneTerm(), z3logic.get());
+        LogicTerm aa = ExactlyOneCMDR(groupVars(a_, n / 2), LogicTerm::noneTerm(), z3logic.get());
         z3logic->assertFormula(aa);
     }
     for (int i = 0; i < n; ++i) {
@@ -671,6 +732,43 @@ TEST(TestZ3, BuildBDDTest) {
     z3logic->dumpZ3State(std::cout);
 
     EXPECT_EQ(z3logic->solve(), Result::SAT);
+
+    z3logic.reset();
+}
+TEST(TestZ3, TestBasicModel) {
+    using namespace logicbase;
+
+    z3::context ctx{};
+    z3::solver  solver{ctx};
+
+    std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, false);
+
+    LogicTerm a = z3logic->makeVariable("a", CType::BOOL);
+    LogicTerm b = z3logic->makeVariable("b", CType::INT);
+    LogicTerm c = z3logic->makeVariable("c", CType::REAL);
+    LogicTerm d = z3logic->makeVariable("d", CType::BITVECTOR, 8);
+
+    z3logic->produceInstance();
+    z3logic->dumpZ3State(std::cout);
+
+    z3logic->assertFormula(a);
+    z3logic->assertFormula(b == LogicTerm(1));
+    z3logic->assertFormula(c == LogicTerm(1.0));
+    z3logic->assertFormula(d == LogicTerm(1, 8));
+
+    EXPECT_EQ(z3logic->solve(), Result::SAT);
+
+    Model* model = z3logic->getModel();
+
+    EXPECT_EQ(model->getBoolValue(a, z3logic.get()), true);
+    EXPECT_EQ(model->getIntValue(b, z3logic.get()), 1);
+    EXPECT_EQ(model->getRealValue(c, z3logic.get()), 1.0);
+    EXPECT_EQ(model->getBitvectorValue(d, z3logic.get()), 1);
+
+    model->getValue(a, z3logic.get());
+    model->getValue(b, z3logic.get());
+    model->getValue(c, z3logic.get());
+    model->getValue(d, z3logic.get());
 
     z3logic.reset();
 }
