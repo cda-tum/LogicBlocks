@@ -18,8 +18,6 @@ option(COVERAGE "Configure for coverage report generation")
 option(GENERATE_POSITION_INDEPENDENT_CODE "Generate position independent code")
 option(BUILD_LB_TESTS "Also build tests for LogicBlocks project")
 
-set(BUILD_LB_TESTS ON)
-set(COVERAGE ON)
 
 if (DEFINED ENV{DEPLOY})
 	set(DEPLOY $ENV{DEPLOY} CACHE BOOL "Use deployment configuration from environment" FORCE)
