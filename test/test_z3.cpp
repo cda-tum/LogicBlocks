@@ -748,14 +748,13 @@ TEST(TestZ3, TestBasicModel) {
     LogicTerm c = z3logic->makeVariable("c", CType::REAL);
     LogicTerm d = z3logic->makeVariable("d", CType::BITVECTOR, 8);
 
-    z3logic->produceInstance();
-    z3logic->dumpZ3State(std::cout);
-
     z3logic->assertFormula(a);
     z3logic->assertFormula(b == LogicTerm(1));
     z3logic->assertFormula(c == LogicTerm(1.0));
     z3logic->assertFormula(d == LogicTerm(1, 8));
 
+    z3logic->produceInstance();
+    z3logic->dumpZ3State(std::cout);
     EXPECT_EQ(z3logic->solve(), Result::SAT);
 
     Model* model = z3logic->getModel();
@@ -769,6 +768,100 @@ TEST(TestZ3, TestBasicModel) {
     model->getValue(b, z3logic.get());
     model->getValue(c, z3logic.get());
     model->getValue(d, z3logic.get());
+
+    z3logic.reset();
+}
+
+TEST(TestZ3, TestVariableConversionsToBool) {
+    using namespace logicbase;
+
+    z3::context ctx{};
+    z3::solver  solver{ctx};
+
+    std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, true);
+
+    LogicTerm a = z3logic->makeVariable("a", CType::BOOL);
+    LogicTerm b = z3logic->makeVariable("b", CType::INT);
+    LogicTerm c = z3logic->makeVariable("c", CType::REAL);
+    LogicTerm d = z3logic->makeVariable("d", CType::BITVECTOR, 32);
+
+    z3logic->assertFormula(a);
+    z3logic->assertFormula(b);
+    z3logic->assertFormula(c);
+    z3logic->assertFormula(d);
+
+    z3logic->dumpZ3State(std::cout);
+    EXPECT_EQ(z3logic->solve(), Result::SAT);
+
+    z3logic.reset();
+}
+
+TEST(TestZ3, TestVariableConversionsToBV) {
+    using namespace logicbase;
+
+    z3::context ctx{};
+    z3::solver  solver{ctx};
+
+    std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, true);
+
+    LogicTerm a = z3logic->makeVariable("a", CType::BOOL);
+    LogicTerm b = z3logic->makeVariable("b", CType::INT);
+    LogicTerm c = z3logic->makeVariable("c", CType::REAL);
+    LogicTerm d = z3logic->makeVariable("d", CType::BITVECTOR, 32);
+
+    z3logic->assertFormula(LogicTerm::bv_and(d, a) == d);
+    z3logic->assertFormula(LogicTerm::eq(d, a) == d);
+    z3logic->assertFormula(LogicTerm::bv_or(d, b) == d);
+    z3logic->assertFormula(LogicTerm::bv_xor(d, b) == d);
+
+    z3logic->dumpZ3State(std::cout);
+    EXPECT_EQ(z3logic->solve(), Result::SAT);
+
+    z3logic.reset();
+}
+
+TEST(TestZ3, TestVariableConversionsToInt) {
+    using namespace logicbase;
+
+    z3::context ctx{};
+    z3::solver  solver{ctx};
+
+    std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, true);
+
+    LogicTerm a = z3logic->makeVariable("a", CType::BOOL);
+    LogicTerm b = z3logic->makeVariable("b", CType::INT);
+    LogicTerm c = z3logic->makeVariable("c", CType::REAL);
+    LogicTerm d = z3logic->makeVariable("d", CType::BITVECTOR, 32);
+
+        z3logic->assertFormula(LogicTerm::bv_and(d, a) == d);
+    z3logic->assertFormula(LogicTerm::bv_or(d, b) == d);
+    z3logic->assertFormula(LogicTerm::bv_xor(d, b) == d);
+
+    z3logic->dumpZ3State(std::cout);
+    EXPECT_EQ(z3logic->solve(), Result::SAT);
+
+    z3logic.reset();
+}
+
+TEST(TestZ3, TestVariableConversionsToReal) {
+    using namespace logicbase;
+
+    z3::context ctx{};
+    z3::solver  solver{ctx};
+
+    std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, true);
+
+    LogicTerm a = z3logic->makeVariable("a", CType::BOOL);
+    LogicTerm b = z3logic->makeVariable("b", CType::INT);
+    LogicTerm c = z3logic->makeVariable("c", CType::REAL);
+    LogicTerm d = z3logic->makeVariable("d", CType::BITVECTOR, 32);
+
+    z3logic->assertFormula(LogicTerm::bv_and(d, a) == d);
+    z3logic->assertFormula(LogicTerm::bv_or(d, b) == d);
+    z3logic->assertFormula(LogicTerm::bv_xor(d, b) == d);
+
+    z3logic->dumpZ3State(std::cout);
+    EXPECT_EQ(z3logic->solve(), Result::SAT);
 
     z3logic.reset();
 }

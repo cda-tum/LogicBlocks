@@ -34,6 +34,15 @@ TEST(TestBaseGates, VanishingConstant) {
 
     result = LogicTerm(true) != LogicTerm(false);
     EXPECT_EQ(result.getBoolValue(), true);
+
+    result = LogicTerm::implies(LogicTerm(true), LogicTerm(false));
+    EXPECT_EQ(result.getBoolValue(), false);
+
+    result = LogicTerm::implies(LogicTerm(true), LogicTerm(true));
+    EXPECT_EQ(result.getBoolValue(), true);
+
+    result = LogicTerm::implies(LogicTerm(false), LogicTerm(false));
+    EXPECT_EQ(result.getBoolValue(), true);
 }
 TEST(TestBaseGates, LeftOverVariable) {
     using namespace logicbase;

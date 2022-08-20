@@ -140,7 +140,7 @@ namespace z3logic {
             } break;
             case OpType::BIT_AND: {
                 v[static_cast<int>(to_type)].second =
-                        convertOperator(a.getNodes(), z3::operator&, to_type);
+                        convertOperator(a.getNodes(), z3::operator&, logicutil::extractNumberType(a.getNodes()));
                 v[static_cast<int>(to_type)].first = true;
             } break;
             case OpType::BIT_OR: {
@@ -259,8 +259,8 @@ namespace z3logic {
                 return z3::ite(ctx.bool_const(ss.str().c_str()), ctx.real_val(1),
                                ctx.real_val(0));
             case CType::BITVECTOR:
-                return ite(ctx.bool_const(ss.str().c_str()), ctx.bv_val(1, 1),
-                           ctx.bv_val(0, 1));
+                return ite(ctx.bool_const(ss.str().c_str()), ctx.bv_val(1, 32),
+                           ctx.bv_val(0, 32));
             default:
                 util::fatal("Unsupported type");
         }
@@ -294,7 +294,7 @@ namespace z3logic {
             case CType::REAL:
                 return ctx.real_const(ss.str().c_str());
             case CType::BITVECTOR:
-                //return z3::int2bv(32U, z3::round_fpa_to_closest_integer(ctx.real_const(ss.str().c_str())));
+                return z3::int2bv(32U, z3::round_fpa_to_closest_integer(ctx.real_const(ss.str().c_str())));
             default:
                 util::fatal("Unsupported type");
         }
@@ -307,7 +307,7 @@ namespace z3logic {
         ss << a.getName() << "_" << a.getID();
         switch (to_type) {
             case CType::BOOL:
-                return ctx.bv_const(ss.str().c_str(), 1U) != 0;
+                return ctx.bv_const(ss.str().c_str(), 32U) != 0;
             case CType::INT:
             case CType::REAL:
                 return z3::bv2int(ctx.bv_const(ss.str().c_str(), 32U), false);

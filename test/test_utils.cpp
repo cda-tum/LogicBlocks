@@ -1,3 +1,13 @@
-//
-// Created by Sarah on 19.08.2022.
-//
+
+#include "utils/csv_util.hpp"
+#include "utils/json_util.hpp"
+#include "utils/logging.hpp"
+
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
+
+class TestUtils: public testing::TestWithParam<std::string> {
+protected:
+    void SetUp() override {
+    }
+};
