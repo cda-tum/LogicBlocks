@@ -833,7 +833,7 @@ TEST(TestZ3, TestVariableConversionsToInt) {
     LogicTerm c = z3logic->makeVariable("c", CType::REAL);
     LogicTerm d = z3logic->makeVariable("d", CType::BITVECTOR, 32);
 
-        z3logic->assertFormula(LogicTerm::bv_and(d, a) == d);
+    z3logic->assertFormula(LogicTerm::bv_and(d, a) == d);
     z3logic->assertFormula(LogicTerm::bv_or(d, b) == d);
     z3logic->assertFormula(LogicTerm::bv_xor(d, b) == d);
 

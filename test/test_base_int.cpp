@@ -45,7 +45,6 @@ TEST(TestBaseInt, VanishingConstant) {
 
     result = LogicTerm(2) == LogicTerm(1);
     EXPECT_EQ(result.getIntValue(), false);
-
 }
 TEST(TestBaseInt, LeftOverVariable) {
     using namespace logicbase;

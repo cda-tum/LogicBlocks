@@ -66,6 +66,4 @@ TEST(TestBaseGates, NeutralElement) {
     EXPECT_EQ(LogicTerm::getNeutralElement(OpType::OR).getBoolValue(), false);
     EXPECT_EQ(LogicTerm::getNeutralElement(OpType::ADD).getIntValue(), 0);
     EXPECT_EQ(LogicTerm::getNeutralElement(OpType::MUL).getIntValue(), 1);
-
 }
-
