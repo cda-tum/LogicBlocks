@@ -1,93 +1,76 @@
-# LogicBlocks
+![OS](https://img.shields.io/badge/os-linux%20%7C%20macos%20%7C%20windows-blue?style=flat-square)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![CI](https://img.shields.io/github/workflow/status/IsFairy/LogicBlocks/CI?style=flat-square&logo=github&label=c%2B%2B)](https://github.com/IsFairy/LogicBlocks/actions/workflows/ci.yml)
 
+[//]: # ([![codecov]&#40;https://img.shields.io/codecov/c/github/IsFairy/LogicBlocks?style=flat-square&logo=codecov&#41;]&#40;https://codecov.io/gh/cda-tum/qmap&#41;)
 
+# LogicBlocks - A Interface Library for SAT/SMT Abstractions written in C++
 
-## Getting started
+A interface library for the abstraction of several methods of interaction with SAT/SMT Solvers developed by the [Chair for Design Automation](https://www.cda.cit.tum.de/) at the [Technical University of Munich](https://www.tum.de/).
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+LogicBlocks are built in the style of the z3 bindings for C++. The library is designed to offer a simpler way to encode SAT/SMT problems in C++ code and hand it off to several different solvers or text exports.
+Note that at the moment the z3 integration is mostly working, as is export in DIMACs and the SMTLibv2 format.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://gitlab.com/-/experiment/new_project_readme_content:64fa4258108a4df4656bc21eed3d07c3?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://gitlab.com/-/experiment/new_project_readme_content:64fa4258108a4df4656bc21eed3d07c3?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://gitlab.com/-/experiment/new_project_readme_content:64fa4258108a4df4656bc21eed3d07c3?https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.com/IsFairy/logicblocks.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.com/-/experiment/new_project_readme_content:64fa4258108a4df4656bc21eed3d07c3?https://gitlab.com/IsFairy/logicblocks/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://gitlab.com/-/experiment/new_project_readme_content:64fa4258108a4df4656bc21eed3d07c3?https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://gitlab.com/-/experiment/new_project_readme_content:64fa4258108a4df4656bc21eed3d07c3?https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://gitlab.com/-/experiment/new_project_readme_content:64fa4258108a4df4656bc21eed3d07c3?https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://gitlab.com/-/experiment/new_project_readme_content:64fa4258108a4df4656bc21eed3d07c3?https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://gitlab.com/-/experiment/new_project_readme_content:64fa4258108a4df4656bc21eed3d07c3?https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://gitlab.com/-/experiment/new_project_readme_content:64fa4258108a4df4656bc21eed3d07c3?https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://gitlab.com/-/experiment/new_project_readme_content:64fa4258108a4df4656bc21eed3d07c3?https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://gitlab.com/-/experiment/new_project_readme_content:64fa4258108a4df4656bc21eed3d07c3?https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://gitlab.com/-/experiment/new_project_readme_content:64fa4258108a4df4656bc21eed3d07c3?https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://gitlab.com/-/experiment/new_project_readme_content:64fa4258108a4df4656bc21eed3d07c3?https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://www.makeareadme.com) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+If you have any questions, feel free to contact us via [quantum.cda@xcit.tum.de](mailto:quantum.cda@xcit.tum.de) or by creating an issue on [GitHub](https://github.com/cda-tum/qmap/issues).
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+LogicBlocks are designed to be used as a submodule in conjunction with git and CMake.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+- In order to start using LogicBlocks, first the submodule needs to be added:
+```bash
+git submodule add https://github.com/IsFairy/LogicBlocks.git
+git submodule update --init --recursive
+```
+ Then, to include the necessary files in your project the following lines need to be added to your CMakeLists.txt:
+```cmake
+add_subdirectory("${PROJECT_SOURCE_DIR}/LogicBlocks" "LogicBlocks")
+```
+ As well as linking to the library: 
+```cmake
+target_link_libraries(${PROJECT_NAME} PUBLIC logicblocks::Logic)
+```
+ Finally, in all files where LogicBlocks are needed, the required files need to be included:
+```cpp
+#include "LogicBlocks/LogicBlock.hpp"
+```
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+## Examples
+A minimal working example needs at least some kind of LogicBlock and some LogicTerms:
+The following example initializes a SMTLibv2 LogicBlock (supporting export to SMTLibv2 Format) and initializes two variables `a` and `b` with the respective LogicTerms, by creating variables from the LogicBlock.
+```cpp
+#include "LogicBlocks/LogicBlock.hpp"
+#include "LogicTerm/LogicTerm.hpp"
+   
+using namespace logicbase;
+int main() {
+   SMTLogicBlock logicBlock();
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+    LogicTerm a = logicBlock.makeVariable("a", CType::BOOL);
+    LogicTerm b = logicBlock.makeVariable("b", CType::BOOL);
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+    logicBlock.assertFormula(a && b);
+    logicBlock.produceInstance();
+}
+```
+Then, `assertFormula(LogicTerm)` asserts a formula to the LogicBlock. 
+Finally, `produceInstance()` produces an instance of all asserted formulas exported to SMTLibv2 format.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
 
-## License
-For open source projects, say how it is licensed.
+## Structure
+ - `LogicBlock` - Contains the various interfaces for interacting with SAT/SMT Solvers.
+    - `LogicBlock.hpp` - Contains the base classes, `LogicBlock` for encoding general SAT/SMT problems and `LogicBlockOptimizer` for encoding optimization problems.
+    - `Model.hpp` - Contains the base class for models, optionally returned by SAT/SMT Solvers.
+ - `LogicTerm/LogicTerm.hpp` - Contains the main way of interacting and writing encodings of problems, the LogicTerm.
+ - `Encodings/Encodings.hpp` - Contain some different encodings for common problems, especially `At most one` and `Exactly one` encodings.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+As of now there are several Theories besides pure SAT that are supported:
+- `Integer` - Integer arithmetic and comparison, including `+`, `-`, `/`, `*`, `<`, `>`, `<=` and `>=`.
+- `Real` - Real arithmetic and comparison, including `+`, `-`, `/`, `*`, `<`, `>`, `<=` and `>=`.
+- `Bitvector` - Bitvector arithmetic and comparison, including `+`, `-`, `/`, `*`, `<`, `>`, `<=` and `>=`, and using `BV_XOR`, `BV_AND` and `BV_OR` bit wise operations on bitvectors.
+
+## Reference
+
+If you use our tool for your research, we will be thankful if you refer to it by citing the appropriate publications.
+
 
