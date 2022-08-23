@@ -59,6 +59,7 @@ jobs:
       - name: Build
         run:  |
           cmake --build "${{github.workspace}}/build" --config $BUILD_TYPE --target logicblocks_z3Logic_test
+          cmake --build "${{github.workspace}}/build" --config $BUILD_TYPE --target logicblocks_utils_test
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
