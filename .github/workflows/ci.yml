@@ -63,6 +63,23 @@ jobs:
         working-directory: ${{github.workspace}}/build/test
         run: ctest -C $BUILD_TYPE --output-on-failure
 
+      - name: Coverage
+        run: |
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$pythonLocation/lib/python3.10/site-packages/z3/lib 
+          export Z3_ROOT=$pythonLocation/lib/python3.10/site-packages/z3 
+          export Z3_DIR=$pythonLocation/lib/python3.10/site-packages/z3
+          cmake -S "${{github.workspace}}" -B "${{github.workspace}}/buildCov" -DCMAKE_BUILD_TYPE=Debug -DBUILD_QMAP_TESTS=ON -DCOVERAGE=ON -DBINDINGS=ON
+          cmake --build "${{github.workspace}}/buildCov" --config Debug --target logicblocks_utils_test
+          cmake --build "${{github.workspace}}/buildCov" --config Debug --target logicblocks_z3Logic_test
+          cd buildCov/test
+          ctest -C $BUILD_TYPE --output-on-failure
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3.1.0
+        with:
+          gcov: true
+          gcov_ignore: "extern/**/*"
+
   macOS-ci:
     runs-on: macos-latest
 
