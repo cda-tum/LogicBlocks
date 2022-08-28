@@ -184,14 +184,14 @@ LogicTerm BuildBDD(unsigned long index, long curSum, long maxSum, long k,
                               true_lit,
                               lb);
     LogicTerm low  = BuildBDD(index + 1U,
-                             curSum,
-                             maxSum - inputLiterals[index].weight,
-                             k,
-                             inputLiterals,
-                             vars,
-                             formula,
-                             true_lit,
-                             lb);
+                              curSum,
+                              maxSum - inputLiterals[index].weight,
+                              k,
+                              inputLiterals,
+                              vars,
+                              formula,
+                              true_lit,
+                              lb);
 
     if (high.deepEquals(low)) {
         return high;
