@@ -1,16 +1,14 @@
 #include "Encodings/Encodings.hpp"
 #include "LogicBlock/CNFLogicBlock.hpp"
 #include "LogicBlock/Z3Logic.hpp"
+#include "LogicUtil/util_logicblock.hpp"
 #include "utils/logging.hpp"
 
 #include <iostream>
 
 using namespace logicbase;
 int main() {
-    z3::context ctx{};
-    z3::solver  solver{ctx};
-
-    z3logic::Z3LogicBlock z3logic(ctx, solver, true);
+   auto z3logic = logicutil::getZ3LogicBlock(true);
 
     //    LogicTerm a       = z3logic.makeVariable("a", CType::BITVECTOR, 5);
     //    LogicTerm b       = z3logic.makeVariable("b", CType::BITVECTOR, 5);
@@ -47,7 +45,7 @@ int main() {
     for (int i = 0; i < 4; ++i) {
         a_nodes.emplace_back();
         for (int j = 0; j < 4; ++j) {
-            a_nodes.back().emplace_back(z3logic.makeVariable("a_" + std::to_string(i) + "_" + std::to_string(j), CType::BOOL));
+            a_nodes.back().emplace_back(z3logic->makeVariable("a_" + std::to_string(i) + "_" + std::to_string(j), CType::BOOL));
         }
     }
 
@@ -57,7 +55,7 @@ int main() {
             a_ = a_ + LogicTerm::ite(a_nodes[i][j], LogicTerm(1), LogicTerm(0));
         }
         LogicTerm aa = (a_ <= LogicTerm(1));
-        z3logic.assertFormula(aa);
+        z3logic->assertFormula(aa);
     }
     for (int i = 0; i < 4; ++i) {
         LogicTerm a_ = LogicTerm(0);
@@ -65,7 +63,7 @@ int main() {
             a_ = a_ + LogicTerm::ite(a_nodes[j][i], LogicTerm(1), LogicTerm(0));
         }
         LogicTerm aa = (a_ == LogicTerm(1));
-        z3logic.assertFormula(aa);
+        z3logic->assertFormula(aa);
     }
 
     //    z3logic.dumpAll(std::cout);

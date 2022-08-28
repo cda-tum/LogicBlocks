@@ -13,7 +13,7 @@ add_library(LogicTerm_lib
 
         ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicUtil/util_logic.hpp
         ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicUtil/util_logicterm.hpp
-        ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicUtil/util_logicblockhpp
+        ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicUtil/util_logicblock.hpp
         ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/logging.hpp
         ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/csv_util.hpp
         ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/json_util.hpp)
