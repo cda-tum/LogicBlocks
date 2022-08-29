@@ -23,29 +23,27 @@ namespace logicutil {
 
     class Param {
     public:
-        ParamType type;
-        std::string        name;
-        std::string        strvalue = "";
-        bool               bvalue = false;
-        double             dvalue = 0.;
-        unsigned int       uivalue = 0;
+        ParamType    type;
+        std::string  name;
+        std::string  strvalue = "";
+        bool         bvalue   = false;
+        double       dvalue   = 0.;
+        unsigned int uivalue  = 0;
         Param(std::string name, std::string value):
             type(ParamType::STR), name(std::move(name)), strvalue(std::move(value)) {}
 
         Param(std::string name, bool value):
             type(ParamType::BOOL), name(std::move(name)), bvalue(value) {}
 
-
         Param(std::string name, double value):
             type(ParamType::DOUBLE), name(std::move(name)), dvalue(value) {}
 
         Param(std::string name, unsigned int value):
             type(ParamType::UINT), name(std::move(name)), uivalue(value) {}
-
-
     };
     class Params {
         std::vector<Param> params;
+
     public:
         void addParam(Param param) {
             params.push_back(param);
@@ -68,7 +66,7 @@ namespace logicutil {
     };
 
     inline void setZ3Params(z3::params& p, Params& params) {
-        for (auto param:params.getParams()){
+        for (auto param: params.getParams()) {
             switch (param.type) {
                 case ParamType::STR:
                     p.set(param.name.c_str(), param.strvalue.c_str());
@@ -88,29 +86,35 @@ namespace logicutil {
         }
     }
 
-    inline std::unique_ptr<LogicBlock> getZ3LogicBlock(bool convertWhenAssert, Params params = Params()) {
+    inline std::unique_ptr<LogicBlock> getZ3LogicBlock(bool& success, bool convertWhenAssert, Params params = Params()) {
 #ifdef Z3_FOUND
         static z3::context c;
         static z3::solver  slv(c);
-        z3::params  p(c);
+        z3::params         p(c);
         setZ3Params(p, params);
         slv.set(p);
+        success = true;
         return std::make_unique<z3logic::Z3LogicBlock>(c, slv, convertWhenAssert);
 #else
-        throw std::runtime_error("Z3 not found");
+        success = false;
+        return nullptr;
+            //throw std::runtime_error("Z3 not found");
 #endif
     }
 
-    inline std::unique_ptr<LogicBlockOptimizer> getZ3LogicOptimizer(bool convertWhenAssert, Params params = Params()) {
+    inline std::unique_ptr<LogicBlockOptimizer> getZ3LogicOptimizer(bool& success, bool convertWhenAssert, Params params = Params()) {
 #ifdef Z3_FOUND
         static z3::context  c;
         static z3::optimize opt(c);
-        z3::params   p(c);
+        z3::params          p(c);
         setZ3Params(p, params);
         opt.set(p);
+        success = true;
         return std::make_unique<z3logic::Z3LogicOptimizer>(c, opt, convertWhenAssert);
 #else
-        throw std::runtime_error("Z3 not found");
+        success = false;
+        return nullptr;
+            //throw std::runtime_error("Z3 not found");
 #endif
     }
 

@@ -1,6 +1,4 @@
-#include "Encodings/Encodings.hpp"
 #include "LogicBlock/CNFLogicBlock.hpp"
-#include "LogicBlock/Z3Logic.hpp"
 #include "LogicUtil/util_logicblock.hpp"
 #include "utils/logging.hpp"
 
@@ -8,7 +6,12 @@
 
 using namespace logicbase;
 int main() {
-   auto z3logic = logicutil::getZ3LogicBlock(true);
+    bool success = false;
+    auto z3logic = logicutil::getZ3LogicBlock(success, true);
+    if (!success) {
+        ERROR() << "Z3 not found";
+        return 1;
+    }
 
     //    LogicTerm a       = z3logic.makeVariable("a", CType::BITVECTOR, 5);
     //    LogicTerm b       = z3logic.makeVariable("b", CType::BITVECTOR, 5);
