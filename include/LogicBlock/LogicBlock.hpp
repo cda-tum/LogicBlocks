@@ -65,6 +65,10 @@ namespace logicbase {
             internal_reset();
             gid = 0U;
         };
+
+        virtual std::string dumpInternalSolver() {
+            return "";
+        }
     };
 
     class LogicBlockOptimizer: public LogicBlock {

@@ -77,10 +77,20 @@ namespace z3logic {
             variables.clear();
             cache.clear();
         }
-        void   assertFormula(const LogicTerm& a) override;
-        void   produceInstance() override;
-        Result solve() override;
-        void   dumpZ3State(std::ostream& stream);
+        void        assertFormula(const LogicTerm& a) override;
+        void        produceInstance() override;
+        Result      solve() override;
+        void        dumpZ3State(std::ostream& stream);
+        std::string dumpInternalSolver() override {
+            std::stringstream ss;
+            ss << solver;
+            try {
+                ctx.check_error();
+            } catch (const z3::exception& e) {
+                std::cerr << "Z3 reported an exception while trying to dump the internal state: " << e.msg() << std::endl;
+            }
+            return ss.str();
+        }
     };
 
     class Z3LogicOptimizer: public LogicBlockOptimizer, public Z3Base {
@@ -104,10 +114,20 @@ namespace z3logic {
         Result solve() override;
         void   dumpZ3State(std::ostream& stream);
 
-        bool makeMinimize() override;
-        bool makeMaximize() override;
-        bool maximize(const LogicTerm& term) override;
-        bool minimize(const LogicTerm& term) override;
+        bool        makeMinimize() override;
+        bool        makeMaximize() override;
+        bool        maximize(const LogicTerm& term) override;
+        bool        minimize(const LogicTerm& term) override;
+        std::string dumpInternalSolver() override {
+            std::stringstream ss;
+            ss << optimizer;
+            try {
+                ctx.check_error();
+            } catch (const z3::exception& e) {
+                std::cerr << "Z3 reported an exception while trying to dump the internal state: " << e.msg() << std::endl;
+            }
+            return ss.str();
+        }
     };
 
 } // namespace z3logic
