@@ -13,7 +13,6 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # configuration options
 option(DEPLOY "Configure for deployment")
-option(BINDINGS "Configure for building Python bindings")
 option(COVERAGE "Configure for coverage report generation")
 option(GENERATE_POSITION_INDEPENDENT_CODE "Generate position independent code")
 option(BUILD_LB_TESTS "Also build tests for LogicBlocks project")

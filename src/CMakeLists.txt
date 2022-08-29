@@ -86,6 +86,7 @@ if (Z3_FOUND)
             ${CMAKE_CURRENT_SOURCE_DIR}/LogicBlock/Z3Model.cpp)
     target_link_libraries(Z3Logic PUBLIC LogicTerm_lib z3::z3lib)
     add_library(logicblocks::Z3Logic ALIAS Z3Logic)
+    target_compile_definitions(Z3Logic PUBLIC Z3_FOUND)
 endif ()
 
 add_library(Encodings
