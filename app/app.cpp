@@ -6,6 +6,7 @@
 
 using namespace logicbase;
 int main() {
+    util::init("", plog::error);
     bool success = false;
     auto z3logic = logicutil::getZ3LogicBlock(success, true);
     if (!success) {
@@ -99,6 +100,5 @@ int main() {
     //    ch.prettyPrint(std::cout);
 
     cnflogic.dumpAll(std::cout);
-    util::init("", plog::error);
     ERROR() << "TESTING";
 }
