@@ -31,9 +31,11 @@ macro(package_add_test TESTNAME LIBRARY)
             VERBATIM)
 endmacro()
 
-package_add_test(${PROJECT_NAME}_z3Logic_test Z3Logic
-        ${CMAKE_CURRENT_SOURCE_DIR}/test_z3.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/test_z3_optimizer.cpp)
+if (Z3_FOUND)
+    package_add_test(${PROJECT_NAME}_z3Logic_test Z3Logic
+            ${CMAKE_CURRENT_SOURCE_DIR}/test_z3.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/test_z3_optimizer.cpp)
+endif ()
 
 package_add_test(${PROJECT_NAME}_utils_test Logic
         ${CMAKE_CURRENT_SOURCE_DIR}/test_base_bool.cpp
