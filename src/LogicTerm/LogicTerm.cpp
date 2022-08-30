@@ -148,5 +148,8 @@ namespace logicbase {
     void LogicTerm::prettyPrint(std::ostream& os, int depth) const {
         pImpl->prettyPrint(os, depth);
     }
+    std::string LogicTerm::getConstantValue() const {
+        return pImpl->getConstantValue();
+    }
 
 } // namespace logicbase

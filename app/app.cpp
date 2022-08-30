@@ -1,4 +1,4 @@
-#include "LogicBlock/CNFLogicBlock.hpp"
+#include "LogicBlock/SMTLibLogicBlock.hpp"
 #include "LogicUtil/util_logicblock.hpp"
 #include "utils/logging.hpp"
 
@@ -81,24 +81,24 @@ int main() {
     //            }
     //        }
     //    }
-    using namespace cnflogic;
-    CNFLogicBlock cnflogic(true, std::cout);
-    LogicTerm     a = cnflogic.makeVariable("a", CType::BOOL);
-    LogicTerm     b = cnflogic.makeVariable("b", CType::BOOL);
-    LogicTerm     c = cnflogic.makeVariable("c", CType::BOOL);
-    LogicTerm     d = cnflogic.makeVariable("d", CType::BOOL);
-    LogicTerm     e = cnflogic.makeVariable("e", CType::BOOL);
-    LogicTerm     f = cnflogic.makeVariable("f", CType::BOOL);
-    LogicTerm     g = cnflogic.makeVariable("g", CType::BOOL);
-    LogicTerm     h = cnflogic.makeVariable("h", CType::BOOL);
-    LogicTerm     i = cnflogic.makeVariable("i", CType::BOOL);
-    LogicTerm     j = cnflogic.makeVariable("j", CType::BOOL);
-    //    cnflogic.assertFormula(a || b);
-    //    cnflogic.assertFormula(c && d);
+    SMTLogicBlock smtLogicBlock(true, std::cout);
+    smtLogicBlock.setOutputLogic(SMTLibLogic::QF_UF);
+    LogicTerm     a = smtLogicBlock.makeVariable("a", CType::BOOL);
+    LogicTerm     b = smtLogicBlock.makeVariable("b", CType::BOOL);
+    LogicTerm     c = smtLogicBlock.makeVariable("c", CType::BOOL);
+    LogicTerm     d = smtLogicBlock.makeVariable("d", CType::BOOL);
+    LogicTerm     e = smtLogicBlock.makeVariable("e", CType::BOOL);
+    LogicTerm     f = smtLogicBlock.makeVariable("f", CType::BOOL);
+    LogicTerm     g = smtLogicBlock.makeVariable("g", CType::BOOL);
+    LogicTerm     h = smtLogicBlock.makeVariable("h", CType::BOOL);
+    LogicTerm     i = smtLogicBlock.makeVariable("i", CType::BOOL);
+    LogicTerm     j = smtLogicBlock.makeVariable("j", CType::BOOL);
+    smtLogicBlock.assertFormula(a || b);
+    smtLogicBlock.assertFormula(c && d);
     LogicTerm ch = c || (a == b);
-    cnflogic.assertFormula(ch);
+    smtLogicBlock.assertFormula(ch);
     //    ch.prettyPrint(std::cout);
 
-    cnflogic.dumpAll(std::cout);
+    smtLogicBlock.produceInstance();
     ERROR() << "TESTING";
 }

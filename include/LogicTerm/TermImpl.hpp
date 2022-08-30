@@ -96,6 +96,8 @@ namespace logicbase {
 
         [[nodiscard]] const std::string& getName() const { return name; }
 
+        [[nodiscard]] const std::string getConstantValue();
+
         [[nodiscard]] OpType getOpType() const { return opType; }
 
         [[nodiscard]] CType getCType() const { return c_type; }

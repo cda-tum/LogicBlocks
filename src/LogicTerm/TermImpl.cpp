@@ -289,3 +289,6 @@ void TermImpl::prettyPrint(std::ostream& os, int depth) const {
         os << std::endl;
     }
 }
+const std::string TermImpl::getConstantValue() {
+    return getValue();
+}
