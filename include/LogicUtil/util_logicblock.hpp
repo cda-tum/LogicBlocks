@@ -83,6 +83,14 @@ namespace logicutil {
         }
     }
 
+    inline bool isZ3Available() {
+#ifdef Z3_FOUND
+        return true;
+#else
+        return false;
+#endif
+    }
+
     inline std::unique_ptr<LogicBlock> getZ3LogicBlock(bool& success, bool convertWhenAssert, Params params = Params()) {
 #ifdef Z3_FOUND
         static z3::context c;
