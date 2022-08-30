@@ -110,7 +110,15 @@ namespace logicutil {
             }
         }
         return res;
-    };
+    }
+
+    inline bool allBool(const std::vector<LogicTerm>& terms) {
+        for (const LogicTerm& it: terms) {
+            if (it.getCType() != CType::BOOL)
+                return false;
+        }
+        return true;
+    }
 
 }; // namespace logicutil
 

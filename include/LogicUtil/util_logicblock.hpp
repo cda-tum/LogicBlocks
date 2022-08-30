@@ -45,9 +45,6 @@ namespace logicutil {
         std::vector<Param> params;
 
     public:
-        void addParam(Param param) {
-            params.push_back(param);
-        }
         void addParam(std::string name, std::string value) {
             params.emplace_back(name, value);
         }
