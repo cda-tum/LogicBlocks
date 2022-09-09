@@ -280,7 +280,7 @@ namespace logicbase {
         [[nodiscard]] virtual unsigned long long            getBitVectorValue() const                = 0;
         [[nodiscard]] virtual short                         getBitVectorSize() const                 = 0;
         [[nodiscard]] virtual const std::string&            getName() const                          = 0;
-        [[nodiscard]] virtual std::string             getConstantValue() const = 0;
+        [[nodiscard]] virtual std::string                   getConstantValue() const                 = 0;
         [[nodiscard]] virtual Logic*                        getLogic() const                         = 0;
         [[nodiscard]] virtual std::shared_ptr<TermImpl>     getImplementation() const                = 0;
         [[nodiscard]] virtual bool                          deepEquals(const LogicTerm& other) const = 0;

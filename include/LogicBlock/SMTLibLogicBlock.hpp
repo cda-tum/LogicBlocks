@@ -33,7 +33,7 @@ class SMTLogicBlock: public logicbase::LogicBlock {
 protected:
     std::map<unsigned long long, LogicTerm> constants;
     std::unordered_set<SMTLibLogic>         requiredLogics;
-    SMTLibLogic                            outputLogic;
+    SMTLibLogic                             outputLogic;
     std::ostream&                           out;
     void                                    internal_reset() override;
 
@@ -41,7 +41,7 @@ public:
     explicit SMTLogicBlock(bool convertWhenAssert = false, std::ostream& out = std::cout):
         logicbase::LogicBlock(convertWhenAssert), out(out) {}
 
-    void  assertFormula(const LogicTerm& a) override;
+    void   assertFormula(const LogicTerm& a) override;
     void   produceInstance() override;
     Result solve() override;
     void   reset() override {
@@ -56,7 +56,7 @@ public:
     void addRequiredLogic(SMTLibLogic logic) { requiredLogics.insert(logic); }
 
 private:
-    SMTLibLogic getLogicForTerm(const LogicTerm& a);
+    SMTLibLogic        getLogicForTerm(const LogicTerm& a);
     static SMTLibLogic getMinimumLogic(const SMTLibLogic& a, const SMTLibLogic& b);
 
     void               collectVariables(const LogicTerm& a);
@@ -71,4 +71,3 @@ private:
 };
 
 #endif
-

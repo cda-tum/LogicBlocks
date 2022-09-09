@@ -244,7 +244,7 @@ namespace logicbase {
         [[nodiscard]] unsigned long long            getBitVectorValue() const override;
         [[nodiscard]] short                         getBitVectorSize() const override;
         [[nodiscard]] const std::string&            getName() const override;
-        [[nodiscard]] std::string             getConstantValue() const override;
+        [[nodiscard]] std::string                   getConstantValue() const override;
         [[nodiscard]] std::shared_ptr<TermImpl>     getImplementation() const override;
         [[nodiscard]] Logic*                        getLogic() const override;
 
