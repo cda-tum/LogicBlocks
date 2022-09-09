@@ -127,5 +127,5 @@ namespace logicbase {
 
         static void reset() { gid = 0; }
     };
-};     // namespace logicbase
+}     // namespace logicbase
 #endif // TermImpl_HPP
