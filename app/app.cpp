@@ -83,16 +83,16 @@ int main() {
     //    }
     SMTLogicBlock smtLogicBlock(true, std::cout);
     smtLogicBlock.setOutputLogic(SMTLibLogic::QF_UF);
-    LogicTerm     a = smtLogicBlock.makeVariable("a", CType::BOOL);
-    LogicTerm     b = smtLogicBlock.makeVariable("b", CType::BOOL);
-    LogicTerm     c = smtLogicBlock.makeVariable("c", CType::BOOL);
-    LogicTerm     d = smtLogicBlock.makeVariable("d", CType::BOOL);
-    LogicTerm     e = smtLogicBlock.makeVariable("e", CType::BOOL);
-    LogicTerm     f = smtLogicBlock.makeVariable("f", CType::BOOL);
-    LogicTerm     g = smtLogicBlock.makeVariable("g", CType::BOOL);
-    LogicTerm     h = smtLogicBlock.makeVariable("h", CType::BOOL);
-    LogicTerm     i = smtLogicBlock.makeVariable("i", CType::BOOL);
-    LogicTerm     j = smtLogicBlock.makeVariable("j", CType::BOOL);
+    LogicTerm a = smtLogicBlock.makeVariable("a", CType::BOOL);
+    LogicTerm b = smtLogicBlock.makeVariable("b", CType::BOOL);
+    LogicTerm c = smtLogicBlock.makeVariable("c", CType::BOOL);
+    LogicTerm d = smtLogicBlock.makeVariable("d", CType::BOOL);
+    LogicTerm e = smtLogicBlock.makeVariable("e", CType::BOOL);
+    LogicTerm f = smtLogicBlock.makeVariable("f", CType::BOOL);
+    LogicTerm g = smtLogicBlock.makeVariable("g", CType::BOOL);
+    LogicTerm h = smtLogicBlock.makeVariable("h", CType::BOOL);
+    LogicTerm i = smtLogicBlock.makeVariable("i", CType::BOOL);
+    LogicTerm j = smtLogicBlock.makeVariable("j", CType::BOOL);
     smtLogicBlock.assertFormula(a || b);
     smtLogicBlock.assertFormula(c && d);
     LogicTerm ch = c || (a == b);
