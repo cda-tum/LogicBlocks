@@ -8,7 +8,7 @@
 
 namespace cnflogic {
 
-    void CNFLogicBlock::internal_reset() {
+    void CNFLogicBlock::internalReset() {
         delete model;
         model = nullptr;
     }
@@ -53,21 +53,23 @@ namespace cnflogic {
                 }
                 if (a.getBoolValue()) {
                     return trueTerm;
-                } else {
+                }
+                {
                     return falseTerm;
                 }
             case OpType::NEG: {
                 if (subnodes[0].getOpType() == OpType::Variable) {
                     return !subnodes[0];
-                } else if (subnodes[0].getOpType() == OpType::Constant) {
+                }
+                if (subnodes[0].getOpType() == OpType::Constant) {
                     if (subnodes[0].getCType() != CType::BOOL) {
                         throw std::runtime_error("Constant is not a boolean");
                     }
                     if (subnodes[0].getBoolValue()) {
                         return falseTerm;
-                    } else {
-                        return trueTerm;
                     }
+                    return trueTerm;
+
                 } else if (subnodes[0].getOpType() == OpType::NEG) {
                     return convertToCNF(subnodes[0].getNodes()[0]);
                 } else if (subnodes[0].getOpType() == OpType::AND) {
@@ -104,68 +106,69 @@ namespace cnflogic {
                 if (allVariables) {
                     return a;
                 }
-                LogicTerm Z = LogicTerm(false);
-                LogicTerm P = convertToCNF(subnodes[0]);
-                LogicTerm Q;
+                LogicTerm z = LogicTerm(false);
+                LogicTerm p = convertToCNF(subnodes[0]);
+                LogicTerm q;
                 for (size_t i = 1; i < subnodes.size(); ++i) {
-                    Q = convertToCNF(subnodes[i]);
-                    if ((logicutil::isUnit(P)) && (logicutil::isUnit(Q))) {
-                        Z = !P && !Q;
-                    } else if (logicutil::isUnit(P)) {
+                    q = convertToCNF(subnodes[i]);
+                    if ((logicutil::isUnit(p)) && (logicutil::isUnit(q))) {
+                        z = !p && !q;
+                    } else if (logicutil::isUnit(p)) {
                         LogicTerm convertedClause = LogicTerm(true);
-                        for (const auto& subnode: Q.getNodes()) {
-                            convertedClause = convertedClause && (P || subnode);
+                        for (const auto& subnode: q.getNodes()) {
+                            convertedClause = convertedClause && (p || subnode);
                         }
-                        Z = convertedClause;
-                    } else if (logicutil::isUnit(Q)) {
+                        z = convertedClause;
+                    } else if (logicutil::isUnit(q)) {
                         LogicTerm convertedClause = LogicTerm(true);
-                        for (const auto& subnode: P.getNodes()) {
-                            convertedClause = convertedClause && (Q || subnode);
+                        for (const auto& subnode: p.getNodes()) {
+                            convertedClause = convertedClause && (q || subnode);
                         }
-                        Z = convertedClause;
+                        z = convertedClause;
                     } else {
-                        Z = this->makeVariable("", CType::BOOL);
-                        Z = convertToCNF((!Z || P)) && convertToCNF((Z || Q));
+                        z = this->makeVariable("", CType::BOOL);
+                        z = convertToCNF((!z || p)) && convertToCNF((z || q));
                     }
-                    P = Z;
+                    p = z;
                 }
-                return Z;
+                return z;
             }
             case OpType::IMPL: {
-                auto P = convertToCNF(subnodes[0]);
-                auto Q = convertToCNF(subnodes[1]);
-                return convertToCNF(!P || Q);
+                auto p = convertToCNF(subnodes[0]);
+                auto q = convertToCNF(subnodes[1]);
+                return convertToCNF(!p || q);
             }
             case OpType::EQ: {
-                auto P = convertToCNF(subnodes[0]);
-                auto Q = convertToCNF(subnodes[1]);
-                return convertToCNF(convertToCNF(P && Q) || (convertToCNF(!P) && convertToCNF(!Q)));
+                auto p = convertToCNF(subnodes[0]);
+                auto q = convertToCNF(subnodes[1]);
+                return convertToCNF(convertToCNF(p && q) || (convertToCNF(!p) && convertToCNF(!q)));
             }
             case OpType::XOR: {
-                auto P = convertToCNF(subnodes[0]);
-                auto Q = convertToCNF(subnodes[1]);
-                return convertToCNF((P && convertToCNF(!Q)) || (convertToCNF(!P) && Q));
+                auto p = convertToCNF(subnodes[0]);
+                auto q = convertToCNF(subnodes[1]);
+                return convertToCNF((p && convertToCNF(!q)) || (convertToCNF(!p) && q));
             }
             default:
                 throw std::runtime_error("Unsupported operation type");
         }
     }
-    std::unordered_set<long long> CNFLogicBlock::convert(const LogicTerm& a) {
+    std::unordered_set<int64_t> CNFLogicBlock::convert(const LogicTerm& a) {
         switch (a.getOpType()) {
             case logicbase::OpType::Variable: {
                 auto it = variables.find(a.getID());
                 if (it == variables.end()) {
                     variables[a.getID()] = varId++;
                     return {variables[a.getID()]};
-                } else {
+                }
+                {
                     return {it->second};
                 }
             }
             case OpType::Constant: {
-                if (a.getBoolValue())
+                if (a.getBoolValue()) {
                     return {1}; //True Literal
-                else
-                    return {2}; //False Literal
+                }
+                return {2}; //False Literal
             }
             case OpType::NEG: {
                 auto subnodes = a.getNodes();
@@ -174,14 +177,15 @@ namespace cnflogic {
                     if (it == variables.end()) {
                         variables[a.getNodes()[0].getID()] = varId++;
                         return {-variables[a.getNodes()[0].getID()]};
-                    } else {
+                    }
+                    {
                         return {-it->second};
                     }
                 } else if (subnodes[0].getOpType() == OpType::Constant) {
-                    if (subnodes[0].getBoolValue())
+                    if (subnodes[0].getBoolValue()) {
                         return {-1}; //True Literal
-                    else
-                        return {-2}; //False Literal
+                    }
+                    return {-2}; //False Literal
                 } else if (subnodes[0].getOpType() == OpType::NEG) {
                     return convert(subnodes[0].getNodes()[0]);
                 } else if (subnodes[0].getOpType() == OpType::AND) {
@@ -201,7 +205,7 @@ namespace cnflogic {
                 }
             }
             case OpType::OR: {
-                std::unordered_set<long long> convertedClause;
+                std::unordered_set<int64_t> convertedClause;
                 for (const auto& subnode: a.getNodes()) {
                     convertedClause.insert(convert(subnode).begin(), convert(subnode).end());
                 }
@@ -210,7 +214,6 @@ namespace cnflogic {
             default:
                 throw std::runtime_error("Unsupported operation type");
         }
-        return {};
     }
 
 } // namespace cnflogic

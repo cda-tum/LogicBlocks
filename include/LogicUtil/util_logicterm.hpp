@@ -12,16 +12,16 @@ namespace logicutil {
     inline OpType getBVConversion(OpType op) {
         switch (op) {
             case OpType::AND:
-                op = OpType::BIT_AND;
+                op = OpType::BitAnd;
                 break;
             case OpType::OR:
-                op = OpType::BIT_OR;
+                op = OpType::BitOr;
                 break;
             case OpType::EQ:
-                op = OpType::BIT_EQ;
+                op = OpType::BitEq;
                 break;
             case OpType::XOR:
-                op = OpType::BIT_XOR;
+                op = OpType::BitXor;
                 break;
             default:
                 break;
@@ -31,11 +31,12 @@ namespace logicutil {
 
     inline LogicTerm getBoolConversion(const LogicTerm& term) {
         if (isConst(term)) {
-            if (term.getCType() == CType::BOOL)
+            if (term.getCType() == CType::BOOL) {
                 return term;
-            else
-                return LogicTerm(term.getBoolValue());
-        } else {
+            }
+            return LogicTerm(term.getBoolValue());
+        }
+        {
             switch (term.getCType()) {
                 case CType::BOOL:
                     return term;
@@ -81,49 +82,51 @@ namespace logicutil {
         }
         switch (op) { // TODO handle other CTypes
             case OpType::AND: {
-                if (constant.getBoolValue())
+                if (constant.getBoolValue()) {
                     return other.getImplementation();
-                else
-                    return std::make_shared<TermImpl>(false);
-            }; break;
+                }
+                return std::make_shared<TermImpl>(false);
+            }
             case OpType::OR: {
-                if (!constant.getBoolValue())
+                if (!constant.getBoolValue()) {
                     return other.getImplementation();
-                else
-                    return std::make_shared<TermImpl>(true);
-            }; break;
+                }
+                return std::make_shared<TermImpl>(true);
+            }
             case OpType::ADD: {
-                if (constant.getFloatValue() == 0)
+                if (constant.getFloatValue() == 0) {
                     return other.getImplementation();
-                else
-                    return std::make_shared<TermImpl>(OpType::ADD, other, constant,
-                                                      CType::INT, logic);
-            }; break;
+                }
+                return std::make_shared<TermImpl>(OpType::ADD, other, constant,
+                                                  CType::INT, logic);
+            }
             case OpType::SUB: {
-                if (constant.getFloatValue() == 0)
+                if (constant.getFloatValue() == 0) {
                     return other.getImplementation();
-                else
-                    return std::make_shared<TermImpl>(OpType::SUB, other, constant,
-                                                      CType::INT, logic);
-            }; break;
+                }
+                return std::make_shared<TermImpl>(OpType::SUB, other, constant,
+                                                  CType::INT, logic);
+            }
             case OpType::MUL: {
-                if (constant.getFloatValue() == 0)
+                if (constant.getFloatValue() == 0) {
                     return std::make_shared<TermImpl>(0);
-                else if (constant.getFloatValue() == 1)
+                }
+                if (constant.getFloatValue() == 1) {
                     return other.getImplementation();
-                else
-                    return std::make_shared<TermImpl>(OpType::MUL, other, constant,
-                                                      CType::INT, logic);
-            }; break;
+                }
+                return std::make_shared<TermImpl>(OpType::MUL, other, constant,
+                                                  CType::INT, logic);
+            }
             case OpType::DIV: {
-                if (constant.getFloatValue() == 0)
+                if (constant.getFloatValue() == 0) {
                     throw std::runtime_error("Divide by zero");
-                if (constant.getFloatValue() == 1)
+                }
+                if (constant.getFloatValue() == 1) {
                     return other.getImplementation();
-                else
-                    return std::make_shared<TermImpl>(OpType::DIV, other, constant,
-                                                      CType::INT, logic);
-            }; break;
+                }
+                return std::make_shared<TermImpl>(OpType::DIV, other, constant,
+                                                  CType::INT, logic);
+            }
             default: // TODO there are multiple ctypes
                 return std::make_shared<TermImpl>(op, other, constant, getCType(op), logic);
                 break;
@@ -135,7 +138,8 @@ namespace logicutil {
         if (!isConst(a) && !isConst(b)) {
             // erroneous function call
             throw std::runtime_error("Both terms are not constants");
-        } else if (isConst(a) && isConst(b)) {
+        }
+        if (isConst(a) && isConst(b)) {
             // combine the values, return new const
             switch (op) {
                 case OpType::AND:
@@ -200,17 +204,19 @@ namespace logicutil {
         };
     }
 
-    inline unsigned long long getMax(const std::vector<LogicTerm>& terms) {
-        unsigned long long ret = 0;
-        for (auto& it: terms)
+    inline uint64_t getMax(const std::vector<LogicTerm>& terms) {
+        uint64_t ret = 0;
+        for (const auto& it: terms) {
             ret = std::max(ret, it.getDepth());
+        }
         return ret + 1;
     }
 
-    inline short getMaxBVSize(const std::vector<LogicTerm>& terms) {
-        short ret = 0;
-        for (auto& it: terms)
+    inline int16_t getMaxBVSize(const std::vector<LogicTerm>& terms) {
+        int16_t ret = 0;
+        for (const auto& it: terms) {
             ret = std::max(ret, it.getBitVectorSize());
+        }
         return ret;
     }
 

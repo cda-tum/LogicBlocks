@@ -16,11 +16,11 @@ namespace logicbase {
     std::shared_ptr<TermImpl> makeLogicTerm(bool value);
     std::shared_ptr<TermImpl> makeLogicTerm(int value);
     std::shared_ptr<TermImpl> makeLogicTerm(double value);
-    std::shared_ptr<TermImpl> makeLogicTerm(unsigned long long value,
-                                            short              bv_size);
+    std::shared_ptr<TermImpl> makeLogicTerm(uint64_t value,
+                                            int16_t  bvSize);
     std::shared_ptr<TermImpl> makeLogicTerm(const char* name,
                                             CType       cType = CType::BOOL,
-                                            Logic* lb = nullptr, short bv_size = 0);
+                                            Logic* lb = nullptr, int16_t bvSize = 0);
     std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const std::string& name,
                                             CType  cType = CType::BOOL,
                                             Logic* lb    = nullptr);
@@ -45,8 +45,8 @@ namespace logicbase {
 
     class LogicTerm: public TermInterface {
     public:
-        static TermType termType;
-        static bool     useBitVectorConversions;
+        [[maybe_unused]] static TermType termType;
+        static bool                      useBitVectorConversions;
 
     private:
         std::shared_ptr<TermImpl> pImpl;
@@ -61,16 +61,16 @@ namespace logicbase {
             pImpl(makeLogicTerm(value)) {}
         explicit LogicTerm(double value):
             pImpl(makeLogicTerm(value)) {}
-        LogicTerm(unsigned long long value, short bv_size):
-            pImpl(makeLogicTerm(value, bv_size)) {}
+        LogicTerm(uint64_t value, int16_t bvSize):
+            pImpl(makeLogicTerm(value, bvSize)) {}
 
         explicit LogicTerm(CType cType = CType::BOOL, Logic* lb = nullptr):
             pImpl(makeLogicTerm("", cType, lb)) {}
         // LogicTerm(const char *name, CType cType = CType::BOOL, Logic *lb = nullptr)
         //     : pImpl(makeLogicTerm(termType, name, cType, lb)) {}
         explicit LogicTerm(const std::string& name, CType cType = CType::BOOL,
-                           Logic* lb = nullptr, short bv_size = 0):
-            pImpl(makeLogicTerm(name.c_str(), cType, lb, bv_size)) {}
+                           Logic* lb = nullptr, int16_t bvSize = 0):
+            pImpl(makeLogicTerm(name.c_str(), cType, lb, bvSize)) {}
 
         LogicTerm(OpType opType, const std::string& name, CType cType = CType::BOOL,
                   Logic* lb = nullptr):
@@ -115,16 +115,16 @@ namespace logicbase {
             return LogicTerm(makeLogicTerm(OpType::AND, a, b));
         }
 
-        static LogicTerm bv_and(const LogicTerm& a, const LogicTerm& b) {
-            return LogicTerm(makeLogicTerm(OpType::BIT_AND, a, b));
+        static LogicTerm bvAnd(const LogicTerm& a, const LogicTerm& b) {
+            return LogicTerm(makeLogicTerm(OpType::BitAnd, a, b));
         }
 
-        static LogicTerm bv_or(const LogicTerm& a, const LogicTerm& b) {
-            return LogicTerm(makeLogicTerm(OpType::BIT_OR, a, b));
+        static LogicTerm bvOr(const LogicTerm& a, const LogicTerm& b) {
+            return LogicTerm(makeLogicTerm(OpType::BitOr, a, b));
         }
 
-        static LogicTerm bv_xor(const LogicTerm& a, const LogicTerm& b) {
-            return LogicTerm(makeLogicTerm(OpType::BIT_XOR, a, b));
+        static LogicTerm bvXor(const LogicTerm& a, const LogicTerm& b) {
+            return LogicTerm(makeLogicTerm(OpType::BitXor, a, b));
         }
 
         static LogicTerm implies(const LogicTerm& a, const LogicTerm& b) {
@@ -177,15 +177,15 @@ namespace logicbase {
         }
 
         LogicTerm operator&(const LogicTerm& other) const {
-            return LogicTerm::bv_and(*this, other);
+            return LogicTerm::bvAnd(*this, other);
         }
 
         LogicTerm operator|(const LogicTerm& other) const {
-            return LogicTerm::bv_or(*this, other);
+            return LogicTerm::bvOr(*this, other);
         }
 
         LogicTerm operator^(const LogicTerm& other) const {
-            return LogicTerm::bv_xor(*this, other);
+            return LogicTerm::bvXor(*this, other);
         }
 
         LogicTerm operator||(const LogicTerm& other) const {
@@ -234,15 +234,15 @@ namespace logicbase {
 
         LogicTerm operator!() const { return LogicTerm::neg(*this); }
 
-        [[nodiscard]] long long                     getID() const override;
+        [[nodiscard]] int64_t                       getID() const override;
         [[nodiscard]] const std::vector<LogicTerm>& getNodes() const override;
         [[nodiscard]] OpType                        getOpType() const override;
         [[nodiscard]] CType                         getCType() const override;
         [[nodiscard]] bool                          getBoolValue() const override;
         [[nodiscard]] int                           getIntValue() const override;
         [[nodiscard]] double                        getFloatValue() const override;
-        [[nodiscard]] unsigned long long            getBitVectorValue() const override;
-        [[nodiscard]] short                         getBitVectorSize() const override;
+        [[nodiscard]] uint64_t                      getBitVectorValue() const override;
+        [[nodiscard]] int16_t                       getBitVectorSize() const override;
         [[nodiscard]] const std::string&            getName() const override;
         [[nodiscard]] std::string                   getConstantValue() const override;
         [[nodiscard]] std::shared_ptr<TermImpl>     getImplementation() const override;
@@ -253,9 +253,9 @@ namespace logicbase {
         void print(std::ostream& os) const override;
         void prettyPrint(std::ostream& os, int depth = 0) const;
 
-        [[nodiscard]] unsigned long long getDepth() const override;
+        [[nodiscard]] uint64_t getDepth() const override;
 
-        [[nodiscard]] unsigned long long getMaxChildrenDepth() const override;
+        [[nodiscard]] uint64_t getMaxChildrenDepth() const override;
 
         static LogicTerm getNeutralElement(OpType opType);
 

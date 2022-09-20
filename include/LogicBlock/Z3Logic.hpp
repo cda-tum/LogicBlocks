@@ -23,7 +23,7 @@ namespace z3logic {
 
     class Z3Base {
     protected:
-        std::map<unsigned long long, std::vector<std::pair<bool, z3::expr>>> variables;
+        std::map<uint64_t, std::vector<std::pair<bool, z3::expr>>> variables;
         std::unordered_map<LogicTerm, std::vector<std::pair<bool, z3::expr>>, TermHash,
                            TermHash>
                      cache{};
@@ -36,39 +36,39 @@ namespace z3logic {
             ctx(ctx) {}
         virtual ~Z3Base() = default;
 
-        z3::expr     convert(const LogicTerm& a, CType to_type = CType::ERRORTYPE);
+        z3::expr     convert(const LogicTerm& a, CType toType = CType::ERRORTYPE);
         z3::context& getContext() { return ctx; }
 
-        static z3::expr getExprTerm(unsigned long long id, CType type, Z3Base* z3base);
+        static z3::expr getExprTerm(uint64_t id, CType type, Z3Base* z3base);
 
-        z3::expr convertVariableTo(const LogicTerm& a, CType to_type);
-        z3::expr convertVariableFromBoolTo(const LogicTerm& a, CType to_type);
-        z3::expr convertVariableFromIntTo(const LogicTerm& a, CType to_type);
-        z3::expr convertVariableFromRealTo(const LogicTerm& a, CType to_type);
-        z3::expr convertVariableFromBitvectorTo(const LogicTerm& a, CType to_type);
+        z3::expr convertVariableTo(const LogicTerm& a, CType toType);
+        z3::expr convertVariableFromBoolTo(const LogicTerm& a, CType toType);
+        z3::expr convertVariableFromIntTo(const LogicTerm& a, CType toType);
+        z3::expr convertVariableFromRealTo(const LogicTerm& a, CType toType);
+        z3::expr convertVariableFromBitvectorTo(const LogicTerm& a, CType toType);
 
         z3::expr convertOperator(const LogicTerm& a, const LogicTerm& b,
                                  z3::expr (*op)(const z3::expr&, const z3::expr&),
-                                 CType to_type);
+                                 CType toType);
         z3::expr convertOperator(const LogicTerm& a, z3::expr (*op)(const z3::expr&),
-                                 CType            to_type);
+                                 CType            toType);
         z3::expr convertOperator(const LogicTerm& a, const LogicTerm& b,
                                  const LogicTerm& c,
                                  z3::expr (*op)(const z3::expr&, const z3::expr&,
                                                 const z3::expr&),
-                                 CType to_type);
+                                 CType toType);
         z3::expr convertOperator(std::vector<LogicTerm> terms,
                                  z3::expr (*op)(const z3::expr&, const z3::expr&),
-                                 CType to_type);
+                                 CType toType);
 
-        z3::expr convertConstant(const LogicTerm& a, CType to_type);
+        z3::expr convertConstant(const LogicTerm& a, CType toType);
     };
 
     class Z3LogicBlock: public LogicBlock, public Z3Base {
     protected:
-        std::map<unsigned long long, std::vector<std::pair<bool, z3::expr>>> variables;
-        z3::solver&                                                          solver;
-        void                                                                 internal_reset() override;
+        std::map<uint64_t, std::vector<std::pair<bool, z3::expr>>> variables;
+        z3::solver&                                                solver;
+        void                                                       internalReset() override;
 
     public:
         Z3LogicBlock(z3::context& ctx, z3::solver& solver, bool convertWhenAssert = true):
@@ -95,9 +95,9 @@ namespace z3logic {
 
     class Z3LogicOptimizer: public LogicBlockOptimizer, public Z3Base {
     private:
-        std::map<unsigned long long, std::vector<std::pair<bool, z3::expr>>> variables;
-        z3::optimize&                                                        optimizer;
-        void                                                                 internal_reset() override;
+        std::map<uint64_t, std::vector<std::pair<bool, z3::expr>>> variables;
+        z3::optimize&                                              optimizer;
+        void                                                       internalReset() override;
 
     public:
         Z3LogicOptimizer(z3::context& ctx, z3::optimize& optimizer,

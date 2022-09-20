@@ -20,23 +20,23 @@ namespace cnflogic {
     class CNFLogicBlock: public LogicBlock {
     protected:
         std::ostream&                                                        out;
-        std::unordered_set<std::unordered_set<long long>, UnorderedLongHash> convertedClauses{};
-        std::unordered_map<unsigned long long, long long>                    variables{};
-        unsigned long long                                                   varId = 0;
+        std::unordered_set<std::unordered_set<int64_t>, Unorderedint64THash> convertedClauses{};
+        std::unordered_map<uint64_t, int64_t>                                variables{};
+        uint64_t                                                             varId = 0;
         LogicTerm                                                            trueTerm;
         LogicTerm                                                            falseTerm;
-        void                                                                 internal_reset() override;
+        void                                                                 internalReset() override;
 
     public:
         explicit CNFLogicBlock(bool convertWhenAssert = false, std::ostream& out = std::cout):
-            LogicBlock(convertWhenAssert), out(out) {
+            LogicBlock(convertWhenAssert), out(out), varId(3) {
             trueTerm  = makeVariable("true", CType::BOOL);
             falseTerm = makeVariable("false", CType::BOOL);
             clauses.insert(trueTerm);
             clauses.insert(falseTerm);
             variables.insert(std::make_pair(trueTerm.getID(), 1));
             variables.insert(std::make_pair(falseTerm.getID(), 2));
-            varId = 3;
+
             convertedClauses.insert({1});  //True Literal
             convertedClauses.insert({-2}); //False Literal
         }
@@ -49,15 +49,15 @@ namespace cnflogic {
         void dump(const LogicTerm& a, std::ostream& stream) override;
         void dumpAll(std::ostream& stream) override;
 
-        void                          convert();
-        std::unordered_set<long long> convert(const LogicTerm& a);
-        LogicTerm                     convertToCNF(const LogicTerm& a);
+        void                        convert();
+        std::unordered_set<int64_t> convert(const LogicTerm& a);
+        LogicTerm                   convertToCNF(const LogicTerm& a);
 
         void reset() override {
             delete model;
             model = nullptr;
             clauses.clear();
-            internal_reset();
+            internalReset();
             gid = 0;
         };
     };

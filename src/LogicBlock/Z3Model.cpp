@@ -29,7 +29,7 @@ namespace z3logic {
         return z3::eq(model.eval(Z3Base::getExprTerm(a.getID(), a.getCType(), llb)), ctx.bool_val(true));
     }
 
-    int Z3Model::getIntValue(const LogicTerm& a, LogicBlock* lb) {
+    int32_t Z3Model::getIntValue(const LogicTerm& a, LogicBlock* lb) {
         auto llb = dynamic_cast<Z3Base*>(lb);
         return static_cast<int>(model.eval(Z3Base::getExprTerm(a.getID(), a.getCType(), llb)).as_int64());
     }
@@ -39,8 +39,8 @@ namespace z3logic {
         return std::stod(model.eval(Z3Base::getExprTerm(a.getID(), a.getCType(), llb)).get_decimal_string(20));
     }
 
-    unsigned long long Z3Model::getBitvectorValue(const LogicTerm& a, LogicBlock* lb) {
+    uint64_t Z3Model::getBitvectorValue(const LogicTerm& a, LogicBlock* lb) {
         auto llb = dynamic_cast<Z3Base*>(lb);
-        return static_cast<unsigned long long>(model.eval(Z3Base::getExprTerm(a.getID(), a.getCType(), llb)).as_int64());
+        return static_cast<uint64_t>(model.eval(Z3Base::getExprTerm(a.getID(), a.getCType(), llb)).as_int64());
     }
 } // namespace z3logic

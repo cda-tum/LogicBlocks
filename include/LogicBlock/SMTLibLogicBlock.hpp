@@ -31,11 +31,11 @@ enum class SMTLibLogic {
 
 class SMTLogicBlock: public logicbase::LogicBlock {
 protected:
-    std::map<unsigned long long, LogicTerm> constants;
-    std::unordered_set<SMTLibLogic>         requiredLogics;
-    SMTLibLogic                             outputLogic;
-    std::ostream&                           out;
-    void                                    internal_reset() override;
+    std::map<uint64_t, LogicTerm>   constants;
+    std::unordered_set<SMTLibLogic> requiredLogics;
+    SMTLibLogic                     outputLogic;
+    std::ostream&                   out;
+    void                            internalReset() override;
 
 public:
     explicit SMTLogicBlock(bool convertWhenAssert = false, std::ostream& out = std::cout):
@@ -48,7 +48,7 @@ public:
         delete model;
         model = nullptr;
         clauses.clear();
-        internal_reset();
+        internalReset();
         gid = 0;
     };
 

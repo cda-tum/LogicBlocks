@@ -28,7 +28,7 @@ Result SMTLogicBlock::solve() {
     return Result::SAT;
 }
 
-void SMTLogicBlock::internal_reset() {
+void SMTLogicBlock::internalReset() {
     delete model;
     model = nullptr;
 }
@@ -119,7 +119,7 @@ std::string SMTLogicBlock::getTypeString(const LogicTerm& a) {
         case CType::BITVECTOR:
             return "(_ BitVec " + std::to_string(a.getBitVectorSize()) + ")";
         default:
-            throw std::runtime_error("Unsupported CType" + std::to_string((int)a.getCType()));
+            throw std::runtime_error("Unsupported CType" + std::to_string(static_cast<int>(a.getCType())));
     }
 }
 
@@ -134,7 +134,8 @@ SMTLibLogic SMTLogicBlock::getMinimumLogic(const SMTLibLogic& a, const SMTLibLog
         if (needsBV) { //Needing BV
             if (needsArith || needsR || needsI) {
                 throw std::runtime_error("Unsupported Logic Combination");
-            } else {
+            }
+            {
                 return SMTLibLogic::QF_UFBV;
             }
         } else if (needsN) { //Needing Nonlinearity implies also needing Arithmetic
@@ -168,7 +169,8 @@ SMTLibLogic SMTLogicBlock::getMinimumLogic(const SMTLibLogic& a, const SMTLibLog
         if (needsBV) { //Needing BV
             if (needsArith || needsR || needsI) {
                 throw std::runtime_error("Unsupported Logic Combination");
-            } else {
+            }
+            {
                 return SMTLibLogic::QF_BV;
             }
         } else if (needsN) { //Needing Nonlinearity implies also needing Arithmetic
@@ -274,13 +276,13 @@ std::string SMTLogicBlock::convert(const LogicTerm& term) {
             return "(> " + convert(term.getNodes()[0]) + " " + convert(term.getNodes()[1]) + ")";
         case OpType::GTE:
             return "(>= " + convert(term.getNodes()[0]) + " " + convert(term.getNodes()[1]) + ")";
-        case OpType::BIT_AND:
+        case OpType::BitAnd:
             return "(bvand " + convert(term.getNodes()[0]) + " " + convert(term.getNodes()[1]) + ")";
-        case OpType::BIT_OR:
+        case OpType::BitOr:
             return "(bvor " + convert(term.getNodes()[0]) + " " + convert(term.getNodes()[1]) + ")";
-        case OpType::BIT_XOR:
+        case OpType::BitXor:
             return "(bvxor " + convert(term.getNodes()[0]) + " " + convert(term.getNodes()[1]) + ")";
-        case OpType::BIT_EQ:
+        case OpType::BitEq:
             return "(= " + convert(term.getNodes()[0]) + " " + convert(term.getNodes()[1]) + ")";
         case OpType::None: break;
         case OpType::CALL: break;

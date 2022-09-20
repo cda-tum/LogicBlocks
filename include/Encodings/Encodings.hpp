@@ -54,19 +54,19 @@ struct SavedLit {
     LogicTerm var  = LogicTerm::noneTerm();
 };
 
-LogicTerm AtMostOneCMDR(const std::vector<NestedVar>& subords,
+LogicTerm atMostOneCmdr(const std::vector<NestedVar>& subords,
                         const LogicTerm& cmdrVar, LogicBlock* logic);
 
-LogicTerm ExactlyOneCMDR(const std::vector<NestedVar>& subords,
+LogicTerm exactlyOneCmdr(const std::vector<NestedVar>& subords,
                          const LogicTerm& cmdrVar, LogicBlock* logic);
 
-LogicTerm NaiveExactlyOne(const std::vector<LogicTerm>& clauseVars);
+LogicTerm naiveExactlyOne(const std::vector<LogicTerm>& clauseVars);
 
-LogicTerm NaiveAtMostOne(const std::vector<LogicTerm>& clauseVars);
+LogicTerm naiveAtMostOne(const std::vector<LogicTerm>& clauseVars);
 
-LogicTerm NaiveAtLeastOne(const std::vector<LogicTerm>& clauseVars);
+LogicTerm naiveAtLeastOne(const std::vector<LogicTerm>& clauseVars);
 
-LogicTerm AtMostOneBiMander(const std::vector<LogicTerm>& vars, LogicBlock* logic);
+LogicTerm atMostOneBiMander(const std::vector<LogicTerm>& vars, LogicBlock* logic);
 
 std::vector<NestedVar> groupVars(const std::vector<LogicTerm>& vars,
                                  std::size_t                   maxSize);
@@ -78,8 +78,8 @@ groupVarsBimander(const std::vector<LogicTerm>& vars, std::size_t groupCount);
 
 LogicTerm BuildBDD(const std::set<WeightedVar>&  inputLiterals,
                    const std::vector<LogicTerm>& vars, int leq, LogicBlock* lb);
-LogicTerm BuildBDD(unsigned long index, long curSum, long maxSum, long k,
+LogicTerm BuildBDD(uint64_t index, int64_t curSum, int64_t maxSum, int64_t k,
                    const std::vector<WeightedVar>& inputLiterals,
                    const std::vector<LogicTerm>& vars, LogicTerm& formula,
-                   LogicTerm& true_lit, LogicBlock* lb);
+                   LogicTerm& trueLit, LogicBlock* lb);
 #endif //QMAP_ENCODINGS_HPP

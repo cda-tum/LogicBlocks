@@ -27,7 +27,7 @@ namespace util {
         if (!logfile.empty() && logfile != "std") {
             static plog::RollingFileAppender<plog::TxtFormatter> fileAppender(logfile.c_str());
             plog::init(severity, &fileAppender);
-        } else if (logfile == "std" || logfile == "") {
+        } else if (logfile == "std" || logfile.empty()) {
             static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
             plog::init(severity, &consoleAppender);
         }

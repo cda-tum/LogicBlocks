@@ -9,7 +9,7 @@
 
 namespace z3logic {
 
-    z3::expr Z3Base::getExprTerm(unsigned long long id, CType type, Z3Base* z3base) {
+    z3::expr Z3Base::getExprTerm(uint64_t id, CType type, Z3Base* z3base) {
         if (z3base->variables.find(id) == z3base->variables.end() ||
             !z3base->variables.at(id)[static_cast<int>(type)].first)
             util::fatal("Variable not found");
@@ -26,7 +26,7 @@ namespace z3logic {
             if (v[static_cast<int>(to_type)].first)
                 return v[static_cast<int>(to_type)].second;
         } else {
-            for (int i = 0; i < 4; i++) {
+            for (int32_t i = 0; i < 4; i++) {
                 v.emplace_back(false, ctx.bool_val(false));
             }
         }
@@ -220,7 +220,7 @@ namespace z3logic {
             if (v[static_cast<int>(to_type)].first)
                 return v[static_cast<int>(to_type)].second;
         } else {
-            for (int i = 0; i < 4; i++) {
+            for (int32_t i = 0; i < 4; i++) {
                 v.emplace_back(false, ctx.bool_val(false));
             }
         }

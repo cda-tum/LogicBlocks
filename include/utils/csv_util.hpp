@@ -4,27 +4,27 @@
 #include <set>
 #include <vector>
 
-namespace CSV {
+namespace csv {
     inline std::vector<std::string>
-    parse_line(const std::string& line, const std::set<char>& escape_chars,
-               const std::set<char>& ignored_chars) {
+    parseLine(const std::string& line, const std::set<char>& escapeChars,
+              const std::set<char>& ignoredChars) {
         std::vector<std::string> result;
         std::string              word;
-        bool                     in_escape = false;
+        bool                     inEscape = false;
         for (char c: line) {
-            if (ignored_chars.find(c) != ignored_chars.end()) {
+            if (ignoredChars.find(c) != ignoredChars.end()) {
                 continue;
             }
-            if (in_escape) {
-                if (escape_chars.find(c) != escape_chars.end()) {
+            if (inEscape) {
+                if (escapeChars.find(c) != escapeChars.end()) {
                     word += c;
-                    in_escape = false;
+                    inEscape = false;
                 } else {
                     word += c;
                 }
             } else {
-                if (escape_chars.find(c) != escape_chars.end()) {
-                    in_escape = true;
+                if (escapeChars.find(c) != escapeChars.end()) {
+                    inEscape = true;
                 } else if (c == ',') {
                     result.push_back(word);
                     word = "";
@@ -37,6 +37,6 @@ namespace CSV {
         return result;
     };
 
-} // namespace CSV
+} // namespace csv
 
 #endif // CSV_UTIL
