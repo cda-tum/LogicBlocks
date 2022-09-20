@@ -90,7 +90,7 @@ namespace logicbase {
         [[nodiscard]] static std::string getStrRep(OpType opType);
 
         void print(std::ostream& os) const;
-        void prettyPrint(std::ostream& os, int depth = 0) const;
+        void prettyPrint(std::ostream& os, int printDepth = 0) const;
 
         [[nodiscard]] int64_t getID() const { return id; }
 

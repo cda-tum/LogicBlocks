@@ -4,7 +4,6 @@
 #include "LogicBlock/CNFLogicBlock.hpp"
 
 #include "LogicUtil/util_logic.hpp"
-#include "utils/logging.hpp"
 
 namespace cnflogic {
 
@@ -69,10 +68,11 @@ namespace cnflogic {
                         return falseTerm;
                     }
                     return trueTerm;
-
-                } else if (subnodes[0].getOpType() == OpType::NEG) {
+                }
+                if (subnodes[0].getOpType() == OpType::NEG) {
                     return convertToCNF(subnodes[0].getNodes()[0]);
-                } else if (subnodes[0].getOpType() == OpType::AND) {
+                }
+                if (subnodes[0].getOpType() == OpType::AND) {
                     LogicTerm negatedClause = LogicTerm(false);
                     for (const auto& subnode: subnodes[0].getNodes()) {
                         negatedClause = negatedClause || !subnode;

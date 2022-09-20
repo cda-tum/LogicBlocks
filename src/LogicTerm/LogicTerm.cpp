@@ -126,7 +126,7 @@ namespace logicbase {
             }
         }
         return max + 1;
-    };
+    }
 
     Logic* LogicTerm::getLogic() const {
         return pImpl->getLogic();

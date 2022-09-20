@@ -614,6 +614,7 @@ TEST(TestZ3, AMOAndExactlyOneNaive) {
 
 TEST(TestZ3, AMOAndExactlyOneCMDR) {
     using namespace logicbase;
+    using namespace encodings;
 
     int n = 11;
 
@@ -636,7 +637,7 @@ TEST(TestZ3, AMOAndExactlyOneCMDR) {
         for (int j = 0; j < n; ++j) {
             a_.emplace_back(a_nodes[i][j]);
         }
-        LogicTerm aa = ExactlyOneCMDR(groupVars(a_, n / 2), LogicTerm::noneTerm(), z3logic.get());
+        LogicTerm aa = encodings::exactlyOneCmdr(groupVars(a_, n / 2), LogicTerm::noneTerm(), z3logic.get());
         z3logic->assertFormula(aa);
     }
     for (int i = 0; i < n; ++i) {
@@ -644,7 +645,7 @@ TEST(TestZ3, AMOAndExactlyOneCMDR) {
         for (int j = 0; j < n; ++j) {
             a_.emplace_back(a_nodes[i][j]);
         }
-        LogicTerm aa = AtMostOneCMDR(groupVars(a_, 3), LogicTerm::noneTerm(), z3logic.get());
+        LogicTerm aa = atMostOneCmdr(groupVars(a_, 3), LogicTerm::noneTerm(), z3logic.get());
         z3logic->assertFormula(aa);
     }
 
@@ -658,6 +659,7 @@ TEST(TestZ3, AMOAndExactlyOneCMDR) {
 
 TEST(TestZ3, AMOAndExactlyOneBimander) {
     using namespace logicbase;
+    using namespace encodings;
 
     int n = 11;
 
@@ -680,7 +682,7 @@ TEST(TestZ3, AMOAndExactlyOneBimander) {
         for (int j = 0; j < n; ++j) {
             a_.emplace_back(a_nodes[i][j]);
         }
-        LogicTerm aa = ExactlyOneCMDR(groupVars(a_, 3), LogicTerm::noneTerm(), z3logic.get());
+        LogicTerm aa = exactlyOneCmdr(groupVars(a_, 3), LogicTerm::noneTerm(), z3logic.get());
         z3logic->assertFormula(aa);
     }
     for (int i = 0; i < n; ++i) {
@@ -688,7 +690,7 @@ TEST(TestZ3, AMOAndExactlyOneBimander) {
         for (int j = 0; j < n; ++j) {
             a_.emplace_back(a_nodes[i][j]);
         }
-        LogicTerm aa = AtMostOneBiMander(a_, z3logic.get());
+        LogicTerm aa = atMostOneBiMander(a_, z3logic.get());
         z3logic->assertFormula(aa);
     }
 
@@ -702,6 +704,7 @@ TEST(TestZ3, AMOAndExactlyOneBimander) {
 
 TEST(TestZ3, BuildBDDTest) {
     using namespace logicbase;
+    using namespace encodings;
 
     int n = 23;
 
@@ -809,10 +812,10 @@ TEST(TestZ3, TestVariableConversionsToBV) {
     LogicTerm c = z3logic->makeVariable("c", CType::REAL);
     LogicTerm d = z3logic->makeVariable("d", CType::BITVECTOR, 32);
 
-    z3logic->assertFormula(LogicTerm::bv_and(d, a) == d);
+    z3logic->assertFormula(LogicTerm::bvAnd(d, a) == d);
     z3logic->assertFormula(LogicTerm::eq(d, a) == d);
-    z3logic->assertFormula(LogicTerm::bv_or(d, b) == d);
-    z3logic->assertFormula(LogicTerm::bv_xor(d, b) == d);
+    z3logic->assertFormula(LogicTerm::bvOr(d, b) == d);
+    z3logic->assertFormula(LogicTerm::bvXor(d, b) == d);
 
     z3logic->dumpZ3State(std::cout);
     EXPECT_EQ(z3logic->solve(), Result::SAT);
@@ -833,9 +836,9 @@ TEST(TestZ3, TestVariableConversionsToInt) {
     LogicTerm c = z3logic->makeVariable("c", CType::REAL);
     LogicTerm d = z3logic->makeVariable("d", CType::BITVECTOR, 32);
 
-    z3logic->assertFormula(LogicTerm::bv_and(d, a) == d);
-    z3logic->assertFormula(LogicTerm::bv_or(d, b) == d);
-    z3logic->assertFormula(LogicTerm::bv_xor(d, b) == d);
+    z3logic->assertFormula(LogicTerm::bvAnd(d, a) == d);
+    z3logic->assertFormula(LogicTerm::bvOr(d, b) == d);
+    z3logic->assertFormula(LogicTerm::bvXor(d, b) == d);
 
     z3logic->dumpZ3State(std::cout);
     EXPECT_EQ(z3logic->solve(), Result::SAT);
@@ -856,9 +859,9 @@ TEST(TestZ3, TestVariableConversionsToReal) {
     LogicTerm c = z3logic->makeVariable("c", CType::REAL);
     LogicTerm d = z3logic->makeVariable("d", CType::BITVECTOR, 32);
 
-    z3logic->assertFormula(LogicTerm::bv_and(d, a) == d);
-    z3logic->assertFormula(LogicTerm::bv_or(d, b) == d);
-    z3logic->assertFormula(LogicTerm::bv_xor(d, b) == d);
+    z3logic->assertFormula(LogicTerm::bvAnd(d, a) == d);
+    z3logic->assertFormula(LogicTerm::bvOr(d, b) == d);
+    z3logic->assertFormula(LogicTerm::bvXor(d, b) == d);
 
     z3logic->dumpZ3State(std::cout);
     EXPECT_EQ(z3logic->solve(), Result::SAT);

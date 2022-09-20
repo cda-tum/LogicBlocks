@@ -253,8 +253,8 @@ bool TermImpl::deepEquals(const TermImpl& other) const {
     }
     return true;
 }
-void TermImpl::prettyPrint(std::ostream& os, int32_t depth) const {
-    for (int32_t i = 0; i < depth; ++i) {
+void TermImpl::prettyPrint(std::ostream& os, int32_t printDepth) const {
+    for (int32_t i = 0; i < printDepth; ++i) {
         os << "  ";
     }
     os << getStrRep(opType);
@@ -267,12 +267,12 @@ void TermImpl::prettyPrint(std::ostream& os, int32_t depth) const {
     } else {
         os << std::endl;
         for (const auto& n: nodes) {
-            n.prettyPrint(os, depth + 1);
+            n.prettyPrint(os, printDepth + 1);
         }
     }
     if (opType != OpType::Variable && opType != OpType::Constant) {
         os << std::endl;
-        for (int32_t i = 0; i < depth; ++i) {
+        for (int32_t i = 0; i < printDepth; ++i) {
             os << "  ";
         }
         os << ">";

@@ -57,12 +57,12 @@ namespace logicutil {
         void addParam(const std::string& name, uint32_t value) {
             params.emplace_back(name, value);
         }
-        std::vector<Param> getParams() {
+        [[nodiscard]] std::vector<Param> getParams() const {
             return params;
         }
     };
 
-    inline void setZ3Params(z3::params& p, Params& params) {
+    inline void setZ3Params(z3::params& p, const Params& params) {
         for (const auto& param: params.getParams()) {
             switch (param.type) {
                 case ParamType::STR:
@@ -91,7 +91,7 @@ namespace logicutil {
 #endif
     }
 
-    inline std::unique_ptr<LogicBlock> getZ3LogicBlock(bool& success, bool /*convertWhenAssert*/, const Params& /*params*/ = Params()) {
+    inline std::unique_ptr<LogicBlock> getZ3LogicBlock(bool& success, bool convertWhenAssert, const Params& params = Params()) {
 #ifdef Z3_FOUND
         static z3::context c;
         static z3::solver  slv(c);
@@ -107,7 +107,7 @@ namespace logicutil {
 #endif
     }
 
-    inline std::unique_ptr<LogicBlockOptimizer> getZ3LogicOptimizer(bool& success, bool /*convertWhenAssert*/, const Params& /*params*/ = Params()) {
+    inline std::unique_ptr<LogicBlockOptimizer> getZ3LogicOptimizer(bool& success, bool convertWhenAssert, const Params& params = Params()) {
 #ifdef Z3_FOUND
         static z3::context  c;
         static z3::optimize opt(c);
