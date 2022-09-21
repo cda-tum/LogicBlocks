@@ -81,8 +81,8 @@ int main() {
     //            }
     //        }
     //    }
-    SMTLogicBlock smtLogicBlock(true, std::cout);
-    smtLogicBlock.setOutputLogic(SMTLibLogic::QF_UF);
+    smtliblogic::SMTLogicBlock smtLogicBlock(true, std::cout);
+    smtLogicBlock.setOutputLogic(smtliblogic::SMTLibLogic::QF_UF);
     LogicTerm a = smtLogicBlock.makeVariable("a", CType::BOOL);
     LogicTerm b = smtLogicBlock.makeVariable("b", CType::BOOL);
     LogicTerm c = smtLogicBlock.makeVariable("c", CType::BOOL);

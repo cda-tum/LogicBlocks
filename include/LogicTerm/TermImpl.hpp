@@ -9,32 +9,32 @@
 namespace logicbase {
     class TermImpl {
     protected:
-        Logic*             lb    = nullptr;
-        long long          id    = 0;
-        unsigned long long depth = 0U;
-        std::string        name{};
+        Logic*      lb    = nullptr;
+        int64_t     id    = 0;
+        uint64_t    depth = 0U;
+        std::string name{};
 
-        OpType                 opType   = OpType::Variable;
-        bool                   value    = false;
-        int                    i_value  = 0;
-        double                 f_value  = 0.;
-        unsigned long long     bv_value = 0U;
-        short                  bv_size  = 0;
+        OpType                 opType  = OpType::Variable;
+        bool                   value   = false;
+        int                    iValue  = 0;
+        double                 fValue  = 0.;
+        uint64_t               bvValue = 0U;
+        int16_t                bvSize  = 0;
         std::vector<LogicTerm> nodes{};
-        CType                  c_type = CType::BOOL;
+        CType                  cType = CType::BOOL;
 
     public:
         explicit TermImpl(bool v):
-            opType(OpType::Constant), value(v), c_type(CType::BOOL) {}
+            opType(OpType::Constant), value(v), cType(CType::BOOL) {}
 
-        explicit TermImpl(int v):
-            opType(OpType::Constant), i_value(v), c_type(CType::INT) {}
+        explicit TermImpl(int32_t v):
+            opType(OpType::Constant), iValue(v), cType(CType::INT) {}
 
         explicit TermImpl(double v):
-            opType(OpType::Constant), f_value(v), c_type(CType::REAL) {}
+            opType(OpType::Constant), fValue(v), cType(CType::REAL) {}
 
-        explicit TermImpl(unsigned long long v, short bv_size):
-            opType(OpType::Constant), bv_value(v), bv_size(bv_size), c_type(CType::BITVECTOR) {}
+        explicit TermImpl(uint64_t v, int16_t bvSize):
+            opType(OpType::Constant), bvValue(v), bvSize(bvSize), cType(CType::BITVECTOR) {}
 
         explicit TermImpl(Logic* lb = nullptr):
             lb(lb), id(getNextId(lb)), name(std::to_string(id)) {}
@@ -43,25 +43,25 @@ namespace logicbase {
             lb(lb), id(getNextId(lb)), name(std::move(name)) {}
 
         explicit TermImpl(OpType opType, std::string name, CType cType,
-                          Logic* lb = nullptr, short bv_size = 0):
+                          Logic* lb = nullptr, int16_t bvSize = 0):
             lb(lb),
-            id(getNextId(lb)), name(std::move(name)), opType(opType), bv_size(bv_size), c_type(cType) {}
+            id(getNextId(lb)), name(std::move(name)), opType(opType), bvSize(bvSize), cType(cType) {}
 
-        explicit TermImpl(std::string name, long long id, Logic* lb = nullptr):
+        explicit TermImpl(std::string name, int64_t id, Logic* lb = nullptr):
             lb(lb), id(id), name(std::move(name)) {}
 
         explicit TermImpl(CType cType, Logic* lb = nullptr):
-            lb(lb), id(getNextId(lb)), name(std::to_string(id)), c_type(cType) {}
+            lb(lb), id(getNextId(lb)), name(std::to_string(id)), cType(cType) {}
 
         explicit TermImpl(std::string name, CType cType, Logic* lb = nullptr,
-                          short bv_size = 0):
+                          int16_t bvSize = 0):
             lb(lb),
-            id(getNextId(lb)), name(std::move(name)), bv_size(bv_size), c_type(cType) {}
+            id(getNextId(lb)), name(std::move(name)), bvSize(bvSize), cType(cType) {}
 
-        explicit TermImpl(std::string name, long long id, CType cType,
+        explicit TermImpl(std::string name, int64_t id, CType cType,
                           Logic* lb = nullptr):
             lb(lb),
-            id(id), name(std::move(name)), c_type(cType) {}
+            id(id), name(std::move(name)), cType(cType) {}
 
         explicit TermImpl(OpType ot, const std::initializer_list<LogicTerm>& n,
                           CType cType = CType::BOOL, Logic* lb = nullptr);
@@ -79,28 +79,28 @@ namespace logicbase {
         TermImpl(const TermImpl& other);
         explicit TermImpl(const LogicTerm& other);
 
-    public:
-        static long long getNextId(Logic* lb = nullptr) {
+        static int64_t getNextId(Logic* lb = nullptr) {
             if (lb == nullptr) {
                 return gid++;
-            } else {
+            }
+            {
                 return lb->getNextId();
             }
         }
         [[nodiscard]] static std::string getStrRep(OpType opType);
 
         void print(std::ostream& os) const;
-        void prettyPrint(std::ostream& os, int depth = 0) const;
+        void prettyPrint(std::ostream& os, int printDepth = 0) const;
 
-        [[nodiscard]] long long getID() const { return id; }
+        [[nodiscard]] int64_t getID() const { return id; }
 
         [[nodiscard]] const std::string& getName() const { return name; }
 
-        [[nodiscard]] const std::string getConstantValue();
+        [[nodiscard]] std::string getConstantValue() const;
 
         [[nodiscard]] OpType getOpType() const { return opType; }
 
-        [[nodiscard]] CType getCType() const { return c_type; }
+        [[nodiscard]] CType getCType() const { return cType; }
 
         [[nodiscard]] const std::vector<LogicTerm>& getNodes() const { return nodes; }
 
@@ -110,20 +110,20 @@ namespace logicbase {
 
         [[nodiscard]] double getFloatValue() const;
 
-        [[nodiscard]] unsigned long long getBitVectorValue() const;
+        [[nodiscard]] uint64_t getBitVectorValue() const;
 
-        [[nodiscard]] short getBitVectorSize() const;
+        [[nodiscard]] int16_t getBitVectorSize() const;
 
         [[nodiscard]] std::string getValue() const;
 
-        [[nodiscard]] unsigned long long getDepth() const { return depth; }
+        [[nodiscard]] uint64_t getDepth() const { return depth; }
 
         [[nodiscard]] bool deepEquals(const TermImpl& other) const;
 
         [[nodiscard]] Logic* getLogic() const { return lb; }
 
-        static long long gid;
-        static long long getGID() { return gid; }
+        static int64_t gid;
+        static int64_t getGID() { return gid; }
 
         static void reset() { gid = 0; }
     };

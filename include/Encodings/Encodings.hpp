@@ -18,68 +18,71 @@
 #include <utility>
 #include <vector>
 
-using namespace logicbase;
+namespace encodings {
 
-struct NestedVar {
-    explicit NestedVar(const LogicTerm& var):
-        var(var), list(){};
-    NestedVar(const LogicTerm& var, std::vector<NestedVar> list):
-        var(var), list(std::move(list)) {}
-    LogicTerm              var = LogicTerm::noneTerm();
-    std::vector<NestedVar> list;
-};
+    using namespace logicbase;
 
-struct WeightedVar {
-    WeightedVar(const LogicTerm& var, int weight):
-        var(var), weight(weight) {}
-    LogicTerm var    = LogicTerm::noneTerm();
-    int       weight = 0;
-};
-inline bool operator<(const WeightedVar& rhs, const WeightedVar& lhs) {
-    return rhs.weight < lhs.weight;
-}
-inline bool operator==(const WeightedVar& rhs, const WeightedVar& lhs) {
-    return rhs.weight == lhs.weight && rhs.var.getID() == lhs.var.getID();
-}
+    struct NestedVar {
+        explicit NestedVar(const LogicTerm& var):
+            var(var), list(){};
+        NestedVar(const LogicTerm& var, std::vector<NestedVar> list):
+            var(var), list(std::move(list)) {}
+        LogicTerm              var = LogicTerm::noneTerm();
+        std::vector<NestedVar> list;
+    };
 
-enum class Type { Uninitialized,
-                  AuxVar,
-                  ProgramVar };
-struct SavedLit {
-    SavedLit():
-        type(Type::Uninitialized), var(LogicTerm::noneTerm()) {}
-    SavedLit(Type type, const LogicTerm& var):
-        type(type), var(var) {}
-    Type      type = Type::Uninitialized;
-    LogicTerm var  = LogicTerm::noneTerm();
-};
+    struct WeightedVar {
+        WeightedVar(const LogicTerm& var, int weight):
+            var(var), weight(weight) {}
+        LogicTerm var    = LogicTerm::noneTerm();
+        int       weight = 0;
+    };
+    inline bool operator<(const WeightedVar& rhs, const WeightedVar& lhs) {
+        return rhs.weight < lhs.weight;
+    }
+    inline bool operator==(const WeightedVar& rhs, const WeightedVar& lhs) {
+        return rhs.weight == lhs.weight && rhs.var.getID() == lhs.var.getID();
+    }
 
-LogicTerm AtMostOneCMDR(const std::vector<NestedVar>& subords,
-                        const LogicTerm& cmdrVar, LogicBlock* logic);
+    enum class Type { Uninitialized,
+                      AuxVar,
+                      ProgramVar };
+    struct SavedLit {
+        SavedLit():
+            type(Type::Uninitialized), var(LogicTerm::noneTerm()) {}
+        SavedLit(Type type, const LogicTerm& var):
+            type(type), var(var) {}
+        Type      type = Type::Uninitialized;
+        LogicTerm var  = LogicTerm::noneTerm();
+    };
 
-LogicTerm ExactlyOneCMDR(const std::vector<NestedVar>& subords,
-                         const LogicTerm& cmdrVar, LogicBlock* logic);
+    LogicTerm atMostOneCmdr(const std::vector<NestedVar>& subords,
+                            const LogicTerm& cmdrVar, LogicBlock* logic);
 
-LogicTerm NaiveExactlyOne(const std::vector<LogicTerm>& clauseVars);
+    LogicTerm exactlyOneCmdr(const std::vector<NestedVar>& subords,
+                             const LogicTerm& cmdrVar, LogicBlock* logic);
 
-LogicTerm NaiveAtMostOne(const std::vector<LogicTerm>& clauseVars);
+    LogicTerm naiveExactlyOne(const std::vector<LogicTerm>& clauseVars);
 
-LogicTerm NaiveAtLeastOne(const std::vector<LogicTerm>& clauseVars);
+    LogicTerm naiveAtMostOne(const std::vector<LogicTerm>& clauseVars);
 
-LogicTerm AtMostOneBiMander(const std::vector<LogicTerm>& vars, LogicBlock* logic);
+    LogicTerm naiveAtLeastOne(const std::vector<LogicTerm>& clauseVars);
 
-std::vector<NestedVar> groupVars(const std::vector<LogicTerm>& vars,
-                                 std::size_t                   maxSize);
-std::vector<NestedVar> groupVarsAux(const std::vector<NestedVar>& vars,
-                                    std::size_t                   maxSize);
+    LogicTerm atMostOneBiMander(const std::vector<LogicTerm>& vars, LogicBlock* logic);
 
-std::vector<std::vector<LogicTerm>>
-groupVarsBimander(const std::vector<LogicTerm>& vars, std::size_t groupCount);
+    std::vector<NestedVar> groupVars(const std::vector<LogicTerm>& vars,
+                                     std::size_t                   maxSize);
+    std::vector<NestedVar> groupVarsAux(const std::vector<NestedVar>& vars,
+                                        std::size_t                   maxSize);
 
-LogicTerm BuildBDD(const std::set<WeightedVar>&  inputLiterals,
-                   const std::vector<LogicTerm>& vars, int leq, LogicBlock* lb);
-LogicTerm BuildBDD(unsigned long index, long curSum, long maxSum, long k,
-                   const std::vector<WeightedVar>& inputLiterals,
-                   const std::vector<LogicTerm>& vars, LogicTerm& formula,
-                   LogicTerm& true_lit, LogicBlock* lb);
+    std::vector<std::vector<LogicTerm>>
+    groupVarsBimander(const std::vector<LogicTerm>& vars, std::size_t groupCount);
+
+    [[maybe_unused]] LogicTerm BuildBDD(const std::set<WeightedVar>&  inputLiterals,
+                                        const std::vector<LogicTerm>& vars, int leq, LogicBlock* lb);
+    LogicTerm                  BuildBDD(uint64_t index, int64_t curSum, int64_t maxSum, int64_t k,
+                                        const std::vector<WeightedVar>& inputLiterals,
+                                        const std::vector<LogicTerm>& vars, LogicTerm& formula,
+                                        LogicTerm& trueLit, LogicBlock* lb);
+} // namespace encodings
 #endif //QMAP_ENCODINGS_HPP

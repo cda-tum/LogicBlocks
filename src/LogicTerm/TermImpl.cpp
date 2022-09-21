@@ -10,15 +10,15 @@ TermImpl::TermImpl(OpType ot, const std::initializer_list<LogicTerm>& n,
                    CType cType, Logic* lb):
     lb(lb),
     id(getNextId(lb)), depth(logicutil::getMax(n)),
-    name(getStrRep(ot)), opType(ot), bv_size(logicutil::getMaxBVSize(n)),
-    nodes(n), c_type(cType) {}
+    name(getStrRep(ot)), opType(ot), bvSize(logicutil::getMaxBVSize(n)),
+    nodes(n), cType(cType) {}
 
 TermImpl::TermImpl(OpType ot, const std::vector<LogicTerm>& n, CType cType,
                    Logic* lb):
     lb(lb),
     id(getNextId(lb)), depth(logicutil::getMax(n)),
-    name(getStrRep(ot)), opType(ot), bv_size(logicutil::getMaxBVSize(n)),
-    nodes(n), c_type(cType) {}
+    name(getStrRep(ot)), opType(ot), bvSize(logicutil::getMaxBVSize(n)),
+    nodes(n), cType(cType) {}
 
 TermImpl::TermImpl(OpType ot, const LogicTerm& a, CType cType, Logic* lb):
     TermImpl(ot, {a}, cType, lb) {}
@@ -29,33 +29,13 @@ TermImpl::TermImpl(OpType ot, const LogicTerm& a, const LogicTerm& b,
                    const LogicTerm& c, CType cType, Logic* lb):
     TermImpl(ot, {a, b, c}, cType, lb) {}
 
-TermImpl::TermImpl(const LogicTerm& other) {
-    lb       = other.getLogic();
-    id       = other.getID();
-    depth    = other.getDepth();
-    name     = other.getName();
-    opType   = other.getOpType();
-    value    = other.getBoolValue();
-    i_value  = other.getIntValue();
-    f_value  = other.getFloatValue();
-    bv_value = other.getBitVectorValue();
-    bv_size  = other.getBitVectorSize();
-    c_type   = other.getCType();
+TermImpl::TermImpl(const LogicTerm& other):
+    lb(other.getLogic()), id(other.getID()), depth(other.getDepth()), name(other.getName()), opType(other.getOpType()), value(other.getBoolValue()), iValue(other.getIntValue()), fValue(other.getFloatValue()), bvValue(other.getBitVectorValue()), bvSize(other.getBitVectorSize()), cType(other.getCType()) {
     nodes.clear();
     nodes.insert(nodes.end(), other.getNodes().begin(), other.getNodes().end());
 }
-TermImpl::TermImpl(const TermImpl& other) {
-    lb       = other.getLogic();
-    id       = other.getID();
-    depth    = other.getDepth();
-    name     = other.getName();
-    opType   = other.getOpType();
-    value    = other.getBoolValue();
-    i_value  = other.getIntValue();
-    f_value  = other.getFloatValue();
-    bv_value = other.getBitVectorValue();
-    bv_size  = other.getBitVectorSize();
-    c_type   = other.getCType();
+TermImpl::TermImpl(const TermImpl& other):
+    lb(other.getLogic()), id(other.getID()), depth(other.getDepth()), name(other.getName()), opType(other.getOpType()), value(other.getBoolValue()), iValue(other.getIntValue()), fValue(other.getFloatValue()), bvValue(other.getBitVectorValue()), bvSize(other.getBitVectorSize()), cType(other.getCType()) {
     nodes.clear();
     nodes.insert(nodes.end(), other.getNodes().begin(), other.getNodes().end());
 }
@@ -75,10 +55,10 @@ std::string TermImpl::getStrRep(OpType opType) {
         case OpType::OR:
             os << "<OR ";
             break;
-        case OpType::BIT_AND:
+        case OpType::BitAnd:
             os << "<BV_AND ";
             break;
-        case OpType::BIT_OR:
+        case OpType::BitOr:
             os << "<BV_OR ";
             break;
         case OpType::ITE:
@@ -93,10 +73,10 @@ std::string TermImpl::getStrRep(OpType opType) {
         case OpType::XOR:
             os << "<XOR ";
             break;
-        case OpType::BIT_EQ:
+        case OpType::BitEq:
             os << "<BV_EQ ";
             break;
-        case OpType::BIT_XOR:
+        case OpType::BitXor:
             os << "<BV_XOR ";
             break;
         case OpType::IMPL:
@@ -136,10 +116,10 @@ std::string TermImpl::getStrRep(OpType opType) {
 void TermImpl::print(std::ostream& os) const {
     os << getStrRep(opType);
     if (opType == OpType::Variable) {
-        os << " " << toString(c_type);
+        os << " " << toString(cType);
         os << " " << (name.empty() ? std::to_string(id) : name);
     } else if (opType == OpType::Constant) {
-        os << " " << toString(c_type);
+        os << " " << toString(cType);
         os << " " << getValue();
     } else {
         for (const auto& n: nodes) {
@@ -153,67 +133,67 @@ void TermImpl::print(std::ostream& os) const {
 }
 
 bool TermImpl::getBoolValue() const {
-    switch (c_type) {
+    switch (cType) {
         case CType::BOOL:
             return value;
         case CType::INT:
-            return i_value != 0;
+            return iValue != 0;
         case CType::REAL:
-            return f_value != 0;
+            return fValue != 0;
         case CType::BITVECTOR:
-            return bv_value != 0;
+            return bvValue != 0;
         default:
             return false;
     }
 }
 
-int TermImpl::getIntValue() const {
-    switch (c_type) {
+int32_t TermImpl::getIntValue() const {
+    switch (cType) {
         case CType::BOOL:
             return value ? 1 : 0;
         case CType::INT:
-            return i_value;
+            return iValue;
         case CType::REAL:
-            return std::floor(f_value);
+            return std::floor(fValue);
         case CType::BITVECTOR:
-            return static_cast<int>(bv_value);
+            return static_cast<int>(bvValue);
         default:
             return std::numeric_limits<int>::infinity();
     }
 }
 
 double TermImpl::getFloatValue() const {
-    switch (c_type) {
+    switch (cType) {
         case CType::BOOL:
             return value ? 1.0 : 0.0;
         case CType::INT:
-            return i_value;
+            return iValue;
         case CType::REAL:
-            return f_value;
+            return fValue;
         case CType::BITVECTOR:
-            return static_cast<double>(bv_value);
+            return static_cast<double>(bvValue);
         default:
             return std::numeric_limits<double>::infinity();
     }
 }
 
-unsigned long long TermImpl::getBitVectorValue() const {
-    switch (c_type) {
+uint64_t TermImpl::getBitVectorValue() const {
+    switch (cType) {
         case CType::BOOL:
             return value ? 1.0 : 0.0;
         case CType::INT:
-            return i_value;
+            return iValue;
         case CType::REAL:
-            return static_cast<unsigned long long>(f_value);
+            return static_cast<uint64_t>(fValue);
         case CType::BITVECTOR:
-            return bv_value & (static_cast<unsigned long long>(std::pow(2, bv_size)) - 1U);
+            return bvValue & (static_cast<uint64_t>(std::pow(2, bvSize)) - 1U);
         default:
-            return std::numeric_limits<unsigned long long>::infinity();
+            return std::numeric_limits<uint64_t>::infinity();
     }
 }
 
-short TermImpl::getBitVectorSize() const {
-    switch (c_type) {
+int16_t TermImpl::getBitVectorSize() const {
+    switch (cType) {
         case CType::BOOL:
             return 1;
         case CType::INT:
@@ -221,41 +201,51 @@ short TermImpl::getBitVectorSize() const {
         case CType::REAL:
             return 256;
         case CType::BITVECTOR:
-            return bv_size;
+            return bvSize;
         default:
-            return std::numeric_limits<short>::infinity();
+            return std::numeric_limits<int16_t>::infinity();
     }
 }
 
 std::string TermImpl::getValue() const {
-    if (c_type == CType::BOOL)
-        return std::to_string(getBoolValue());
-    if (c_type == CType::INT)
+    if (cType == CType::BOOL) {
+        return std::to_string(static_cast<int>(getBoolValue()));
+    }
+    if (cType == CType::INT) {
         return std::to_string(getIntValue());
-    if (c_type == CType::REAL)
+    }
+    if (cType == CType::REAL) {
         return std::to_string(getFloatValue());
-    if (c_type == CType::BITVECTOR) {
+    }
+    if (cType == CType::BITVECTOR) {
         return std::bitset<256U>{getBitVectorValue()}.to_string().substr(
-                256U - bv_size, bv_size);
+                256U - bvSize, bvSize);
     }
     throw std::runtime_error("Invalid CType of LogicTerm");
 }
 
 bool TermImpl::deepEquals(const TermImpl& other) const {
-    if (getOpType() == OpType::Variable && getID() == other.getID())
+    if (getOpType() == OpType::Variable && getID() == other.getID()) {
         return true;
-    if (getDepth() != other.getDepth())
+    }
+    if (getDepth() != other.getDepth()) {
         return false;
-    if (getOpType() != other.getOpType())
+    }
+    if (getOpType() != other.getOpType()) {
         return false;
-    if (getName() != other.getName())
+    }
+    if (getName() != other.getName()) {
         return false;
-    if (getNodes().size() != other.getNodes().size())
+    }
+    if (getNodes().size() != other.getNodes().size()) {
         return false;
-    if (getID() != other.getID())
+    }
+    if (getID() != other.getID()) {
         return false;
-    if (getCType() != other.getCType())
+    }
+    if (getCType() != other.getCType()) {
         return false;
+    }
     for (size_t i = 0U; i < getNodes().size(); ++i) {
         if (!getNodes()[i].deepEquals(other.getNodes()[i])) {
             return false;
@@ -263,32 +253,32 @@ bool TermImpl::deepEquals(const TermImpl& other) const {
     }
     return true;
 }
-void TermImpl::prettyPrint(std::ostream& os, int depth) const {
-    for (int i = 0; i < depth; ++i) {
+void TermImpl::prettyPrint(std::ostream& os, int32_t printDepth) const {
+    for (int32_t i = 0; i < printDepth; ++i) {
         os << "  ";
     }
     os << getStrRep(opType);
     if (opType == OpType::Variable) {
-        os << " " << toString(c_type);
+        os << " " << toString(cType);
         os << " " << (name.empty() ? std::to_string(id) : name);
     } else if (opType == OpType::Constant) {
-        os << " " << toString(c_type);
+        os << " " << toString(cType);
         os << " " << getValue();
     } else {
         os << std::endl;
         for (const auto& n: nodes) {
-            n.prettyPrint(os, depth + 1);
+            n.prettyPrint(os, printDepth + 1);
         }
     }
     if (opType != OpType::Variable && opType != OpType::Constant) {
         os << std::endl;
-        for (int i = 0; i < depth; ++i) {
+        for (int32_t i = 0; i < printDepth; ++i) {
             os << "  ";
         }
         os << ">";
         os << std::endl;
     }
 }
-const std::string TermImpl::getConstantValue() {
+std::string TermImpl::getConstantValue() const {
     return getValue();
 }

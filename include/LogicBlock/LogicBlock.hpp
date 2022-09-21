@@ -15,16 +15,16 @@ namespace logicbase {
         std::set<LogicTerm, TermDepthComparator> clauses{};
         Model*                                   model{};
         bool                                     convertWhenAssert;
-        virtual void                             internal_reset() = 0;
-        unsigned long long                       gid              = 0U;
+        virtual void                             internalReset() = 0;
+        uint64_t                                 gid             = 0U;
 
     public:
         explicit LogicBlock(bool convertWhenAssert = false):
             convertWhenAssert(convertWhenAssert) {}
         virtual ~LogicBlock() = default;
 
-        unsigned long long getNextId() override { return gid++; };
-        unsigned long long getId() override { return gid; };
+        uint64_t getNextId() override { return gid++; };
+        uint64_t getId() override { return gid; };
 
         Model* getModel() { return model; }
 
@@ -49,11 +49,11 @@ namespace logicbase {
         }
 
         LogicTerm makeVariable(const std::string& name, CType type = CType::BOOL,
-                               short bv_size = 32) {
-            if (type == CType::BITVECTOR && bv_size == 0) {
+                               int16_t bvSize = 32) {
+            if (type == CType::BITVECTOR && bvSize == 0) {
                 throw std::invalid_argument("bv_size must be > 0");
             }
-            return LogicTerm(name, type, this, bv_size);
+            return LogicTerm(name, type, this, bvSize);
         }
 
         virtual void   produceInstance() = 0;
@@ -62,7 +62,7 @@ namespace logicbase {
             delete model;
             model = nullptr;
             clauses.clear();
-            internal_reset();
+            internalReset();
             gid = 0U;
         };
 
@@ -101,7 +101,7 @@ namespace logicbase {
             model = nullptr;
             clauses.clear();
             weightedTerms.clear();
-            internal_reset();
+            internalReset();
             gid = 0U;
         };
     };

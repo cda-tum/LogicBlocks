@@ -23,12 +23,12 @@ namespace logicutil {
 
     class Param {
     public:
-        ParamType    type;
-        std::string  name;
-        std::string  strvalue = "";
-        bool         bvalue   = false;
-        double       dvalue   = 0.;
-        unsigned int uivalue  = 0;
+        ParamType   type;
+        std::string name;
+        std::string strvalue;
+        bool        bvalue  = false;
+        double      dvalue  = 0.;
+        uint32_t    uivalue = 0;
         Param(std::string name, std::string value):
             type(ParamType::STR), name(std::move(name)), strvalue(std::move(value)) {}
 
@@ -38,32 +38,32 @@ namespace logicutil {
         Param(std::string name, double value):
             type(ParamType::DOUBLE), name(std::move(name)), dvalue(value) {}
 
-        Param(std::string name, unsigned int value):
+        Param(std::string name, uint32_t value):
             type(ParamType::UINT), name(std::move(name)), uivalue(value) {}
     };
     class Params {
         std::vector<Param> params;
 
     public:
-        void addParam(std::string name, std::string value) {
+        void addParam(const std::string& name, const std::string& value) {
             params.emplace_back(name, value);
         }
-        void addParam(std::string name, bool value) {
+        void addParam(const std::string& name, bool value) {
             params.emplace_back(name, value);
         }
-        void addParam(std::string name, double value) {
+        void addParam(const std::string& name, double value) {
             params.emplace_back(name, value);
         }
-        void addParam(std::string name, unsigned int value) {
+        void addParam(const std::string& name, uint32_t value) {
             params.emplace_back(name, value);
         }
-        std::vector<Param> getParams() {
+        [[nodiscard]] std::vector<Param> getParams() const {
             return params;
         }
     };
 
-    inline void setZ3Params(z3::params& p, Params& params) {
-        for (auto param: params.getParams()) {
+    inline void setZ3Params(z3::params& p, const Params& params) {
+        for (const auto& param: params.getParams()) {
             switch (param.type) {
                 case ParamType::STR:
                     p.set(param.name.c_str(), param.strvalue.c_str());
@@ -91,7 +91,7 @@ namespace logicutil {
 #endif
     }
 
-    inline std::unique_ptr<LogicBlock> getZ3LogicBlock(bool& success, bool convertWhenAssert, Params params = Params()) {
+    inline std::unique_ptr<LogicBlock> getZ3LogicBlock(bool& success, bool convertWhenAssert, const Params& params = Params()) {
 #ifdef Z3_FOUND
         static z3::context c;
         static z3::solver  slv(c);
@@ -107,7 +107,7 @@ namespace logicutil {
 #endif
     }
 
-    inline std::unique_ptr<LogicBlockOptimizer> getZ3LogicOptimizer(bool& success, bool convertWhenAssert, Params params = Params()) {
+    inline std::unique_ptr<LogicBlockOptimizer> getZ3LogicOptimizer(bool& success, bool convertWhenAssert, const Params& params = Params()) {
 #ifdef Z3_FOUND
         static z3::context  c;
         static z3::optimize opt(c);

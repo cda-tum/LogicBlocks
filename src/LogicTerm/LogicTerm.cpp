@@ -4,22 +4,22 @@
 #include "LogicUtil/util_logicterm.hpp"
 
 namespace logicbase {
-    TermType  LogicTerm::termType                = TermType::BASE;
-    long long TermImpl::gid                      = 1;
-    bool      LogicTerm::useBitVectorConversions = false;
+    [[maybe_unused]] TermType LogicTerm::termType                = TermType::BASE;
+    int64_t                   TermImpl::gid                      = 1;
+    bool                      LogicTerm::useBitVectorConversions = false;
 
     std::shared_ptr<TermImpl> makeLogicTerm(const bool value) {
         return std::make_shared<TermImpl>(value);
     }
-    std::shared_ptr<TermImpl> makeLogicTerm(const int value) {
+    std::shared_ptr<TermImpl> makeLogicTerm(const int32_t value) {
         return std::make_shared<TermImpl>(value);
     }
     std::shared_ptr<TermImpl> makeLogicTerm(const double value) {
         return std::make_shared<TermImpl>(value);
     }
-    std::shared_ptr<TermImpl> makeLogicTerm(const unsigned long long value,
-                                            short                    bv_size) {
-        return std::make_shared<TermImpl>(value, bv_size);
+    std::shared_ptr<TermImpl> makeLogicTerm(const uint64_t value,
+                                            int16_t        bvSize) {
+        return std::make_shared<TermImpl>(value, bvSize);
     }
     std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const std::string& name,
                                             CType cType, Logic* lb) {
@@ -27,13 +27,13 @@ namespace logicbase {
     }
 
     std::shared_ptr<TermImpl> makeLogicTerm(const char* name = "", CType cType,
-                                            Logic* lb, short bv_size) {
-        return std::make_shared<TermImpl>(name, cType, lb, bv_size);
+                                            Logic* lb, int16_t bvSize) {
+        return std::make_shared<TermImpl>(name, cType, lb, bvSize);
     }
 
     std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm& a,
                                             const LogicTerm& b) {
-        Logic* lb = logicutil::getValidLogic_ptr(a, b);
+        Logic* lb = logicutil::getValidLogicPtr(a, b);
 
         if (logicutil::isConst(a) || logicutil::isConst(b)) {
             return logicutil::combineConst(a, b, opType, lb);
@@ -48,7 +48,7 @@ namespace logicbase {
     std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm& a,
                                             const LogicTerm& b,
                                             const LogicTerm& c) {
-        Logic* lb          = logicutil::getValidLogic_ptr(a, b, c);
+        Logic* lb          = logicutil::getValidLogicPtr(a, b, c);
         CType  targetCType = logicutil::getTargetCType(b, c, opType);
         return std::make_shared<TermImpl>(opType, a, b, c, targetCType, lb);
     }
@@ -65,7 +65,7 @@ namespace logicbase {
         pImpl->print(os);
     }
 
-    long long LogicTerm::getID() const {
+    int64_t LogicTerm::getID() const {
         return pImpl->getID();
     }
 
@@ -85,7 +85,7 @@ namespace logicbase {
         return pImpl->getBoolValue();
     }
 
-    int LogicTerm::getIntValue() const {
+    int32_t LogicTerm::getIntValue() const {
         return pImpl->getIntValue();
     }
 
@@ -93,11 +93,11 @@ namespace logicbase {
         return pImpl->getFloatValue();
     }
 
-    unsigned long long LogicTerm::getBitVectorValue() const {
+    uint64_t LogicTerm::getBitVectorValue() const {
         return pImpl->getBitVectorValue();
     }
 
-    short LogicTerm::getBitVectorSize() const {
+    int16_t LogicTerm::getBitVectorSize() const {
         return pImpl->getBitVectorSize();
     }
 
@@ -113,19 +113,20 @@ namespace logicbase {
         return this->pImpl->deepEquals(*other.getImplementation());
     }
 
-    unsigned long long LogicTerm::getDepth() const {
+    uint64_t LogicTerm::getDepth() const {
         return pImpl->getDepth();
     }
 
-    unsigned long long LogicTerm::getMaxChildrenDepth() const {
-        unsigned long long max = 0;
+    uint64_t LogicTerm::getMaxChildrenDepth() const {
+        uint64_t max = 0;
         for (const LogicTerm& t: pImpl->getNodes()) {
-            unsigned long long d = t.getMaxChildrenDepth();
-            if (d > max)
+            uint64_t d = t.getMaxChildrenDepth();
+            if (d > max) {
                 max = d;
+            }
         }
         return max + 1;
-    };
+    }
 
     Logic* LogicTerm::getLogic() const {
         return pImpl->getLogic();
@@ -145,7 +146,7 @@ namespace logicbase {
                 return LogicTerm::noneTerm();
         }
     }
-    void LogicTerm::prettyPrint(std::ostream& os, int depth) const {
+    void LogicTerm::prettyPrint(std::ostream& os, int32_t depth) const {
         pImpl->prettyPrint(os, depth);
     }
     std::string LogicTerm::getConstantValue() const {

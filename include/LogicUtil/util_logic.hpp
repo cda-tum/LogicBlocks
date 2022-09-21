@@ -25,58 +25,63 @@ namespace logicutil {
             op == OpType::OR || op == OpType::GT || op == OpType::LT || op == OpType::GTE || op == OpType::LTE) {
             return CType::BOOL;
         }
-        if (a.getCType() == CType::REAL || b.getCType() == CType::REAL)
+        if (a.getCType() == CType::REAL || b.getCType() == CType::REAL) {
             return CType::REAL;
-        else if (a.getCType() == CType::BITVECTOR || b.getCType() == CType::BITVECTOR)
+        }
+        if (a.getCType() == CType::BITVECTOR || b.getCType() == CType::BITVECTOR) {
             return CType::BITVECTOR;
-        else if (a.getCType() == CType::INT || b.getCType() == CType::INT)
+        }
+        if (a.getCType() == CType::INT || b.getCType() == CType::INT) {
             return CType::INT;
-        else
-            return CType::BOOL;
+        }
+        return CType::BOOL;
     }
     inline CType getTargetCType(CType targetType, const LogicTerm& b) {
-        if (targetType == CType::REAL || b.getCType() == CType::REAL)
+        if (targetType == CType::REAL || b.getCType() == CType::REAL) {
             return CType::REAL;
-        else if (targetType == CType::BITVECTOR || b.getCType() == CType::BITVECTOR)
+        }
+        if (targetType == CType::BITVECTOR || b.getCType() == CType::BITVECTOR) {
             return CType::BITVECTOR;
-        else if (targetType == CType::INT || b.getCType() == CType::INT)
+        }
+        if (targetType == CType::INT || b.getCType() == CType::INT) {
             return CType::INT;
-        else
-            return CType::BOOL;
+        }
+        return CType::BOOL;
     }
 
-    inline Logic* getValidLogic_ptr(const LogicTerm& a, const LogicTerm& b) {
+    inline Logic* getValidLogicPtr(const LogicTerm& a, const LogicTerm& b) {
         if (isConst(a) || isConst(b)) {
-            if (!isConst(a))
+            if (!isConst(a)) {
                 return a.getLogic();
-            else if (!isConst(b))
+            }
+            if (!isConst(b)) {
                 return b.getLogic();
-            else
-                return nullptr;
-        } else {
-            if (a.getLogic() == b.getLogic())
-                return a.getLogic();
-            else
-                throw std::runtime_error("Logic mismatch");
+            }
+            return nullptr;
         }
+        if (a.getLogic() == b.getLogic()) {
+            return a.getLogic();
+        }
+        throw std::runtime_error("Logic mismatch");
     }
-    inline Logic* getValidLogic_ptr(const LogicTerm& a, const LogicTerm& b,
-                                    const LogicTerm& c) {
+    inline Logic* getValidLogicPtr(const LogicTerm& a, const LogicTerm& b,
+                                   const LogicTerm& c) {
         if (isConst(a) || isConst(b) || isConst(c)) {
-            if (!isConst(a))
+            if (!isConst(a)) {
                 return a.getLogic();
-            else if (!isConst(b))
+            }
+            if (!isConst(b)) {
                 return b.getLogic();
-            else if (!isConst(c))
+            }
+            if (!isConst(c)) {
                 return c.getLogic();
-            else
-                return nullptr;
-        } else {
-            if (a.getLogic() == b.getLogic() && b.getLogic() == c.getLogic())
-                return a.getLogic();
-            else
-                throw std::runtime_error("Logic mismatch");
+            }
+            return nullptr;
         }
+        if (a.getLogic() == b.getLogic() && b.getLogic() == c.getLogic()) {
+            return a.getLogic();
+        }
+        throw std::runtime_error("Logic mismatch");
     }
     inline std::vector<LogicTerm> getFlatTerms(const LogicTerm& t,
                                                OpType           op = OpType::AND) {
@@ -104,7 +109,8 @@ namespace logicutil {
             if (it.getCType() == CType::REAL) {
                 res = CType::REAL;
                 break;
-            } else if (it.getCType() == CType::BITVECTOR) {
+            }
+            if (it.getCType() == CType::BITVECTOR) {
                 res = CType::BITVECTOR;
                 break;
             }
@@ -113,11 +119,9 @@ namespace logicutil {
     }
 
     inline bool allBool(const std::vector<LogicTerm>& terms) {
-        for (const LogicTerm& it: terms) {
-            if (it.getCType() != CType::BOOL)
-                return false;
-        }
-        return true;
+        return std::all_of(terms.begin(), terms.end(), [](const LogicTerm& it) {
+            return it.getCType() == CType::BOOL;
+        });
     }
 
 }; // namespace logicutil

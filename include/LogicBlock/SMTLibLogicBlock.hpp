@@ -8,66 +8,69 @@
 #include <map>
 #include <memory>
 
-using namespace logicbase;
+namespace smtliblogic {
 
-enum class SMTLibLogic {
-    NONE,
-    QF_UF,
-    QF_BV,
-    QF_IDL,
-    QF_RDL,
-    QF_LRA,
-    QF_LIA,
-    QF_NIA,
-    QF_NRA,
-    QF_UFLRA,
-    QF_UFLIA,
-    QF_UFBV,
-    QF_UFIDL,
-    QF_UFRDL,
-    QF_UFNIA,
-    QF_UFNRA
-};
+    using namespace logicbase;
 
-class SMTLogicBlock: public logicbase::LogicBlock {
-protected:
-    std::map<unsigned long long, LogicTerm> constants;
-    std::unordered_set<SMTLibLogic>         requiredLogics;
-    SMTLibLogic                             outputLogic;
-    std::ostream&                           out;
-    void                                    internal_reset() override;
-
-public:
-    explicit SMTLogicBlock(bool convertWhenAssert = false, std::ostream& out = std::cout):
-        logicbase::LogicBlock(convertWhenAssert), out(out) {}
-
-    void   assertFormula(const LogicTerm& a) override;
-    void   produceInstance() override;
-    Result solve() override;
-    void   reset() override {
-        delete model;
-        model = nullptr;
-        clauses.clear();
-        internal_reset();
-        gid = 0;
+    enum class SMTLibLogic {
+        NONE,
+        QF_UF,
+        QF_BV,
+        QF_IDL,
+        QF_RDL,
+        QF_LRA,
+        QF_LIA,
+        QF_NIA,
+        QF_NRA,
+        QF_UFLRA,
+        QF_UFLIA,
+        QF_UFBV,
+        QF_UFIDL,
+        QF_UFRDL,
+        QF_UFNIA,
+        QF_UFNRA
     };
 
-    void setOutputLogic(SMTLibLogic logic) { outputLogic = logic; }
-    void addRequiredLogic(SMTLibLogic logic) { requiredLogics.insert(logic); }
+    class SMTLogicBlock: public logicbase::LogicBlock {
+    protected:
+        std::map<uint64_t, LogicTerm>   constants;
+        std::unordered_set<SMTLibLogic> requiredLogics;
+        SMTLibLogic                     outputLogic;
+        std::ostream&                   out;
+        void                            internalReset() override;
 
-private:
-    SMTLibLogic        getLogicForTerm(const LogicTerm& a);
-    static SMTLibLogic getMinimumLogic(const SMTLibLogic& a, const SMTLibLogic& b);
+    public:
+        explicit SMTLogicBlock(bool convertWhenAssert = false, std::ostream& out = std::cout):
+            logicbase::LogicBlock(convertWhenAssert), out(out) {}
 
-    void               collectVariables(const LogicTerm& a);
-    static std::string getConstantString(const LogicTerm& a);
-    static std::string getTypeString(const LogicTerm& a);
+        void   assertFormula(const LogicTerm& a) override;
+        void   produceInstance() override;
+        Result solve() override;
+        void   reset() override {
+            delete model;
+            model = nullptr;
+            clauses.clear();
+            internalReset();
+            gid = 0;
+        };
 
-    static std::string writeConstantDefinition(const LogicTerm& a);
+        void setOutputLogic(SMTLibLogic logic) { outputLogic = logic; }
+        void addRequiredLogic(SMTLibLogic logic) { requiredLogics.insert(logic); }
 
-    static std::string writeLogicDefinition(const SMTLibLogic& logic);
+    private:
+        SMTLibLogic        getLogicForTerm(const LogicTerm& a);
+        static SMTLibLogic getMinimumLogic(const SMTLibLogic& a, const SMTLibLogic& b);
 
-    std::string convert(const LogicTerm& a);
-};
+        void               collectVariables(const LogicTerm& a);
+        static std::string getConstantString(const LogicTerm& a);
+        static std::string getTypeString(const LogicTerm& a);
 
-#endif
+        static std::string writeConstantDefinition(const LogicTerm& a);
+
+        static std::string writeLogicDefinition(const SMTLibLogic& logic);
+
+        std::string convert(const LogicTerm& a);
+    };
+
+} // namespace smtliblogic
+#endif // SMTLIBLOGIC_H

@@ -48,10 +48,10 @@ namespace logicbase {
         CALL,
         GET,
         SET,
-        BIT_AND,
-        BIT_OR,
-        BIT_EQ,
-        BIT_XOR
+        BitAnd,
+        BitOr,
+        BitEq,
+        BitXor
     };
 
     enum class TermType { BASE,
@@ -104,13 +104,13 @@ namespace logicbase {
                 return "GTE";
             case OpType::LTE:
                 return "LTE";
-            case OpType::BIT_AND:
+            case OpType::BitAnd:
                 return "BIT_AND";
-            case OpType::BIT_OR:
+            case OpType::BitOr:
                 return "BIT_OR";
-            case OpType::BIT_EQ:
+            case OpType::BitEq:
                 return "BIT_EQ";
-            case OpType::BIT_XOR:
+            case OpType::BitXor:
                 return "BIT_XOR";
             case OpType::CALL:
                 return "CALL";
@@ -144,21 +144,28 @@ namespace logicbase {
         }
         return "Error";
     }
-    inline CType CTypeFromString(const std::string& ctype) {
-        if (ctype == "B")
+    inline CType cTypeFromString(const std::string& ctype) {
+        if (ctype == "B") {
             return CType::BOOL;
-        if (ctype == "BV")
+        }
+        if (ctype == "BV") {
             return CType::BITVECTOR;
-        if (ctype == "I")
+        }
+        if (ctype == "I") {
             return CType::INT;
-        if (ctype == "F")
+        }
+        if (ctype == "F") {
             return CType::REAL;
-        if (ctype == "F(...)")
+        }
+        if (ctype == "F(...)") {
             return CType::FUNCTION;
-        if (ctype == "A[...]")
+        }
+        if (ctype == "A[...]") {
             return CType::ARRAY;
-        if (ctype == "S{...}")
+        }
+        if (ctype == "S{...}") {
             return CType::SET;
+        }
         return CType::BOOL;
     }
 
@@ -244,10 +251,10 @@ namespace logicbase {
                 return CType::INT;
             case OpType::ITE:
                 return CType::BOOL;
-            case OpType::BIT_AND:
-            case OpType::BIT_OR:
-            case OpType::BIT_EQ:
-            case OpType::BIT_XOR:
+            case OpType::BitAnd:
+            case OpType::BitOr:
+            case OpType::BitEq:
+            case OpType::BitXor:
                 return CType::BITVECTOR;
             default:
                 return CType::BOOL;
@@ -263,30 +270,30 @@ namespace logicbase {
 
     class Logic {
     public:
-        virtual unsigned long long getNextId() = 0;
-        virtual unsigned long long getId()     = 0;
+        virtual uint64_t getNextId() = 0;
+        virtual uint64_t getId()     = 0;
     };
 
     class TermInterface {
     public:
         virtual ~TermInterface()                                                                     = default;
-        [[nodiscard]] virtual long long                     getID() const                            = 0;
+        [[nodiscard]] virtual int64_t                       getID() const                            = 0;
         [[nodiscard]] virtual const std::vector<LogicTerm>& getNodes() const                         = 0;
         [[nodiscard]] virtual OpType                        getOpType() const                        = 0;
         [[nodiscard]] virtual CType                         getCType() const                         = 0;
         [[nodiscard]] virtual bool                          getBoolValue() const                     = 0;
         [[nodiscard]] virtual int                           getIntValue() const                      = 0;
         [[nodiscard]] virtual double                        getFloatValue() const                    = 0;
-        [[nodiscard]] virtual unsigned long long            getBitVectorValue() const                = 0;
-        [[nodiscard]] virtual short                         getBitVectorSize() const                 = 0;
+        [[nodiscard]] virtual uint64_t                      getBitVectorValue() const                = 0;
+        [[nodiscard]] virtual int16_t                       getBitVectorSize() const                 = 0;
         [[nodiscard]] virtual const std::string&            getName() const                          = 0;
         [[nodiscard]] virtual std::string                   getConstantValue() const                 = 0;
         [[nodiscard]] virtual Logic*                        getLogic() const                         = 0;
         [[nodiscard]] virtual std::shared_ptr<TermImpl>     getImplementation() const                = 0;
         [[nodiscard]] virtual bool                          deepEquals(const LogicTerm& other) const = 0;
         virtual void                                        print(std::ostream& os) const            = 0;
-        [[nodiscard]] virtual unsigned long long            getDepth() const                         = 0;
-        [[nodiscard]] virtual unsigned long long            getMaxChildrenDepth() const              = 0;
+        [[nodiscard]] virtual uint64_t                      getDepth() const                         = 0;
+        [[nodiscard]] virtual uint64_t                      getMaxChildrenDepth() const              = 0;
     };
 
     struct TermHash {
@@ -330,20 +337,22 @@ namespace logicbase {
                  t2.getOpType() == OpType::Constant) ||
                 t1.getDepth() == t2.getDepth()) {
                 return t1.getID() > t2.getID();
-            } else {
+            }
+            {
                 return t1.getDepth() > t2.getDepth();
             }
         }
     };
 
-    struct UnorderedLongHash {
-        std::size_t operator()(const std::unordered_set<long long>& t) const {
+    struct Unorderedint64THash {
+        std::size_t operator()(const std::unordered_set<int64_t>& t) const {
             std::size_t result{};
-            for (const auto& item: t)
-                result += std::numeric_limits<unsigned long>::max() * item;
+            for (const auto& item: t) {
+                result += std::numeric_limits<uint64_t>::max() * item;
+            }
             return result;
         }
-        bool operator()(const std::unordered_set<long long>& t1, const std::unordered_set<long long>& t2) const {
+        bool operator()(const std::unordered_set<int64_t>& t1, const std::unordered_set<int64_t>& t2) const {
             return t1 == t2;
         }
     };
