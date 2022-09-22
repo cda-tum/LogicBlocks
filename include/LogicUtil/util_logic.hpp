@@ -118,12 +118,6 @@ namespace logicutil {
         return res;
     }
 
-    inline bool allBool(const std::vector<LogicTerm>& terms) {
-        return std::all_of(terms.begin(), terms.end(), [](const LogicTerm& it) {
-            return it.getCType() == CType::BOOL;
-        });
-    }
-
-}; // namespace logicutil
+} // namespace logicutil
 
 #endif // UTIL_LOGIC_H
