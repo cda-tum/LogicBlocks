@@ -68,6 +68,19 @@ namespace logicbase {
         ERRORTYPE
     };
 
+    inline std::string toString(Result result) {
+        switch (result) {
+            case Result::SAT:
+                return "SAT";
+            case Result::UNSAT:
+                return "UNSAT";
+            case Result::NDEF:
+                return "NDEF";
+            default:
+                return "NDEF";
+        }
+    }
+
     inline std::string toString(OpType opType) {
         switch (opType) {
             case OpType::Variable:
