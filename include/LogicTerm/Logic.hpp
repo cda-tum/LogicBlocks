@@ -68,6 +68,16 @@ namespace logicbase {
         ERRORTYPE
     };
 
+    [[maybe_unused]] static Result resultFromString(std::string result) {
+        if (result == "sat") {
+            return Result::SAT;
+        } else if (result == "unsat") {
+            return Result::UNSAT;
+        } else {
+            return Result::NDEF;
+        }
+    }
+
     inline std::string toString(Result result) {
         switch (result) {
             case Result::SAT:
