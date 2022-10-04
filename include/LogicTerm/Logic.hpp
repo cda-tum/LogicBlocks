@@ -280,6 +280,7 @@ namespace logicbase {
     using LogicVector   = std::vector<LogicTerm>;
     using LogicMatrix   = std::vector<LogicVector>;
     using LogicMatrix3D = std::vector<LogicMatrix>;
+    using LogicMatrix4D = std::vector<LogicMatrix3D>;
 
     class Logic {
     public:
