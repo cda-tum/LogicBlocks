@@ -301,24 +301,24 @@ namespace logicbase {
 
     class TermInterface {
     public:
-        virtual ~TermInterface()                                                                     = default;
-        [[nodiscard]] virtual int64_t                       getID() const                            = 0;
-        [[nodiscard]] virtual const std::vector<LogicTerm>& getNodes() const                         = 0;
-        [[nodiscard]] virtual OpType                        getOpType() const                        = 0;
-        [[nodiscard]] virtual CType                         getCType() const                         = 0;
-        [[nodiscard]] virtual bool                          getBoolValue() const                     = 0;
-        [[nodiscard]] virtual int                           getIntValue() const                      = 0;
-        [[nodiscard]] virtual double                        getFloatValue() const                    = 0;
-        [[nodiscard]] virtual uint64_t                      getBitVectorValue() const                = 0;
-        [[nodiscard]] virtual int16_t                       getBitVectorSize() const                 = 0;
-        [[nodiscard]] virtual const std::string&            getName() const                          = 0;
-        [[nodiscard]] virtual std::string                   getConstantValue() const                 = 0;
-        [[nodiscard]] virtual Logic*                        getLogic() const                         = 0;
-        [[nodiscard]] virtual std::shared_ptr<TermImpl>     getImplementation() const                = 0;
+        virtual ~TermInterface()                                                                         = default;
+        [[nodiscard]] virtual int64_t                       getID() const                                = 0;
+        [[nodiscard]] virtual const std::vector<LogicTerm>& getNodes() const                             = 0;
+        [[nodiscard]] virtual OpType                        getOpType() const                            = 0;
+        [[nodiscard]] virtual CType                         getCType() const                             = 0;
+        [[nodiscard]] virtual bool                          getBoolValue() const                         = 0;
+        [[nodiscard]] virtual int                           getIntValue() const                          = 0;
+        [[nodiscard]] virtual double                        getFloatValue() const                        = 0;
+        [[nodiscard]] virtual uint64_t                      getBitVectorValue() const                    = 0;
+        [[nodiscard]] virtual int16_t                       getBitVectorSize() const                     = 0;
+        [[nodiscard]] virtual const std::string&            getName() const                              = 0;
+        [[nodiscard]] virtual std::string                   getConstantValue() const                     = 0;
+        [[nodiscard]] virtual Logic*                        getLogic() const                             = 0;
+        [[nodiscard]] virtual std::shared_ptr<TermImpl>     getImplementation() const                    = 0;
         [[nodiscard]] virtual bool                          deepEquals(const TermInterface& other) const = 0;
-        virtual void                                        print(std::ostream& os) const            = 0;
-        [[nodiscard]] virtual uint64_t                      getDepth() const                         = 0;
-        [[nodiscard]] virtual uint64_t                      getMaxChildrenDepth() const              = 0;
+        virtual void                                        print(std::ostream& os) const                = 0;
+        [[nodiscard]] virtual uint64_t                      getDepth() const                             = 0;
+        [[nodiscard]] virtual uint64_t                      getMaxChildrenDepth() const                  = 0;
     };
 
     struct TermHash {
