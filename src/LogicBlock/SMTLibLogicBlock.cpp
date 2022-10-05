@@ -27,7 +27,7 @@ namespace smtliblogic {
     }
 
     Result SMTLogicBlock::solve() {
-        return Result::SAT;
+        return Result::NDEF;
     }
 
     void SMTLogicBlock::internalReset() {

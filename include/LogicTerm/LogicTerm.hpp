@@ -251,7 +251,7 @@ namespace logicbase {
         [[nodiscard]] bool deepEquals(const TermInterface& other) const override;
 
         void print(std::ostream& os) const override;
-        void prettyPrint(std::ostream& os, int depth = 0) const;
+        void prettyPrint(std::ostream& os, int depth = 0, bool isNeg = false, bool printNL = false, bool lastNL = false) const;
 
         [[nodiscard]] uint64_t getDepth() const override;
 

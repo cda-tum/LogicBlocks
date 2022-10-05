@@ -146,8 +146,8 @@ namespace logicbase {
                 return LogicTerm::noneTerm();
         }
     }
-    void LogicTerm::prettyPrint(std::ostream& os, int32_t depth) const {
-        pImpl->prettyPrint(os, depth);
+    void LogicTerm::prettyPrint(std::ostream& os, int32_t depth, bool isNeg, bool printNL, bool lastNL) const {
+        pImpl->prettyPrint(os, depth, isNeg, printNL, lastNL);
     }
     std::string LogicTerm::getConstantValue() const {
         return pImpl->getConstantValue();

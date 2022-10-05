@@ -44,7 +44,7 @@ std::string TermImpl::getStrRep(OpType opType) {
     std::stringstream os;
     switch (opType) {
         case OpType::Constant:
-            os << "<CONST";
+            os << "CONST";
             break;
         case OpType::Variable:
             os << "VAR";
@@ -250,9 +250,17 @@ bool TermImpl::deepEquals(const TermImpl& other) const {
     }
     return this->getID() == other.getID();
 }
-void TermImpl::prettyPrint(std::ostream& os, int32_t printDepth) const {
-    for (int32_t i = 0; i < printDepth; ++i) {
-        os << "  ";
+void TermImpl::prettyPrint(std::ostream& os, int32_t printDepth, bool isNeg, bool printNL, bool lastNL) const {
+    if (!isNeg) {
+        for (int32_t i = 0; i < printDepth; ++i) {
+            os << "  ";
+        }
+    }
+    if (opType != OpType::Variable && opType != OpType::Constant && opType != OpType::NEG && printNL) {
+        os << std::endl;
+        for (int32_t i = 0; i < printDepth; ++i) {
+            os << "  ";
+        }
     }
     os << getStrRep(opType);
     if (opType == OpType::Variable) {
@@ -262,17 +270,25 @@ void TermImpl::prettyPrint(std::ostream& os, int32_t printDepth) const {
         os << " " << toString(cType);
         os << " " << getValue();
     } else {
-        os << std::endl;
-        for (const auto& n: nodes) {
-            n.prettyPrint(os, printDepth + 1);
+        if (opType != OpType::NEG) {
+            os << std::endl;
+        }
+        for (auto i = 0U; i < nodes.size(); ++i) {
+            nodes[i].prettyPrint(os, printDepth + 1, opType == OpType::NEG, i != 0, i != nodes.size() - 1);
         }
     }
-    if (opType != OpType::Variable && opType != OpType::Constant) {
+    if (opType != OpType::Variable && opType != OpType::Constant && opType != OpType::NEG) {
         os << std::endl;
         for (int32_t i = 0; i < printDepth; ++i) {
             os << "  ";
         }
-        os << std::endl;
+        os << ">";
+        if (lastNL) {
+            os << std::endl;
+        }
+    }
+    if (opType == OpType::NEG) {
+        os << " >";
     }
 }
 std::string TermImpl::getConstantValue() const {
