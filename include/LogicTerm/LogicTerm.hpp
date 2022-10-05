@@ -248,7 +248,7 @@ namespace logicbase {
         [[nodiscard]] std::shared_ptr<TermImpl>     getImplementation() const override;
         [[nodiscard]] Logic*                        getLogic() const override;
 
-        [[nodiscard]] bool deepEquals(const LogicTerm& other) const override;
+        [[nodiscard]] bool deepEquals(const TermInterface& other) const override;
 
         void print(std::ostream& os) const override;
         void prettyPrint(std::ostream& os, int depth = 0) const;

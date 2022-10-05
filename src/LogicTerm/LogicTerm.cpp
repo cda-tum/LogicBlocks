@@ -109,7 +109,7 @@ namespace logicbase {
         return pImpl;
     }
 
-    bool LogicTerm::deepEquals(const LogicTerm& other) const {
+    bool LogicTerm::deepEquals(const TermInterface& other) const {
         return this->pImpl->deepEquals(*other.getImplementation());
     }
 

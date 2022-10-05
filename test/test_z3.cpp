@@ -616,7 +616,7 @@ TEST(TestZ3, AMOAndExactlyOneCMDR) {
     using namespace logicbase;
     using namespace encodings;
 
-    int n = 11;
+    int n = 22;
 
     z3::context ctx{};
     z3::solver  solver{ctx};

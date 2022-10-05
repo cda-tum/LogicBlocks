@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cstdarg>
 #include <functional>
+#include <iostream>
 #include <limits>
 #include <memory>
 #include <ostream>
@@ -314,7 +315,7 @@ namespace logicbase {
         [[nodiscard]] virtual std::string                   getConstantValue() const                 = 0;
         [[nodiscard]] virtual Logic*                        getLogic() const                         = 0;
         [[nodiscard]] virtual std::shared_ptr<TermImpl>     getImplementation() const                = 0;
-        [[nodiscard]] virtual bool                          deepEquals(const LogicTerm& other) const = 0;
+        [[nodiscard]] virtual bool                          deepEquals(const TermInterface& other) const = 0;
         virtual void                                        print(std::ostream& os) const            = 0;
         [[nodiscard]] virtual uint64_t                      getDepth() const                         = 0;
         [[nodiscard]] virtual uint64_t                      getMaxChildrenDepth() const              = 0;
@@ -346,7 +347,7 @@ namespace logicbase {
                         return false;
                 }
             } else {
-                return t1.getID() == t2.getID();
+                return t1.deepEquals(t2);
             }
         }
     };

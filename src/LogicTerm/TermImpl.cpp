@@ -240,9 +240,9 @@ bool TermImpl::deepEquals(const TermImpl& other) const {
     if (getNodes().size() != other.getNodes().size()) {
         return false;
     }
-    if (getID() != other.getID()) {
-        return false;
-    }
+//    if (getID() != other.getID()) {
+//        return false;
+//    }
     if (getCType() != other.getCType()) {
         return false;
     }
@@ -275,7 +275,6 @@ void TermImpl::prettyPrint(std::ostream& os, int32_t printDepth) const {
         for (int32_t i = 0; i < printDepth; ++i) {
             os << "  ";
         }
-        os << ">";
         os << std::endl;
     }
 }

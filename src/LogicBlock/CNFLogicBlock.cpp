@@ -78,15 +78,15 @@ namespace cnflogic {
                         negatedClause = negatedClause || !subnode;
                     }
                     return convertToCNF(negatedClause);
-                } else if (subnodes[0].getOpType() == OpType::OR) {
+                }
+                if (subnodes[0].getOpType() == OpType::OR) {
                     LogicTerm negatedClause = LogicTerm(true);
                     for (const auto& subnode: subnodes[0].getNodes()) {
                         negatedClause = negatedClause && !subnode;
                     }
                     return convertToCNF(negatedClause);
-                } else {
-                    throw std::runtime_error("Unsupported operation type");
                 }
+                throw std::runtime_error("Unsupported operation type");
             }
             case OpType::AND: {
                 LogicTerm convertedClause = LogicTerm(true);
