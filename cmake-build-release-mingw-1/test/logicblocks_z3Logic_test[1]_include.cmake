@@ -1,5 +1,0 @@
-if(EXISTS "C:/Users/Sarah/OneDrive/ClionProjects/LogicBlocks/cmake-build-release-mingw-1/test/logicblocks_z3Logic_test[1]_tests.cmake")
-  include("C:/Users/Sarah/OneDrive/ClionProjects/LogicBlocks/cmake-build-release-mingw-1/test/logicblocks_z3Logic_test[1]_tests.cmake")
-else()
-  add_test(logicblocks_z3Logic_test_NOT_BUILT logicblocks_z3Logic_test_NOT_BUILT)
-endif()
