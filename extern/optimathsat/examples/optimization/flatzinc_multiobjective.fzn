@@ -1,0 +1,91 @@
+% -*- SMT2 -*-
+%
+% Author: Patrick Trentin <patrick.trentin@unitn.it>
+%
+% This file is part of OptiMathSAT.
+%
+% MULTI-OBJECTIVE OPTIMIZATION:
+%     OptiMathSAT supports the following multi-objective
+%     optimization searches:
+%     - lexicographic optimization:
+%           the objectives are optimized lexicographically in
+%           the same order of appearance.
+%     - pareto optimization:
+%           the complete Pareto-front is explored.
+%     - boxed/multi-independent optimization:
+%           each objective is considered independent from
+%           the others. It is equivalent to optimizing multiple
+%           instances of the same formula with different goals,
+%           only that it is faster.
+%
+%     To configure the type of multi-objective search, add
+%
+%         -opt.priority=[lex|par|box]
+%
+%     to the list of command-line options.
+%
+
+% % % % % % % % % % % % % % % % % % % % % % %
+% % % % % % % % % % % % % % % % % % % % % % %
+% % % % % % % % % % % % % % % % % % % % % % %
+
+var 0..3: x ::output_var;
+var 0..3: y ::output_var;
+
+constraint int_lin_le([1, 1, -1], [x, y, 4], 0);
+% 
+% approximate domain:
+% |
+% |*
+% |**
+% |***
+% x----
+%
+
+solve maximize x, maximize y;
+
+%
+% LEXICOGRAPHIC OPTIMIZATION:
+%
+% ~$ ../bin/optimathsat -input=fzn -opt.priority=lex < flatzinc_multiobjective.fzn
+%% lexicographic search (optimal model)
+% x = 3;
+% y = 1;
+% ----------
+% =========
+%
+
+%
+% PARETO OPTIMIZATION:
+%
+% ~$ ../bin/optimathsat -input=fzn -opt.priority=par < flatzinc_multiobjective.fzn
+%% pareto search (optimal model)
+% x = 3;
+% y = 1;
+% ----------
+%% pareto search (optimal model)
+% x = 2;
+% y = 2;
+% ----------
+%% pareto search (optimal model)
+% x = 1;
+% y = 3;
+% ----------
+% =========
+%
+
+%
+% BOXED OPTIMIZATION:
+%
+% ~$ ../bin/optimathsat -input=fzn -opt.priority=box < flatzinc_multiobjective.fzn
+%% objective: x (optimal model)
+% x = 3;
+% y = 0;
+% ----------
+%% objective: y (optimal model)
+% x = 0;
+% y = 3;
+% ----------
+% =========
+%
+
