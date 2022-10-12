@@ -1,0 +1,5 @@
+if(EXISTS "C:/Users/Sarah/OneDrive/ClionProjects/LogicBlocks/cmake-build-debug-mingw-1/test/logicblocks_utils_test[1]_tests.cmake")
+  include("C:/Users/Sarah/OneDrive/ClionProjects/LogicBlocks/cmake-build-debug-mingw-1/test/logicblocks_utils_test[1]_tests.cmake")
+else()
+  add_test(logicblocks_utils_test_NOT_BUILT logicblocks_utils_test_NOT_BUILT)
+endif()

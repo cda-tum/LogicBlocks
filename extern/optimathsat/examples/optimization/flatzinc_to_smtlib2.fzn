@@ -1,0 +1,70 @@
+% -*- SMT2 -*-
+%
+% Author: Patrick Trentin <patrick.trentin@unitn.it>
+%
+% This file is part of OptiMathSAT.
+%
+% FLATZINC TO SMTLIB2:
+%     It is possible to use OptiMathSAT as a fzn2smt2 converter
+%     by running it with the following options:
+%
+%         -input=fzn 
+%         -debug.solver_enabled=false
+%         -debug.api_call_trace=1
+%         -debug.api_call_trace_dump_config=false
+%         -debug.api_call_trace_filename=outputfile.smt2
+%
+%     The generated 'outputfile.smt2' is encoded in SmtLibv2
+%     enriched with optimization extensions for OMT.
+%
+% POST-PROCESSING:
+%     In order to use the printed formula with OptiMathSAT,
+%     the following options should be enabled either by
+%     command-line or by pre-pending them in the SmtLibv2 file:
+%
+%         (set-option :config model_generation=true)
+%             or, equivalently, (set-option :produce-models true)
+%         (set-option :config opt.par.mode=callback)
+%         (set-option :config opt.print_objectives=true)
+%
+%     The reason for this is that the FlatZinc interpreter works
+%     fundamentally different than the SmtLibv2 interpreter and
+%     these differences needs to be taken into account.
+%
+
+% % % % % % % % % % % % % % % % % % % % % % %
+% % % % % % % % % % % % % % % % % % % % % % %
+% % % % % % % % % % % % % % % % % % % % % % %
+
+var 0..3: x ::output_var;
+var 0..3: y ::output_var;
+
+constraint int_lin_le([1, 1, -1], [x, y, 4], 0);
+
+solve maximize x, maximize y;
+
+%
+% EXAMPLE:
+%
+% ~$ ../bin/optimathsat -input=fzn \
+%                       -debug.solver_enabled=false \
+%                       -debug.api_call_trace=1 \
+%                       -debug.api_call_trace_dump_config=false \
+%                       -debug.api_call_trace_filename=output.smt2 \
+%                       < input_file
+% =====UNKNOWN=====
+%
+% ~$ ls
+% ...     output.smt2     ...
+%
+% ~% ../bin/optimathsat -model_generation=true \
+%                       -opt.par.mode=callback \
+%                       -opt.print_objectives=true \
+%                       -opt.priority=lex \
+%                       < output.smt2
+% (objectives
+%  (x 3)
+%  (y 1)
+% )
+% sat
+%
