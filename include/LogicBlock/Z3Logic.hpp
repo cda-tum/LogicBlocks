@@ -23,7 +23,7 @@ namespace z3logic {
 
     class Z3Base {
     protected:
-        std::map<uint64_t, std::vector<std::pair<bool, z3::expr>>> variables;
+        std::unordered_map<uint64_t, std::vector<std::pair<bool, z3::expr>>> variables;
         std::unordered_map<LogicTerm, std::vector<std::pair<bool, z3::expr>>, TermHash,
                            TermHash>
                      cache{};

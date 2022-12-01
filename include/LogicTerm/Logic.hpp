@@ -347,7 +347,7 @@ namespace logicbase {
                         return false;
                 }
             } else {
-                return t1.deepEquals(t2);
+                return t1.getID() == t2.getID();
             }
         }
     };
