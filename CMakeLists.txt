@@ -58,6 +58,10 @@ if (Z3_FOUND AND NOT TARGET z3::z3lib)
     add_compile_definitions(Z3_FOUND)
 endif ()
 
+find_library(mathsat mathsat PATHS ./extern/optimathsat/lib)
+find_library(gmp gmp)
+find_library(gmpxx gmpxx)
+
 add_subdirectory(src)
 
 add_subdirectory(app)

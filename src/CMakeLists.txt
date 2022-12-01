@@ -88,6 +88,16 @@ if (Z3_FOUND)
     target_compile_definitions(Z3Logic PUBLIC Z3_FOUND)
 endif ()
 
+add_library(OptimathLogic
+        ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
+        ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/OptimathLogicBlock.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/LogicBlock/OptimathLogicBlock.cpp)
+target_link_libraries(OptimathLogic PUBLIC LogicTerm_lib ${mathsat} ${gmp} ${gmpxx})
+target_include_directories(OptimathLogic PRIVATE ../extern/optimathsat/include)
+target_link_libraries(OptimathLogic PUBLIC LogicTerm_lib)
+add_library(logicblocks::OptimathLogic ALIAS OptimathLogic)
+
+
 add_library(Encodings
         ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
         ${${PROJECT_NAME}_SOURCE_DIR}/include/Encodings/Encodings.hpp
