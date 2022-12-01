@@ -1,7 +1,3 @@
-//
-// Created by Sarah on 12.07.2021.
-//
-
 #ifndef LOGGING_UTIL_H
 #define LOGGING_UTIL_H
 

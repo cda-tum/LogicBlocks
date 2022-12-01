@@ -1,7 +1,3 @@
-//
-// Created by Sarah on 08.07.2021.
-//
-
 #ifndef CLIFFORDSATOPT_Z3LOGIC_H
 #define CLIFFORDSATOPT_Z3LOGIC_H
 #include "LogicBlock.hpp"
