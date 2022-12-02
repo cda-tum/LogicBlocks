@@ -55,7 +55,7 @@ jobs:
           export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$pythonLocation/lib/python3.10/site-packages/z3/lib
           export Z3_ROOT=$pythonLocation/lib/python3.10/site-packages/z3
           export Z3_DIR=$pythonLocation/lib/python3.10/site-packages/z3
-          cmake -S "${{github.workspace}}" -B "${{github.workspace}}/build" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_QMAP_TESTS=ON -DBINDINGS=ON
+          cmake -S "${{github.workspace}}" -B "${{github.workspace}}/build" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_LB_TESTS=ON -DBINDINGS=ON
       - name: Build
         run:  |
           cmake --build "${{github.workspace}}/build" --config $BUILD_TYPE --target logicblocks_z3Logic_test

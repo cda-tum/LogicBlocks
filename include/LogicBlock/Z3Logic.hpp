@@ -1,7 +1,3 @@
-//
-// Created by Sarah on 08.07.2021.
-//
-
 #ifndef CLIFFORDSATOPT_Z3LOGIC_H
 #define CLIFFORDSATOPT_Z3LOGIC_H
 #include "LogicBlock.hpp"
@@ -23,7 +19,7 @@ namespace z3logic {
 
     class Z3Base {
     protected:
-        std::map<uint64_t, std::vector<std::pair<bool, z3::expr>>> variables;
+        std::unordered_map<uint64_t, std::vector<std::pair<bool, z3::expr>>> variables;
         std::unordered_map<LogicTerm, std::vector<std::pair<bool, z3::expr>>, TermHash,
                            TermHash>
                      cache{};

@@ -1,6 +1,3 @@
-//
-// Created by Sarah on 30.05.2022.
-//
 #include "LogicBlock/CNFLogicBlock.hpp"
 
 #include "LogicUtil/util_logic.hpp"
