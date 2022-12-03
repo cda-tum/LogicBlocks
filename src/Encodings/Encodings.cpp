@@ -95,7 +95,7 @@ namespace encodings {
         for (const auto& var: vars) {
             vVars.emplace_back(var);
         }
-        if (vVars.size() <= 6U) {
+        if (vVars.size() < 6U) {
             return vVars;
         }
         return groupVarsAux(vVars, maxSize);
