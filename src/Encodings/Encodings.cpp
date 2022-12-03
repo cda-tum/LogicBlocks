@@ -107,16 +107,15 @@ namespace encodings {
             return vars;
         }
         std::vector<NestedVar> ret{};
-        size_t                 numGr = numVars / maxSize;
+        const std::size_t      numGr = numVars / maxSize;
         ret.reserve(numGr);
-        for (uint32_t i = 0U; i < numGr; i++) {
-            auto from = vars.begin();
-            std::advance(from, static_cast<int64_t>(i * numVars / numGr));
-            auto to = from;
+        auto to = vars.begin();
+        for (std::size_t i = 0U; i < numGr; i++) {
+            const auto from = to;
             if (i == numGr - 1U) {
                 to = vars.end();
             } else {
-                std::advance(to, static_cast<int64_t>(numVars / numGr));
+                std::advance(to, maxSize);
             }
             ret.emplace_back(LogicTerm::noneTerm(), std::vector<NestedVar>(from, to));
         }
