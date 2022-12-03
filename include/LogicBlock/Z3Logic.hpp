@@ -62,9 +62,8 @@ namespace z3logic {
 
     class Z3LogicBlock: public LogicBlock, public Z3Base {
     protected:
-        std::map<uint64_t, std::vector<std::pair<bool, z3::expr>>> variables;
-        z3::solver&                                                solver;
-        void                                                       internalReset() override;
+        z3::solver& solver;
+        void        internalReset() override;
 
     public:
         Z3LogicBlock(z3::context& ctx, z3::solver& solver, bool convertWhenAssert = true):
@@ -91,9 +90,8 @@ namespace z3logic {
 
     class Z3LogicOptimizer: public LogicBlockOptimizer, public Z3Base {
     private:
-        std::map<uint64_t, std::vector<std::pair<bool, z3::expr>>> variables;
-        z3::optimize&                                              optimizer;
-        void                                                       internalReset() override;
+        z3::optimize& optimizer;
+        void          internalReset() override;
 
     public:
         Z3LogicOptimizer(z3::context& ctx, z3::optimize& optimizer,
