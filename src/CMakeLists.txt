@@ -1,5 +1,7 @@
 # add logging library target
 add_subdirectory("${PROJECT_SOURCE_DIR}/extern/plog" "extern/plog")
+# the following sets the SYSTEM flag for the include dirs of the plog libs to suppress warnings
+set_target_properties(plog PROPERTIES INTERFACE_SYSTEM_INCLUDE_DIRECTORIES $<TARGET_PROPERTY:plog,INTERFACE_INCLUDE_DIRECTORIES>)
 
 add_library(LogicTerm_lib
         ${CMAKE_CURRENT_SOURCE_DIR}/LogicTerm/TermImpl.cpp
