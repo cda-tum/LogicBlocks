@@ -10,7 +10,7 @@ namespace logicbase {
     class TermImpl {
     protected:
         Logic*      lb    = nullptr;
-        int64_t     id    = 0;
+        uint64_t    id    = 0;
         uint64_t    depth = 0U;
         std::string name{};
 
@@ -23,9 +23,11 @@ namespace logicbase {
         std::vector<LogicTerm> nodes{};
         CType                  cType = CType::BOOL;
 
+        static inline uint64_t gid = 1;
+
     public:
         explicit TermImpl(bool v):
-            opType(OpType::Constant), value(v), cType(CType::BOOL) {}
+            opType(OpType::Constant), value(v) {}
 
         explicit TermImpl(int32_t v):
             opType(OpType::Constant), iValue(v), cType(CType::INT) {}
@@ -47,7 +49,7 @@ namespace logicbase {
             lb(lb),
             id(getNextId(lb)), name(std::move(name)), opType(opType), bvSize(bvSize), cType(cType) {}
 
-        explicit TermImpl(std::string name, int64_t id, Logic* lb = nullptr):
+        explicit TermImpl(std::string name, const uint64_t id, Logic* lb = nullptr):
             lb(lb), id(id), name(std::move(name)) {}
 
         explicit TermImpl(CType cType, Logic* lb = nullptr):
@@ -58,7 +60,7 @@ namespace logicbase {
             lb(lb),
             id(getNextId(lb)), name(std::move(name)), bvSize(bvSize), cType(cType) {}
 
-        explicit TermImpl(std::string name, int64_t id, CType cType,
+        explicit TermImpl(std::string name, const uint64_t id, CType cType,
                           Logic* lb = nullptr):
             lb(lb),
             id(id), name(std::move(name)), cType(cType) {}
@@ -79,20 +81,18 @@ namespace logicbase {
         TermImpl(const TermImpl& other);
         explicit TermImpl(const LogicTerm& other);
 
-        static int64_t getNextId(Logic* lb = nullptr) {
+        static uint64_t getNextId(Logic* lb = nullptr) {
             if (lb == nullptr) {
                 return gid++;
             }
-            {
-                return lb->getNextId();
-            }
+            return lb->getNextId();
         }
         [[nodiscard]] static std::string getStrRep(OpType opType);
 
         void print(std::ostream& os) const;
         void prettyPrint(std::ostream& os, int printDepth = 0, bool isNeg = false, bool printNL = false, bool lastNL = false) const;
 
-        [[nodiscard]] int64_t getID() const { return id; }
+        [[nodiscard]] uint64_t getID() const { return id; }
 
         [[nodiscard]] const std::string& getName() const { return name; }
 
@@ -122,8 +122,7 @@ namespace logicbase {
 
         [[nodiscard]] Logic* getLogic() const { return lb; }
 
-        static int64_t gid;
-        static int64_t getGID() { return gid; }
+        static uint64_t getGID() { return gid; }
 
         static void reset() { gid = 0; }
     };

@@ -45,8 +45,8 @@ namespace logicbase {
 
     class LogicTerm: public TermInterface {
     public:
-        [[maybe_unused]] static TermType termType;
-        static bool                      useBitVectorConversions;
+        [[maybe_unused]] static inline TermType termType                = TermType::BASE;
+        static inline bool                      useBitVectorConversions = false;
 
     private:
         std::shared_ptr<TermImpl> pImpl;
@@ -234,7 +234,7 @@ namespace logicbase {
 
         LogicTerm operator!() const { return LogicTerm::neg(*this); }
 
-        [[nodiscard]] int64_t                       getID() const override;
+        [[nodiscard]] uint64_t                      getID() const override;
         [[nodiscard]] const std::vector<LogicTerm>& getNodes() const override;
         [[nodiscard]] OpType                        getOpType() const override;
         [[nodiscard]] CType                         getCType() const override;

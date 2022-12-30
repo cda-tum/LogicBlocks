@@ -21,7 +21,6 @@ namespace logicbase {
     public:
         explicit LogicBlock(bool convertWhenAssert = false):
             convertWhenAssert(convertWhenAssert) {}
-        virtual ~LogicBlock() = default;
 
         uint64_t getNextId() override { return gid++; };
         uint64_t getId() override { return gid; };

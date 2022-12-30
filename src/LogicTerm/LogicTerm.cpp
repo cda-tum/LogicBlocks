@@ -4,10 +4,6 @@
 #include "LogicUtil/util_logicterm.hpp"
 
 namespace logicbase {
-    [[maybe_unused]] TermType LogicTerm::termType                = TermType::BASE;
-    int64_t                   TermImpl::gid                      = 1;
-    bool                      LogicTerm::useBitVectorConversions = false;
-
     std::shared_ptr<TermImpl> makeLogicTerm(const bool value) {
         return std::make_shared<TermImpl>(value);
     }
@@ -48,8 +44,8 @@ namespace logicbase {
     std::shared_ptr<TermImpl> makeLogicTerm(OpType opType, const LogicTerm& a,
                                             const LogicTerm& b,
                                             const LogicTerm& c) {
-        Logic* lb          = logicutil::getValidLogicPtr(a, b, c);
-        CType  targetCType = logicutil::getTargetCType(b, c, opType);
+        Logic*      lb          = logicutil::getValidLogicPtr(a, b, c);
+        const CType targetCType = logicutil::getTargetCType(b, c, opType);
         return std::make_shared<TermImpl>(opType, a, b, c, targetCType, lb);
     }
 
@@ -65,7 +61,7 @@ namespace logicbase {
         pImpl->print(os);
     }
 
-    int64_t LogicTerm::getID() const {
+    uint64_t LogicTerm::getID() const {
         return pImpl->getID();
     }
 
@@ -120,7 +116,7 @@ namespace logicbase {
     uint64_t LogicTerm::getMaxChildrenDepth() const {
         uint64_t max = 0;
         for (const LogicTerm& t: pImpl->getNodes()) {
-            uint64_t d = t.getMaxChildrenDepth();
+            const uint64_t d = t.getMaxChildrenDepth();
             if (d > max) {
                 max = d;
             }
