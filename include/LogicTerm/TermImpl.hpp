@@ -63,17 +63,17 @@ namespace logicbase {
             lb(lb),
             id(id), name(std::move(name)), cType(cType) {}
 
-        explicit TermImpl(OpType ot, const std::initializer_list<LogicTerm>& n,
+        explicit TermImpl(OpType op, const std::initializer_list<LogicTerm>& n,
                           CType cType = CType::BOOL, Logic* lb = nullptr);
 
-        explicit TermImpl(OpType ot, const std::vector<LogicTerm>& n,
+        explicit TermImpl(OpType op, const std::vector<LogicTerm>& n,
                           CType cType = CType::BOOL, Logic* lb = nullptr);
 
-        explicit TermImpl(OpType ot, const LogicTerm& a, CType cType = CType::BOOL,
+        explicit TermImpl(OpType op, const LogicTerm& a, CType cType = CType::BOOL,
                           Logic* lb = nullptr);
-        explicit TermImpl(OpType ot, const LogicTerm& a, const LogicTerm& b,
+        explicit TermImpl(OpType op, const LogicTerm& a, const LogicTerm& b,
                           CType cType = CType::BOOL, Logic* lb = nullptr);
-        explicit TermImpl(OpType ot, const LogicTerm& a, const LogicTerm& b,
+        explicit TermImpl(OpType op, const LogicTerm& a, const LogicTerm& b,
                           const LogicTerm& c, CType cType = CType::BOOL,
                           Logic* lb = nullptr);
         TermImpl(const TermImpl& other);

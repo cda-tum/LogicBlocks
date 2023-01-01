@@ -6,28 +6,28 @@
 
 using namespace logicbase;
 
-TermImpl::TermImpl(OpType ot, const std::initializer_list<LogicTerm>& n,
+TermImpl::TermImpl(const OpType op, const std::initializer_list<LogicTerm>& n,
                    CType cType, Logic* lb):
     lb(lb),
     id(getNextId(lb)), depth(logicutil::getMax(n)),
-    name(getStrRep(ot)), opType(ot), bvSize(logicutil::getMaxBVSize(n)),
+    name(getStrRep(op)), opType(op), bvSize(logicutil::getMaxBVSize(n)),
     nodes(n), cType(cType) {}
 
-TermImpl::TermImpl(OpType ot, const std::vector<LogicTerm>& n, CType cType,
+TermImpl::TermImpl(const OpType op, const std::vector<LogicTerm>& n, CType cType,
                    Logic* lb):
     lb(lb),
     id(getNextId(lb)), depth(logicutil::getMax(n)),
-    name(getStrRep(ot)), opType(ot), bvSize(logicutil::getMaxBVSize(n)),
+    name(getStrRep(op)), opType(op), bvSize(logicutil::getMaxBVSize(n)),
     nodes(n), cType(cType) {}
 
-TermImpl::TermImpl(OpType ot, const LogicTerm& a, CType cType, Logic* lb):
-    TermImpl(ot, {a}, cType, lb) {}
-TermImpl::TermImpl(OpType ot, const LogicTerm& a, const LogicTerm& b,
+TermImpl::TermImpl(const OpType op, const LogicTerm& a, CType cType, Logic* lb):
+    TermImpl(op, {a}, cType, lb) {}
+TermImpl::TermImpl(const OpType op, const LogicTerm& a, const LogicTerm& b,
                    CType cType, Logic* lb):
-    TermImpl(ot, {a, b}, cType, lb) {}
-TermImpl::TermImpl(OpType ot, const LogicTerm& a, const LogicTerm& b,
+    TermImpl(op, {a, b}, cType, lb) {}
+TermImpl::TermImpl(const OpType op, const LogicTerm& a, const LogicTerm& b,
                    const LogicTerm& c, CType cType, Logic* lb):
-    TermImpl(ot, {a, b, c}, cType, lb) {}
+    TermImpl(op, {a, b, c}, cType, lb) {}
 
 TermImpl::TermImpl(const LogicTerm& other):
     lb(other.getLogic()), id(other.getID()), depth(other.getDepth()), name(other.getName()), opType(other.getOpType()), value(other.getBoolValue()), iValue(other.getIntValue()), fValue(other.getFloatValue()), bvValue(other.getBitVectorValue()), bvSize(other.getBitVectorSize()), cType(other.getCType()) {
