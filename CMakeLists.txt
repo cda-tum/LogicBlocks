@@ -1,6 +1,9 @@
-cmake_minimum_required(VERSION 3.14...3.19)
+# set required cmake version
+cmake_minimum_required(VERSION 3.19)
 
-# set(CMAKE_VERBOSE_MAKEFILE ON)
+# This avoids googletest complaining that this (IPO) policy is not set
+cmake_policy(SET CMP0069 NEW)
+set(CMAKE_POLICY_DEFAULT_CMP0069 NEW)
 
 project(
   logicblocks
@@ -32,22 +35,24 @@ if(DEPLOY)
       CACHE STRING "" FORCE)
 endif()
 
-macro(check_submodule_present MODULENAME)
-  if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/${MODULENAME}/CMakeLists.txt")
+# check whether the submodule ``modulename`` is correctly cloned in the ``/extern`` directory.
+macro(CHECK_SUBMODULE_PRESENT modulename)
+  if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/${modulename}/CMakeLists.txt")
     message(
       FATAL_ERROR
-        "${MODULENAME} submodule not cloned properly. Please run `git submodule update --init --recursive` from the main project directory"
-    )
+        "${modulename} submodule not cloned properly. \
+        Please run `git submodule update --init --recursive` \
+        from the main project directory")
   endif()
 endmacro()
 
-# build type settings
-set(default_build_type "Release")
+# Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
+  message(STATUS "Setting build type to 'Release' as none was specified.")
   set(CMAKE_BUILD_TYPE
-      "${default_build_type}"
+      Release
       CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui, ccmake
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel"
                                                "RelWithDebInfo")
 endif()
@@ -59,13 +64,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # search for Z3
 find_package(Z3 4.8.15.0)
-if(Z3_FOUND AND NOT TARGET z3::z3lib)
-  message(STATUS "Found Z3 with version ${Z3_VERSION_STRING}")
-  add_library(z3::z3lib IMPORTED INTERFACE)
-  set_property(TARGET z3::z3lib PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Z3_CXX_INCLUDE_DIRS})
-  set_property(TARGET z3::z3lib PROPERTY INTERFACE_LINK_LIBRARIES ${Z3_LIBRARIES})
-  add_compile_definitions(Z3_FOUND)
-endif()
 
 add_subdirectory(src)
 
