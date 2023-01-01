@@ -10,8 +10,8 @@ namespace logicbase {
 
     public:
         Model() = default;
-        explicit Model(Result result):
-            result(result) {}
+        explicit Model(Result res):
+            result(res) {}
         virtual ~Model() = default;
 
         Result getResult() { return result; };

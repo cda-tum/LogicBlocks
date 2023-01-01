@@ -35,59 +35,59 @@ namespace logicbase {
         explicit TermImpl(double v):
             opType(OpType::Constant), fValue(v), cType(CType::REAL) {}
 
-        explicit TermImpl(uint64_t v, int16_t bvSize):
-            opType(OpType::Constant), bvValue(v), bvSize(bvSize), cType(CType::BITVECTOR) {}
+        explicit TermImpl(uint64_t v, int16_t bvs):
+            opType(OpType::Constant), bvValue(v), bvSize(bvs), cType(CType::BITVECTOR) {}
 
-        explicit TermImpl(Logic* lb = nullptr):
-            lb(lb), id(getNextId(lb)), name(std::to_string(id)) {}
+        explicit TermImpl(Logic* logic = nullptr):
+            lb(logic), id(getNextId(lb)), name(std::to_string(id)) {}
 
-        explicit TermImpl(std::string name, Logic* lb = nullptr):
-            lb(lb), id(getNextId(lb)), name(std::move(name)) {}
+        explicit TermImpl(std::string n, Logic* logic = nullptr):
+            lb(logic), id(getNextId(lb)), name(std::move(n)) {}
 
-        explicit TermImpl(OpType opType, std::string name, CType cType,
-                          Logic* lb = nullptr, int16_t bvSize = 0):
-            lb(lb),
-            id(getNextId(lb)), name(std::move(name)), opType(opType), bvSize(bvSize), cType(cType) {}
+        explicit TermImpl(OpType op, std::string n, CType type,
+                          Logic* logic = nullptr, int16_t bvs = 0):
+            lb(logic),
+            id(getNextId(lb)), name(std::move(n)), opType(op), bvSize(bvs), cType(type) {}
 
-        explicit TermImpl(std::string name, const uint64_t id, Logic* lb = nullptr):
-            lb(lb), id(id), name(std::move(name)) {}
+        explicit TermImpl(std::string n, const uint64_t identifier, Logic* logic = nullptr):
+            lb(logic), id(identifier), name(std::move(n)) {}
 
-        explicit TermImpl(CType cType, Logic* lb = nullptr):
-            lb(lb), id(getNextId(lb)), name(std::to_string(id)), cType(cType) {}
+        explicit TermImpl(CType type, Logic* logic = nullptr):
+            lb(logic), id(getNextId(lb)), name(std::to_string(id)), cType(type) {}
 
-        explicit TermImpl(std::string name, CType cType, Logic* lb = nullptr,
-                          int16_t bvSize = 0):
-            lb(lb),
-            id(getNextId(lb)), name(std::move(name)), bvSize(bvSize), cType(cType) {}
+        explicit TermImpl(std::string n, CType type, Logic* logic = nullptr,
+                          int16_t bvs = 0):
+            lb(logic),
+            id(getNextId(lb)), name(std::move(n)), bvSize(bvs), cType(type) {}
 
-        explicit TermImpl(std::string name, const uint64_t id, CType cType,
-                          Logic* lb = nullptr):
-            lb(lb),
-            id(id), name(std::move(name)), cType(cType) {}
+        explicit TermImpl(std::string n, const uint64_t identifier, CType type,
+                          Logic* logic = nullptr):
+            lb(logic),
+            id(identifier), name(std::move(n)), cType(type) {}
 
         explicit TermImpl(OpType ot, const std::initializer_list<LogicTerm>& n,
-                          CType cType = CType::BOOL, Logic* lb = nullptr);
+                          CType type = CType::BOOL, Logic* logic = nullptr);
 
         explicit TermImpl(OpType ot, const std::vector<LogicTerm>& n,
-                          CType cType = CType::BOOL, Logic* lb = nullptr);
+                          CType type = CType::BOOL, Logic* logic = nullptr);
 
-        explicit TermImpl(OpType ot, const LogicTerm& a, CType cType = CType::BOOL,
-                          Logic* lb = nullptr);
+        explicit TermImpl(OpType ot, const LogicTerm& a, CType type = CType::BOOL,
+                          Logic* logic = nullptr);
         explicit TermImpl(OpType ot, const LogicTerm& a, const LogicTerm& b,
-                          CType cType = CType::BOOL, Logic* lb = nullptr);
+                          CType type = CType::BOOL, Logic* logic = nullptr);
         explicit TermImpl(OpType ot, const LogicTerm& a, const LogicTerm& b,
-                          const LogicTerm& c, CType cType = CType::BOOL,
-                          Logic* lb = nullptr);
+                          const LogicTerm& c, CType type = CType::BOOL,
+                          Logic* logic = nullptr);
         TermImpl(const TermImpl& other);
         explicit TermImpl(const LogicTerm& other);
 
-        static uint64_t getNextId(Logic* lb = nullptr) {
-            if (lb == nullptr) {
+        static uint64_t getNextId(Logic* logic = nullptr) {
+            if (logic == nullptr) {
                 return gid++;
             }
-            return lb->getNextId();
+            return logic->getNextId();
         }
-        [[nodiscard]] static std::string getStrRep(OpType opType);
+        [[nodiscard]] static std::string getStrRep(OpType type);
 
         void print(std::ostream& os) const;
         void prettyPrint(std::ostream& os, int printDepth = 0, bool isNeg = false, bool printNL = false, bool lastNL = false) const;

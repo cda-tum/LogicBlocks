@@ -40,8 +40,8 @@ namespace smtliblogic {
         void                            internalReset() override;
 
     public:
-        explicit SMTLogicBlock(bool convertWhenAssert = false, std::ostream& out = std::cout):
-            logicbase::LogicBlock(convertWhenAssert), out(out) {}
+        explicit SMTLogicBlock(bool convert = false, std::ostream& os = std::cout):
+            logicbase::LogicBlock(convert), out(os) {}
 
         void   assertFormula(const LogicTerm& a) override;
         void   produceInstance() override;

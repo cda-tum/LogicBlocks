@@ -19,8 +19,8 @@ namespace logicbase {
         uint64_t                                 gid             = 0U;
 
     public:
-        explicit LogicBlock(bool convertWhenAssert = false):
-            convertWhenAssert(convertWhenAssert) {}
+        explicit LogicBlock(bool convert = false):
+            convertWhenAssert(convert) {}
 
         uint64_t getNextId() override { return gid++; };
         uint64_t getId() override { return gid; };
@@ -75,8 +75,8 @@ namespace logicbase {
         std::vector<std::pair<LogicTerm, double>> weightedTerms;
 
     public:
-        explicit LogicBlockOptimizer(bool convertWhenAssert):
-            LogicBlock(convertWhenAssert) {}
+        explicit LogicBlockOptimizer(bool convert):
+            LogicBlock(convert) {}
         void weightedTerm(const LogicTerm& a, double weight) {
             weightedTerms.emplace_back(a, weight);
         };

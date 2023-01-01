@@ -7,27 +7,27 @@
 using namespace logicbase;
 
 TermImpl::TermImpl(OpType ot, const std::initializer_list<LogicTerm>& n,
-                   CType cType, Logic* lb):
-    lb(lb),
-    id(getNextId(lb)), depth(logicutil::getMax(n)),
+                   CType type, Logic* logic):
+    lb(logic),
+    id(getNextId(logic)), depth(logicutil::getMax(n)),
     name(getStrRep(ot)), opType(ot), bvSize(logicutil::getMaxBVSize(n)),
-    nodes(n), cType(cType) {}
+    nodes(n), cType(type) {}
 
-TermImpl::TermImpl(OpType ot, const std::vector<LogicTerm>& n, CType cType,
-                   Logic* lb):
-    lb(lb),
-    id(getNextId(lb)), depth(logicutil::getMax(n)),
+TermImpl::TermImpl(OpType ot, const std::vector<LogicTerm>& n, CType type,
+                   Logic* logic):
+    lb(logic),
+    id(getNextId(logic)), depth(logicutil::getMax(n)),
     name(getStrRep(ot)), opType(ot), bvSize(logicutil::getMaxBVSize(n)),
-    nodes(n), cType(cType) {}
+    nodes(n), cType(type) {}
 
-TermImpl::TermImpl(OpType ot, const LogicTerm& a, CType cType, Logic* lb):
-    TermImpl(ot, {a}, cType, lb) {}
+TermImpl::TermImpl(OpType ot, const LogicTerm& a, CType type, Logic* logic):
+    TermImpl(ot, {a}, type, logic) {}
 TermImpl::TermImpl(OpType ot, const LogicTerm& a, const LogicTerm& b,
-                   CType cType, Logic* lb):
-    TermImpl(ot, {a, b}, cType, lb) {}
+                   CType type, Logic* logic):
+    TermImpl(ot, {a, b}, type, logic) {}
 TermImpl::TermImpl(OpType ot, const LogicTerm& a, const LogicTerm& b,
-                   const LogicTerm& c, CType cType, Logic* lb):
-    TermImpl(ot, {a, b, c}, cType, lb) {}
+                   const LogicTerm& c, CType type, Logic* logic):
+    TermImpl(ot, {a, b, c}, type, logic) {}
 
 TermImpl::TermImpl(const LogicTerm& other):
     lb(other.getLogic()), id(other.getID()), depth(other.getDepth()), name(other.getName()), opType(other.getOpType()), value(other.getBoolValue()), iValue(other.getIntValue()), fValue(other.getFloatValue()), bvValue(other.getBitVectorValue()), bvSize(other.getBitVectorSize()), cType(other.getCType()) {
@@ -40,9 +40,9 @@ TermImpl::TermImpl(const TermImpl& other):
     nodes.insert(nodes.end(), other.getNodes().begin(), other.getNodes().end());
 }
 
-std::string TermImpl::getStrRep(OpType opType) {
+std::string TermImpl::getStrRep(OpType type) {
     std::stringstream os;
-    switch (opType) {
+    switch (type) {
         case OpType::Constant:
             os << "CONST";
             break;

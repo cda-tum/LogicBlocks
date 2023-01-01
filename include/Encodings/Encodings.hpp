@@ -23,17 +23,17 @@ namespace encodings {
     using namespace logicbase;
 
     struct NestedVar {
-        explicit NestedVar(const LogicTerm& var):
-            var(var), list(){};
-        NestedVar(const LogicTerm& var, std::vector<NestedVar> list):
-            var(var), list(std::move(list)) {}
+        explicit NestedVar(LogicTerm v):
+            var(std::move(v)), list(){};
+        NestedVar(LogicTerm v, std::vector<NestedVar> l):
+            var(std::move(v)), list(std::move(l)) {}
         LogicTerm              var = LogicTerm::noneTerm();
         std::vector<NestedVar> list;
     };
 
     struct WeightedVar {
-        WeightedVar(const LogicTerm& var, int weight):
-            var(var), weight(weight) {}
+        WeightedVar(LogicTerm v, const int w):
+            var(std::move(v)), weight(w) {}
         LogicTerm var    = LogicTerm::noneTerm();
         int       weight = 0;
     };
@@ -49,9 +49,9 @@ namespace encodings {
                       ProgramVar };
     struct SavedLit {
         SavedLit():
-            type(Type::Uninitialized), var(LogicTerm::noneTerm()) {}
-        SavedLit(Type type, const LogicTerm& var):
-            type(type), var(var) {}
+            var(LogicTerm::noneTerm()) {}
+        SavedLit(Type t, LogicTerm v):
+            type(t), var(std::move(v)) {}
         Type      type = Type::Uninitialized;
         LogicTerm var  = LogicTerm::noneTerm();
     };
