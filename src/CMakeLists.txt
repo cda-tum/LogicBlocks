@@ -64,6 +64,12 @@ if(COVERAGE)
   target_link_libraries(LogicTerm_lib PUBLIC --coverage)
 endif()
 
+if(BINDINGS)
+  include(CheckPIESupported)
+  check_pie_supported()
+  set_target_properties(${target_name} PROPERTIES INTERFACE_POSITION_INDEPENDENT_CODE ON)
+endif()
+
 add_library(
   SMTLibLogic
   ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
@@ -107,28 +113,3 @@ if(Z3_FOUND)
   target_link_libraries(Logic INTERFACE Z3Logic)
 endif()
 add_library(logicblocks::Logic ALIAS Logic)
-
-if(GENERATE_POSITION_INDEPENDENT_CODE OR BINDINGS)
-  include(CheckPIESupported)
-  check_pie_supported()
-  set_target_properties(LogicTerm_lib PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-  set_target_properties(SMTLibLogic PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-  set_target_properties(CNFLogic PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-  set_target_properties(Encodings PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-  if(Z3_FOUND)
-    set_target_properties(Z3Logic PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-  endif()
-endif()
-
-# add coverage compiler and linker flag to the library and all targets that link against it, if
-# COVERAGE is set
-if(COVERAGE)
-  target_compile_options(LogicTerm_lib PUBLIC --coverage)
-  target_link_libraries(LogicTerm_lib PUBLIC --coverage)
-  target_compile_options(SMTLibLogic PUBLIC --coverage)
-  target_link_libraries(SMTLibLogic PUBLIC --coverage)
-  target_compile_options(CNFLogic PUBLIC --coverage)
-  target_link_libraries(CNFLogic PUBLIC --coverage)
-  target_compile_options(Encodings PUBLIC --coverage)
-  target_link_libraries(Encodings PUBLIC --coverage)
-endif()
