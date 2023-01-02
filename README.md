@@ -10,7 +10,7 @@ A interface library for the abstraction of several methods of interaction with S
 LogicBlocks are built in the style of the z3 bindings for C++. The library is designed to offer a simpler way to encode SAT/SMT problems in C++ code and hand it off to several different solvers or text exports.
 Note that at the moment the z3 integration is mostly working, as is export in DIMACs and the SMTLibv2 format.
 
-If you have any questions, feel free to contact us via [quantum.cda@xcit.tum.de](mailto:quantum.cda@xcit.tum.de) or by creating an issue on [GitHub](https://github.com/cda-tum/qmap/issues).
+If you have any questions, feel free to contact us via [quantum.cda@xcit.tum.de](mailto:quantum.cda@xcit.tum.de) or by creating an issue on [GitHub](https://github.com/cda-tum/LogicBlocks/issues).
 
 ## Usage
 
@@ -19,7 +19,7 @@ LogicBlocks are designed to be used as a submodule in conjunction with git and C
 - In order to start using LogicBlocks, first the submodule needs to be added:
 
 ```bash
-git submodule add https://github.com/IsFairy/LogicBlocks.git
+git submodule add https://github.com/cda-tum/LogicBlocks.git
 git submodule update --init --recursive
 ```
 
@@ -78,7 +78,3 @@ As of now there are several Theories besides pure SAT that are supported:
 - `Integer` - Integer arithmetic and comparison, including `+`, `-`, `/`, `*`, `<`, `>`, `<=` and `>=`.
 - `Real` - Real arithmetic and comparison, including `+`, `-`, `/`, `*`, `<`, `>`, `<=` and `>=`.
 - `Bitvector` - Bitvector arithmetic and comparison, including `+`, `-`, `/`, `*`, `<`, `>`, `<=` and `>=`, and using `BV_XOR`, `BV_AND` and `BV_OR` bit wise operations on bitvectors.
-
-## Reference
-
-If you use our tool for your research, we will be thankful if you refer to it by citing the appropriate publications.
