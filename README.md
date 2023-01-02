@@ -1,8 +1,8 @@
 ![OS](https://img.shields.io/badge/os-linux%20%7C%20macos%20%7C%20windows-blue?style=flat-square)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
-[![CI](https://img.shields.io/github/workflow/status/IsFairy/LogicBlocks/CI?style=flat-square&logo=github&label=c%2B%2B)](https://github.com/IsFairy/LogicBlocks/actions/workflows/ci.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/cda-tum/LogicBlocks/ci.yml?branch=main&style=flat-square&logo=github&label=c%2B%2B)](https://github.com/cda-tum/LogicBlocks/actions/workflows/ci.yml)
 
-[//]: # "[![codecov](https://img.shields.io/codecov/c/github/IsFairy/LogicBlocks?style=flat-square&logo=codecov)](https://codecov.io/gh/cda-tum/qmap)"
+[//]: # "[![codecov](https://img.shields.io/codecov/c/github/cda-tum/LogicBlocks?style=flat-square&logo=codecov)](https://codecov.io/gh/cda-tum/LogicBlocks)"
 
 # LogicBlocks - A Interface Library for SAT/SMT Abstractions written in C++
 
