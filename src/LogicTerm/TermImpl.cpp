@@ -40,7 +40,8 @@ TermImpl::TermImpl(const TermImpl& other):
     nodes.insert(nodes.end(), other.getNodes().begin(), other.getNodes().end());
 }
 
-std::string TermImpl::getStrRep(OpType type) {
+std::string TermImpl::getStrRep(OpType op) {
+
     std::stringstream os;
     switch (type) {
         case OpType::Constant:
