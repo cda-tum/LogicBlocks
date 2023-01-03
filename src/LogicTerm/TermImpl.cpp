@@ -41,10 +41,8 @@ TermImpl::TermImpl(const TermImpl& other):
 }
 
 std::string TermImpl::getStrRep(OpType op) {
-
     std::stringstream os;
     switch (op) {
-
         case OpType::Constant:
             os << "CONST";
             break;
