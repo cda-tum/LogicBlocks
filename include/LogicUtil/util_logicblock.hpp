@@ -29,33 +29,33 @@ namespace logicutil {
         bool        bvalue  = false;
         double      dvalue  = 0.;
         uint32_t    uivalue = 0;
-        Param(std::string name, std::string value):
-            type(ParamType::STR), name(std::move(name)), strvalue(std::move(value)) {}
+        Param(std::string n, std::string value):
+            type(ParamType::STR), name(std::move(n)), strvalue(std::move(value)) {}
 
-        Param(std::string name, bool value):
-            type(ParamType::BOOL), name(std::move(name)), bvalue(value) {}
+        Param(std::string n, bool value):
+            type(ParamType::BOOL), name(std::move(n)), bvalue(value) {}
 
-        Param(std::string name, double value):
-            type(ParamType::DOUBLE), name(std::move(name)), dvalue(value) {}
+        Param(std::string n, double value):
+            type(ParamType::DOUBLE), name(std::move(n)), dvalue(value) {}
 
-        Param(std::string name, uint32_t value):
-            type(ParamType::UINT), name(std::move(name)), uivalue(value) {}
+        Param(std::string n, uint32_t value):
+            type(ParamType::UINT), name(std::move(n)), uivalue(value) {}
     };
     class Params {
         std::vector<Param> params;
 
     public:
-        void addParam(const std::string& name, const std::string& value) {
-            params.emplace_back(name, value);
+        void addParam(const std::string& n, const std::string& value) {
+            params.emplace_back(n, value);
         }
-        void addParam(const std::string& name, bool value) {
-            params.emplace_back(name, value);
+        void addParam(const std::string& n, bool value) {
+            params.emplace_back(n, value);
         }
-        void addParam(const std::string& name, double value) {
-            params.emplace_back(name, value);
+        void addParam(const std::string& n, double value) {
+            params.emplace_back(n, value);
         }
-        void addParam(const std::string& name, uint32_t value) {
-            params.emplace_back(name, value);
+        void addParam(const std::string& n, uint32_t value) {
+            params.emplace_back(n, value);
         }
         [[nodiscard]] std::vector<Param> getParams() const {
             return params;

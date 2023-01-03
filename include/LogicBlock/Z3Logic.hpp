@@ -28,8 +28,8 @@ namespace z3logic {
         bool producedInstance = false;
 
     public:
-        explicit Z3Base(z3::context& ctx):
-            ctx(ctx) {}
+        explicit Z3Base(z3::context& context):
+            ctx(context) {}
         virtual ~Z3Base() = default;
 
         z3::expr     convert(const LogicTerm& a, CType toType = CType::ERRORTYPE);
@@ -66,8 +66,8 @@ namespace z3logic {
         void        internalReset() override;
 
     public:
-        Z3LogicBlock(z3::context& ctx, z3::solver& solver, bool convertWhenAssert = true):
-            LogicBlock(convertWhenAssert), Z3Base(ctx), solver(solver) {}
+        Z3LogicBlock(z3::context& context, z3::solver& sol, bool convert = true):
+            LogicBlock(convert), Z3Base(context), solver(sol) {}
         ~Z3LogicBlock() override {
             variables.clear();
             cache.clear();
@@ -94,11 +94,11 @@ namespace z3logic {
         void          internalReset() override;
 
     public:
-        Z3LogicOptimizer(z3::context& ctx, z3::optimize& optimizer,
-                         bool convertWhenAssert = true):
-            LogicBlockOptimizer(convertWhenAssert),
-            Z3Base(ctx),
-            optimizer(optimizer) {}
+        Z3LogicOptimizer(z3::context& context, z3::optimize& opt,
+                         bool convert = true):
+            LogicBlockOptimizer(convert),
+            Z3Base(context),
+            optimizer(opt) {}
         ~Z3LogicOptimizer() override {
             variables.clear();
             cache.clear();

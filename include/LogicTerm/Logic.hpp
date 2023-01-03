@@ -69,14 +69,14 @@ namespace logicbase {
         ERRORTYPE
     };
 
-    [[maybe_unused]] static Result resultFromString(std::string result) {
+    [[maybe_unused]] static Result resultFromString(const std::string& result) {
         if (result == "sat") {
             return Result::SAT;
-        } else if (result == "unsat") {
-            return Result::UNSAT;
-        } else {
-            return Result::NDEF;
         }
+        if (result == "unsat") {
+            return Result::UNSAT;
+        }
+        return Result::NDEF;
     }
 
     inline std::string toString(Result result) {
@@ -86,7 +86,6 @@ namespace logicbase {
             case Result::UNSAT:
                 return "UNSAT";
             case Result::NDEF:
-                return "NDEF";
             default:
                 return "NDEF";
         }
@@ -295,6 +294,7 @@ namespace logicbase {
 
     class Logic {
     public:
+        virtual ~Logic()             = default;
         virtual uint64_t getNextId() = 0;
         virtual uint64_t getId()     = 0;
     };
@@ -302,7 +302,7 @@ namespace logicbase {
     class TermInterface {
     public:
         virtual ~TermInterface()                                                                         = default;
-        [[nodiscard]] virtual int64_t                       getID() const                                = 0;
+        [[nodiscard]] virtual uint64_t                      getID() const                                = 0;
         [[nodiscard]] virtual const std::vector<LogicTerm>& getNodes() const                             = 0;
         [[nodiscard]] virtual OpType                        getOpType() const                            = 0;
         [[nodiscard]] virtual CType                         getCType() const                             = 0;
@@ -373,7 +373,7 @@ namespace logicbase {
         std::size_t operator()(const std::unordered_set<int64_t>& t) const {
             std::size_t result{};
             for (const auto& item: t) {
-                result += std::numeric_limits<uint64_t>::max() * item;
+                result += std::numeric_limits<uint64_t>::max() * static_cast<std::size_t>(item);
             }
             return result;
         }
