@@ -1,8 +1,7 @@
 ![OS](https://img.shields.io/badge/os-linux%20%7C%20macos%20%7C%20windows-blue?style=flat-square)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
-[![CI](https://img.shields.io/github/workflow/status/IsFairy/LogicBlocks/CI?style=flat-square&logo=github&label=c%2B%2B)](https://github.com/IsFairy/LogicBlocks/actions/workflows/ci.yml)
-
-[//]: # "[![codecov](https://img.shields.io/codecov/c/github/IsFairy/LogicBlocks?style=flat-square&logo=codecov)](https://codecov.io/gh/cda-tum/qmap)"
+[![CI](https://img.shields.io/github/actions/workflow/status/cda-tum/LogicBlocks/ci.yml?branch=main&style=flat-square&logo=github&label=c%2B%2B)](https://github.com/cda-tum/LogicBlocks/actions/workflows/ci.yml)
+[![codecov](https://img.shields.io/codecov/c/github/cda-tum/LogicBlocks?style=flat-square&logo=codecov)](https://codecov.io/gh/cda-tum/LogicBlocks)
 
 # LogicBlocks - A Interface Library for SAT/SMT Abstractions written in C++
 
@@ -11,7 +10,7 @@ A interface library for the abstraction of several methods of interaction with S
 LogicBlocks are built in the style of the z3 bindings for C++. The library is designed to offer a simpler way to encode SAT/SMT problems in C++ code and hand it off to several different solvers or text exports.
 Note that at the moment the z3 integration is mostly working, as is export in DIMACs and the SMTLibv2 format.
 
-If you have any questions, feel free to contact us via [quantum.cda@xcit.tum.de](mailto:quantum.cda@xcit.tum.de) or by creating an issue on [GitHub](https://github.com/cda-tum/qmap/issues).
+If you have any questions, feel free to contact us via [quantum.cda@xcit.tum.de](mailto:quantum.cda@xcit.tum.de) or by creating an issue on [GitHub](https://github.com/cda-tum/LogicBlocks/issues).
 
 ## Usage
 
@@ -20,7 +19,7 @@ LogicBlocks are designed to be used as a submodule in conjunction with git and C
 - In order to start using LogicBlocks, first the submodule needs to be added:
 
 ```bash
-git submodule add https://github.com/IsFairy/LogicBlocks.git
+git submodule add https://github.com/cda-tum/LogicBlocks.git
 git submodule update --init --recursive
 ```
 
@@ -79,7 +78,3 @@ As of now there are several Theories besides pure SAT that are supported:
 - `Integer` - Integer arithmetic and comparison, including `+`, `-`, `/`, `*`, `<`, `>`, `<=` and `>=`.
 - `Real` - Real arithmetic and comparison, including `+`, `-`, `/`, `*`, `<`, `>`, `<=` and `>=`.
 - `Bitvector` - Bitvector arithmetic and comparison, including `+`, `-`, `/`, `*`, `<`, `>`, `<=` and `>=`, and using `BV_XOR`, `BV_AND` and `BV_OR` bit wise operations on bitvectors.
-
-## Reference
-
-If you use our tool for your research, we will be thankful if you refer to it by citing the appropriate publications.
