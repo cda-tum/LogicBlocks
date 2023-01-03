@@ -87,7 +87,8 @@ namespace logicbase {
             }
             return logic->getNextId();
         }
-        [[nodiscard]] static std::string getStrRep(OpType type);
+        [[nodiscard]] static std::string getStrRep(OpType op);
+
 
         void print(std::ostream& os) const;
         void prettyPrint(std::ostream& os, int printDepth = 0, bool isNeg = false, bool printNL = false, bool lastNL = false) const;
