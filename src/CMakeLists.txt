@@ -67,7 +67,7 @@ endif()
 if(BINDINGS)
   include(CheckPIESupported)
   check_pie_supported()
-  set_target_properties(${target_name} PROPERTIES INTERFACE_POSITION_INDEPENDENT_CODE ON)
+  set_target_properties(LogicTerm_lib PROPERTIES INTERFACE_POSITION_INDEPENDENT_CODE ON)
 endif()
 
 add_library(
