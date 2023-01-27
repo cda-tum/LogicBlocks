@@ -8,7 +8,7 @@
 
 namespace z3logic {
 
-    z3::expr Z3Base::getExprTerm(uint64_t id, CType type, Z3Base* z3base) {
+    z3::expr Z3Base::getExprTerm(const uint64_t id, const CType type, Z3Base* z3base) {
         if (z3base->variables.find(id) == z3base->variables.end() ||
             !z3base->variables.at(id)[static_cast<int>(type)].first) {
             util::fatal("Variable not found");
@@ -199,7 +199,7 @@ namespace z3logic {
 
     Result Z3LogicBlock::solve() {
         produceInstance();
-        z3::check_result res = solver.check();
+        const auto res = solver.check();
         if (res == z3::sat) {
             model = new Z3Model(ctx, solver.get_model());
             return Result::SAT;
@@ -349,7 +349,7 @@ namespace z3logic {
         return op(convert(a, CType::BOOL), convert(b, toType), convert(c, toType));
     }
 
-    z3::expr Z3Base::convertOperator(std::vector<LogicTerm> terms,
+    z3::expr Z3Base::convertOperator(const std::vector<LogicTerm>& terms,
                                      z3::expr (*op)(const z3::expr&,
                                                     const z3::expr&),
                                      CType toType) {
@@ -379,14 +379,14 @@ namespace z3logic {
 
     bool Z3LogicOptimizer::makeMinimize() {
         for (const auto& [term, weight]: weightedTerms) {
-            optimizer.add(convert(LogicTerm::neg(term), CType::BOOL), weight);
+            optimizer.add(convert(LogicTerm::neg(term), CType::BOOL), static_cast<unsigned>(weight));
         }
         return false;
     }
 
     bool Z3LogicOptimizer::makeMaximize() {
         for (const auto& [term, weight]: weightedTerms) {
-            optimizer.add(convert(term, CType::BOOL), weight);
+            optimizer.add(convert(term, CType::BOOL), static_cast<unsigned>(weight));
         }
         return false;
     }
@@ -429,7 +429,7 @@ namespace z3logic {
 
     Result Z3LogicOptimizer::solve() {
         produceInstance();
-        z3::check_result res = optimizer.check();
+        const auto res = optimizer.check();
         if (res == z3::sat) {
             model = new Z3Model(ctx, optimizer.get_model());
             return Result::SAT;

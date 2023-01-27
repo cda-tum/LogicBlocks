@@ -53,7 +53,7 @@ namespace z3logic {
                                  z3::expr (*op)(const z3::expr&, const z3::expr&,
                                                 const z3::expr&),
                                  CType toType);
-        z3::expr convertOperator(std::vector<LogicTerm> terms,
+        z3::expr convertOperator(const std::vector<LogicTerm>& terms,
                                  z3::expr (*op)(const z3::expr&, const z3::expr&),
                                  CType toType);
 
