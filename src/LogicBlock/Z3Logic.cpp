@@ -349,7 +349,7 @@ namespace z3logic {
         return op(convert(a, CType::BOOL), convert(b, toType), convert(c, toType));
     }
 
-    z3::expr Z3Base::convertOperator(std::vector<LogicTerm> terms,
+    z3::expr Z3Base::convertOperator(const std::vector<LogicTerm>& terms,
                                      z3::expr (*op)(const z3::expr&,
                                                     const z3::expr&),
                                      CType toType) {
