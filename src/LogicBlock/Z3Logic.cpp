@@ -379,14 +379,14 @@ namespace z3logic {
 
     bool Z3LogicOptimizer::makeMinimize() {
         for (const auto& [term, weight]: weightedTerms) {
-            optimizer.add(convert(LogicTerm::neg(term), CType::BOOL), weight);
+            optimizer.add(convert(LogicTerm::neg(term), CType::BOOL), static_cast<unsigned>(weight));
         }
         return false;
     }
 
     bool Z3LogicOptimizer::makeMaximize() {
         for (const auto& [term, weight]: weightedTerms) {
-            optimizer.add(convert(term, CType::BOOL), weight);
+            optimizer.add(convert(term, CType::BOOL), static_cast<unsigned>(weight));
         }
         return false;
     }
