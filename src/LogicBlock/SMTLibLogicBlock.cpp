@@ -18,7 +18,7 @@ namespace smtliblogic {
         }
 
         for (const auto& clause: clauses) {
-            out << convert(clause) << std::endl;
+            out << "(assert " << convert(clause) << ")" << std::endl;
         }
 
         out << "(check-sat)" << std::endl;
