@@ -28,4 +28,5 @@ endif()
 
 package_add_test(
   ${PROJECT_NAME}_utils_test Logic ${CMAKE_CURRENT_SOURCE_DIR}/test_base_bool.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/test_base_int.cpp ${CMAKE_CURRENT_SOURCE_DIR}/test_utils.cpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/test_base_int.cpp ${CMAKE_CURRENT_SOURCE_DIR}/test_utils.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/test_base_int.cpp ${CMAKE_CURRENT_SOURCE_DIR}/test_smtlib.cpp)
