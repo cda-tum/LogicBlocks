@@ -15,9 +15,7 @@ TEST(TestSMTLib, ConstructDestruct) {
     using namespace logicbase;
 
     std::unique_ptr<smtliblogic::SMTLogicBlock> const smtLibLogic = std::make_unique<smtliblogic::SMTLogicBlock>(false, std::cout);
-
 }
-
 
 TEST(TestSMTLib, TestPrint) {
     using namespace logicbase;
