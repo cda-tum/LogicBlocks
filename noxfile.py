@@ -1,13 +1,18 @@
+"""Nox sessions."""
+
 from __future__ import annotations
 
 import os
+from typing import TYPE_CHECKING
 
 import nox
-from nox.sessions import Session
+
+if TYPE_CHECKING:
+    from nox.sessions import Session
 
 nox.options.sessions = ["lint"]
 
-PYTHON_ALL_VERSIONS = ["3.7", "3.8", "3.9", "3.10", "3.11"]
+PYTHON_ALL_VERSIONS = ["3.8", "3.9", "3.10", "3.11"]
 
 if os.environ.get("CI", None):
     nox.options.error_on_missing_interpreters = True
