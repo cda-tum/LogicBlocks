@@ -454,6 +454,44 @@ TEST(TestSMTLib, TestModelBitVector) {
     ASSERT_EQ(model.getBitvectorValue(y, nullptr), 2);
 }
 
+TEST(TestSMTLib, TestModelWrongType) {
+    using namespace logicbase;
+
+    std::stringstream ss;
+
+    std::string output = "(\n"
+                         "(define-fun x () (_ BitVector 8) #x00)\n"
+                         "(define-fun y () Int 1)\n"
+                         "(define-fun z () Bool true)\n"
+                         "(define-fun a () Real 1.0)\n"
+                         ")\n";
+
+    smtliblogic::SMTLibLogicModel model(output);
+
+    std::unique_ptr<smtliblogic::SMTLogicBlock> const smtLibLogic = std::make_unique<smtliblogic::SMTLogicBlock>(false, ss);
+    LogicTerm                                         x           = smtLibLogic->makeVariable("x", CType::BITVECTOR, 16);
+    LogicTerm                                         y           = smtLibLogic->makeVariable("y", CType::INT);
+    LogicTerm                                         z           = smtLibLogic->makeVariable("z", CType::BOOL);
+    LogicTerm                                         a           = smtLibLogic->makeVariable("a", CType::REAL);
+
+    ASSERT_THROW(model.getBitvectorValue(x, nullptr), std::runtime_error);
+    ASSERT_THROW(model.getBitvectorValue(y, nullptr), std::runtime_error);
+    ASSERT_THROW(model.getBitvectorValue(z, nullptr), std::runtime_error);
+    ASSERT_THROW(model.getBitvectorValue(a, nullptr), std::runtime_error);
+
+    ASSERT_THROW(model.getIntValue(a, nullptr), std::runtime_error);
+    ASSERT_THROW(model.getIntValue(x, nullptr), std::runtime_error);
+    ASSERT_THROW(model.getIntValue(z, nullptr), std::runtime_error);
+
+    ASSERT_THROW(model.getBoolValue(x, nullptr), std::runtime_error);
+    ASSERT_THROW(model.getBoolValue(y, nullptr), std::runtime_error);
+    ASSERT_THROW(model.getBoolValue(a, nullptr), std::runtime_error);
+
+    ASSERT_THROW(model.getRealValue(x, nullptr), std::runtime_error);
+    ASSERT_THROW(model.getRealValue(y, nullptr), std::runtime_error);
+    ASSERT_THROW(model.getRealValue(z, nullptr), std::runtime_error);
+}
+
 TEST(TestSMTLib, TestModelGetValue) {
     using namespace logicbase;
 
