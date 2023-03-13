@@ -27,6 +27,7 @@ namespace smtliblogic {
 
     private:
         std::string getTermString(const LogicTerm& a);
+        std::string getTermType(const LogicTerm& a);
         std::string getTermValue(const LogicTerm& a);
     };
 } // namespace smtliblogic

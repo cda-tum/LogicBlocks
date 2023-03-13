@@ -1,6 +1,7 @@
 
 #include "Encodings/Encodings.hpp"
 #include "LogicBlock/SMTLibLogicBlock.hpp"
+#include "LogicBlock/SMTLibLogicModel.hpp"
 #include "LogicTerm/Logic.hpp"
 #include "LogicTerm/LogicTerm.hpp"
 
@@ -371,4 +372,84 @@ TEST(TestSMTLib, TestBitVectorArithmeticXor) {
     smtLibLogic->produceInstance();
 
     ASSERT_EQ(ss.str(), output);
+}
+
+TEST(TestSMTLib, TestModelInt) {
+    using namespace logicbase;
+
+    std::stringstream ss;
+
+    std::string output = "(\n"
+                         "(define-fun x () Int 8)\n"
+                         "(define-fun y () Int 6)\n"
+                         ")\n";
+
+    smtliblogic::SMTLibLogicModel model(output);
+
+    std::unique_ptr<smtliblogic::SMTLogicBlock> const smtLibLogic = std::make_unique<smtliblogic::SMTLogicBlock>(false, ss);
+    LogicTerm                                         x           = smtLibLogic->makeVariable("x", CType::INT);
+    LogicTerm                                         y           = smtLibLogic->makeVariable("y", CType::INT);
+
+    ASSERT_EQ(model.getIntValue(x, nullptr), 8);
+    ASSERT_EQ(model.getIntValue(y, nullptr), 6);
+}
+
+TEST(TestSMTLib, TestModelBool) {
+    using namespace logicbase;
+
+    std::stringstream ss;
+
+    std::string output = "(\n"
+                         "(define-fun x () Bool true)\n"
+                         "(define-fun y () Bool false)\n"
+                         ")\n";
+
+    smtliblogic::SMTLibLogicModel model(output);
+
+    std::unique_ptr<smtliblogic::SMTLogicBlock> const smtLibLogic = std::make_unique<smtliblogic::SMTLogicBlock>(false, ss);
+    LogicTerm                                         x           = smtLibLogic->makeVariable("x", CType::BOOL);
+    LogicTerm                                         y           = smtLibLogic->makeVariable("y", CType::BOOL);
+
+    ASSERT_EQ(model.getBoolValue(x, nullptr), true);
+    ASSERT_EQ(model.getBoolValue(y, nullptr), false);
+}
+
+TEST(TestSMTLib, TestModelFloat) {
+    using namespace logicbase;
+
+    std::stringstream ss;
+
+    std::string output = "(\n"
+                         "(define-fun x () Real 1.0)\n"
+                         "(define-fun y () Real 0.7)\n"
+                         ")\n";
+
+    smtliblogic::SMTLibLogicModel model(output);
+
+    std::unique_ptr<smtliblogic::SMTLogicBlock> const smtLibLogic = std::make_unique<smtliblogic::SMTLogicBlock>(false, ss);
+    LogicTerm                                         x           = smtLibLogic->makeVariable("x", CType::BOOL);
+    LogicTerm                                         y           = smtLibLogic->makeVariable("y", CType::BOOL);
+
+    ASSERT_EQ(model.getRealValue(x, nullptr), 1);
+    ASSERT_EQ(model.getRealValue(y, nullptr), 0.7);
+}
+
+TEST(TestSMTLib, TestModelBitVector) {
+    using namespace logicbase;
+
+    std::stringstream ss;
+
+    std::string output = "(\n"
+                         "(define-fun x () (_ BitVector 8) #x00)\n"
+                         "(define-fun y () (_ BitVector 8) #x10)\n"
+                         ")\n";
+
+    smtliblogic::SMTLibLogicModel model(output);
+
+    std::unique_ptr<smtliblogic::SMTLogicBlock> const smtLibLogic = std::make_unique<smtliblogic::SMTLogicBlock>(false, ss);
+    LogicTerm                                         x           = smtLibLogic->makeVariable("x", CType::BITVECTOR, 8);
+    LogicTerm                                         y           = smtLibLogic->makeVariable("y", CType::BITVECTOR, 8);
+
+    ASSERT_EQ(model.getBitvectorValue(x, nullptr), 0);
+    ASSERT_EQ(model.getBitvectorValue(y, nullptr), 2);
 }
