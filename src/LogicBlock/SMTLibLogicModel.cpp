@@ -38,7 +38,7 @@ int smtliblogic::SMTLibLogicModel::getIntValue(const logicbase::LogicTerm& a, lo
     std::string const value = getTermValue(a);
     const auto        type  = getTermType(a);
     if (type != "Int") {
-        return 0;
+        throw std::runtime_error("SMTLibLogicModel::getIntValue: type mismatch");
     }
     if (value.empty()) {
         return 0;
@@ -49,7 +49,7 @@ bool smtliblogic::SMTLibLogicModel::getBoolValue(const logicbase::LogicTerm& a, 
     std::string const value = getTermValue(a);
     const auto        type  = getTermType(a);
     if (type != "Bool") {
-        return false;
+        throw std::runtime_error("SMTLibLogicModel::getBoolValue: type mismatch");
     }
     if (value.empty()) {
         return false;
@@ -60,7 +60,7 @@ double smtliblogic::SMTLibLogicModel::getRealValue(const logicbase::LogicTerm& a
     std::string const value = getTermValue(a);
     const auto        type  = getTermType(a);
     if (type != "Real") {
-        return 0.0;
+        throw std::runtime_error("SMTLibLogicModel::getRealValue: type mismatch");
     }
     if (value.empty()) {
         return 0.0;
@@ -79,13 +79,13 @@ uint64_t smtliblogic::SMTLibLogicModel::getBitvectorValue(const logicbase::Logic
     if (std::regex_search(type, m, typeRegex)) {
         if (m.size() == 2) {
             if (std::stoi(m[1]) != a.getBitVectorSize()) {
-                return 0;
+                throw std::runtime_error("SMTLibLogicModel::getBitvectorValue: bitvector size mismatch");
             }
         } else {
-            return 0;
+            throw std::runtime_error("SMTLibLogicModel::getBitvectorValue: bitvector size not found");
         }
     } else {
-        return 0;
+        throw std::runtime_error("SMTLibLogicModel::getBitvectorValue: bitvector type not found");
     }
     const auto regex = std::regex(R"(#x(\d+))");
 

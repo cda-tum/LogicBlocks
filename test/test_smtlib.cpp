@@ -453,3 +453,29 @@ TEST(TestSMTLib, TestModelBitVector) {
     ASSERT_EQ(model.getBitvectorValue(x, nullptr), 0);
     ASSERT_EQ(model.getBitvectorValue(y, nullptr), 2);
 }
+
+TEST(TestSMTLib, TestModelGetValue) {
+    using namespace logicbase;
+
+    std::stringstream ss;
+
+    std::string output = "(\n"
+                         "(define-fun x () (_ BitVector 8) #x00)\n"
+                         "(define-fun y () Int 1)\n"
+                         "(define-fun z () Bool true)\n"
+                         "(define-fun a () Real 1.0)\n"
+                         ")\n";
+
+    smtliblogic::SMTLibLogicModel model(output);
+
+    std::unique_ptr<smtliblogic::SMTLogicBlock> const smtLibLogic = std::make_unique<smtliblogic::SMTLogicBlock>(false, ss);
+    LogicTerm                                         x           = smtLibLogic->makeVariable("x", CType::BITVECTOR, 8);
+    LogicTerm                                         y           = smtLibLogic->makeVariable("y", CType::INT);
+    LogicTerm                                         z           = smtLibLogic->makeVariable("z", CType::BOOL);
+    LogicTerm                                         a           = smtLibLogic->makeVariable("a", CType::REAL);
+
+    ASSERT_EQ(model.getValue(x, nullptr).getBitVectorValue(), 0);
+    ASSERT_EQ(model.getValue(y, nullptr).getIntValue(), 1);
+    ASSERT_EQ(model.getValue(z, nullptr).getBoolValue(), true);
+    ASSERT_EQ(model.getValue(a, nullptr).getFloatValue(), 1.0);
+}
