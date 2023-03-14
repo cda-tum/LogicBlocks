@@ -21,11 +21,11 @@ namespace smtliblogic {
     public:
         SMTLibLogicModel(std::string modelString):
             modelString(std::move(modelString)) {}
-        int       getIntValue(const LogicTerm& a, LogicBlock* lb) override;
-        LogicTerm getValue(const LogicTerm& a, LogicBlock* lb) override;
-        bool      getBoolValue(const LogicTerm& a, LogicBlock* lb) override;
-        double    getRealValue(const LogicTerm& a, LogicBlock* lb) override;
-        uint64_t  getBitvectorValue(const LogicTerm& a, LogicBlock* lb) override;
+        int       getIntValue(const LogicTerm& a, [[maybe_unused]] LogicBlock* lb) override;
+        LogicTerm getValue(const LogicTerm& a, [[maybe_unused]] LogicBlock* lb) override;
+        bool      getBoolValue(const LogicTerm& a, [[maybe_unused]] LogicBlock* lb) override;
+        double    getRealValue(const LogicTerm& a, [[maybe_unused]] LogicBlock* lb) override;
+        uint64_t  getBitvectorValue(const LogicTerm& a, [[maybe_unused]] LogicBlock* lb) override;
 
         std::string getModelString() const { return modelString; }
 

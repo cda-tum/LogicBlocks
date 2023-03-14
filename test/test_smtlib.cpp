@@ -491,6 +491,24 @@ TEST(TestSMTLib, TestModelNotAVariable) {
     ASSERT_THROW(model.getValue(LogicTerm(true), nullptr), std::runtime_error);
 }
 
+TEST(TestSMTLib, TestModelUnsupportedCType) {
+    std::stringstream ss;
+
+    const std::string output = "(\n"
+                               "(define-fun x () (_ BitVector 8) #x00)\n"
+                               "(define-fun y () Int 1)\n"
+                               "(define-fun z () Bool true)\n"
+                               "(define-fun a () Real 1.0)\n"
+                               ")\n";
+
+    smtliblogic::SMTLibLogicModel model(output);
+
+    const auto      smtLibLogic = std::make_unique<smtliblogic::SMTLogicBlock>(false, ss);
+    const LogicTerm x           = smtLibLogic->makeVariable("x", CType::ARRAY);
+
+    ASSERT_THROW(model.getValue(x, nullptr), std::runtime_error);
+}
+
 TEST(TestSMTLib, TestModelGetValue) {
     std::stringstream ss;
 

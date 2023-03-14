@@ -30,7 +30,7 @@ std::string smtliblogic::SMTLibLogicModel::getTermValue(const logicbase::LogicTe
 
     return {};
 }
-int smtliblogic::SMTLibLogicModel::getIntValue(const logicbase::LogicTerm& a, logicbase::LogicBlock* lb) {
+int smtliblogic::SMTLibLogicModel::getIntValue(const logicbase::LogicTerm& a, [[maybe_unused]] logicbase::LogicBlock* lb) {
     std::string const value = getTermValue(a);
     const auto        type  = getTermType(a);
     if (type != "Int") {
@@ -41,7 +41,7 @@ int smtliblogic::SMTLibLogicModel::getIntValue(const logicbase::LogicTerm& a, lo
     }
     return std::stoi(value);
 }
-bool smtliblogic::SMTLibLogicModel::getBoolValue(const logicbase::LogicTerm& a, logicbase::LogicBlock* lb) {
+bool smtliblogic::SMTLibLogicModel::getBoolValue(const logicbase::LogicTerm& a, [[maybe_unused]] logicbase::LogicBlock* lb) {
     std::string const value = getTermValue(a);
     const auto        type  = getTermType(a);
     if (type != "Bool") {
@@ -52,7 +52,7 @@ bool smtliblogic::SMTLibLogicModel::getBoolValue(const logicbase::LogicTerm& a, 
     }
     return value == "true";
 }
-double smtliblogic::SMTLibLogicModel::getRealValue(const logicbase::LogicTerm& a, logicbase::LogicBlock* lb) {
+double smtliblogic::SMTLibLogicModel::getRealValue(const logicbase::LogicTerm& a, [[maybe_unused]] logicbase::LogicBlock* lb) {
     std::string const value = getTermValue(a);
     const auto        type  = getTermType(a);
     if (type != "Real") {
@@ -63,7 +63,7 @@ double smtliblogic::SMTLibLogicModel::getRealValue(const logicbase::LogicTerm& a
     }
     return std::stod(value);
 }
-uint64_t smtliblogic::SMTLibLogicModel::getBitvectorValue(const logicbase::LogicTerm& a, logicbase::LogicBlock* lb) {
+uint64_t smtliblogic::SMTLibLogicModel::getBitvectorValue(const logicbase::LogicTerm& a, [[maybe_unused]] logicbase::LogicBlock* lb) {
     std::string const value = getTermValue(a);
     if (value.empty()) {
         return 0;
