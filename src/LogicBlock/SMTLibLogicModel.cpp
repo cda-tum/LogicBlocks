@@ -1,16 +1,13 @@
 
 #include "LogicBlock/SMTLibLogicModel.hpp"
 
-#include <regex>
-
 std::string smtliblogic::SMTLibLogicModel::getTermString(const LogicTerm& a) {
     std::stringstream ss(modelString);
     std::string       line;
 
-    const auto  regex = std::regex("\\(define-fun (.*) \\(\\) (.*) (.*)\\)");
     std::smatch m;
     while (std::getline(ss, line)) {
-        if (std::regex_search(line, m, regex)) {
+        if (std::regex_search(line, m, lineRegex)) {
             if (m.size() == 4) {
                 if (m[1] == a.getName()) {
                     return line;
@@ -23,10 +20,9 @@ std::string smtliblogic::SMTLibLogicModel::getTermString(const LogicTerm& a) {
 std::string smtliblogic::SMTLibLogicModel::getTermValue(const logicbase::LogicTerm& a) {
     std::string const termString = getTermString(a);
 
-    const auto  regex = std::regex(R"(\(define-fun (.*) \(\) (.*) (.*)\))");
     std::smatch m;
 
-    if (std::regex_search(termString, m, regex)) {
+    if (std::regex_search(termString, m, lineRegex)) {
         if (m.size() == 4) {
             return m[3];
         }
@@ -38,7 +34,7 @@ int smtliblogic::SMTLibLogicModel::getIntValue(const logicbase::LogicTerm& a, lo
     std::string const value = getTermValue(a);
     const auto        type  = getTermType(a);
     if (type != "Int") {
-        throw std::runtime_error("SMTLibLogicModel::getIntValue: type mismatch");
+        throw std::runtime_error("Type mismatch, expected int got " + type);
     }
     if (value.empty()) {
         return 0;
@@ -49,7 +45,7 @@ bool smtliblogic::SMTLibLogicModel::getBoolValue(const logicbase::LogicTerm& a, 
     std::string const value = getTermValue(a);
     const auto        type  = getTermType(a);
     if (type != "Bool") {
-        throw std::runtime_error("SMTLibLogicModel::getBoolValue: type mismatch");
+        throw std::runtime_error("Type mismatch, expected bool got " + type);
     }
     if (value.empty()) {
         return false;
@@ -60,7 +56,7 @@ double smtliblogic::SMTLibLogicModel::getRealValue(const logicbase::LogicTerm& a
     std::string const value = getTermValue(a);
     const auto        type  = getTermType(a);
     if (type != "Real") {
-        throw std::runtime_error("SMTLibLogicModel::getRealValue: type mismatch");
+        throw std::runtime_error("Type mismatch, expected real got " + type);
     }
     if (value.empty()) {
         return 0.0;
@@ -74,22 +70,20 @@ uint64_t smtliblogic::SMTLibLogicModel::getBitvectorValue(const logicbase::Logic
     }
     const auto type = getTermType(a);
 
-    const auto  typeRegex = std::regex(R"(\(_ BitVector (\d+)\))");
     std::smatch m;
-    if (std::regex_search(type, m, typeRegex)) {
+    if (std::regex_search(type, m, bvTypeRegex)) {
         if (m.size() == 2) {
             if (std::stoi(m[1]) != a.getBitVectorSize()) {
-                throw std::runtime_error("SMTLibLogicModel::getBitvectorValue: bitvector size mismatch");
+                throw std::runtime_error("bitvector size mismatch");
             }
         } else {
-            throw std::runtime_error("SMTLibLogicModel::getBitvectorValue: bitvector size not found");
+            throw std::runtime_error("bitvector size not found");
         }
     } else {
-        throw std::runtime_error("SMTLibLogicModel::getBitvectorValue: bitvector type not found");
+        throw std::runtime_error("Type mismatch, expected bitvector got " + type);
     }
-    const auto regex = std::regex(R"(#x(\d+))");
 
-    if (std::regex_search(value, m, regex)) {
+    if (std::regex_search(value, m, bvValueRegex)) {
         if (m.size() == 2) {
             return std::stoull(m[1], 0, 2);
         }
@@ -98,7 +92,7 @@ uint64_t smtliblogic::SMTLibLogicModel::getBitvectorValue(const logicbase::Logic
 }
 logicbase::LogicTerm smtliblogic::SMTLibLogicModel::getValue(const logicbase::LogicTerm& a, logicbase::LogicBlock* lb) {
     if (a.getOpType() != OpType::Variable) {
-        throw std::runtime_error("TermInterface::getValue: not a variable");
+        throw std::runtime_error("Not a variable");
     }
     if (a.getCType() == CType::BOOL) {
         return LogicTerm(getBoolValue(a, lb));
@@ -113,15 +107,14 @@ logicbase::LogicTerm smtliblogic::SMTLibLogicModel::getValue(const logicbase::Lo
         return {getBitvectorValue(a, lb), a.getBitVectorSize()};
     }
     throw std::runtime_error(
-            "TermInterface::getValue: not supported for this CType");
+            "Not supported for this CType " + std::to_string(static_cast<int>(a.getCType())));
 }
 std::string smtliblogic::SMTLibLogicModel::getTermType(const logicbase::LogicTerm& a) {
     std::string const termString = getTermString(a);
 
-    const auto  regex = std::regex(R"(\(define-fun (.*) \(\) (.*) (.*)\))");
     std::smatch m;
 
-    if (std::regex_search(termString, m, regex)) {
+    if (std::regex_search(termString, m, lineRegex)) {
         if (m.size() == 4) {
             return m[2];
         }

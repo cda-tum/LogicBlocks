@@ -1,10 +1,10 @@
-#ifndef LOGICBLOCKS_SMTLIBLOGICMODEL_HPP
-#define LOGICBLOCKS_SMTLIBLOGICMODEL_HPP
+#pragma once
 
 #include "LogicBlock.hpp"
 #include "LogicBlock/Model.hpp"
 #include "LogicBlock/SMTLibLogicBlock.hpp"
 
+#include <regex>
 #include <utility>
 
 namespace smtliblogic {
@@ -13,6 +13,10 @@ namespace smtliblogic {
     class SMTLibLogicModel: public Model {
     protected:
         std::string modelString;
+
+        const std::basic_regex<char> lineRegex    = std::regex(R"(\(define-fun (.*) \(\) (.*) (.*)\))");
+        const std::basic_regex<char> bvTypeRegex  = std::regex(R"(\(_ BitVector (\d+)\))");
+        const std::basic_regex<char> bvValueRegex = std::regex(R"(#x(\d+))");
 
     public:
         SMTLibLogicModel(std::string modelString):
@@ -31,4 +35,3 @@ namespace smtliblogic {
         std::string getTermValue(const LogicTerm& a);
     };
 } // namespace smtliblogic
-#endif //LOGICBLOCKS_SMTLIBLOGICMODEL_HPP
