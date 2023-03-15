@@ -294,10 +294,7 @@ namespace smtliblogic {
                 return "(bvxor " + convert(term.getNodes()[0]) + " " + convert(term.getNodes()[1]) + ")";
             case OpType::BitEq:
                 return "(= " + convert(term.getNodes()[0]) + " " + convert(term.getNodes()[1]) + ")";
-            case OpType::None:
-            case OpType::CALL:
-            case OpType::GET:
-            case OpType::SET: break;
+            default: break;
         }
         return "";
     }
