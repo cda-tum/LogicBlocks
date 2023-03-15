@@ -8,11 +8,7 @@
 
 using namespace logicbase;
 
-class TestSMTLib: public testing::TestWithParam<logicbase::OpType> {
-protected:
-    void SetUp() override {
-    }
-};
+class TestSMTLib: public testing::TestWithParam<logicbase::OpType> {};
 
 TEST(TestSMTLib, TestPrint) {
     const auto smtLibLogic = std::make_unique<smtliblogic::SMTLogicBlock>(false, std::cout);
