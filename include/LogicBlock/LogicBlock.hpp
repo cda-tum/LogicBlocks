@@ -3,7 +3,7 @@
 
 #include "LogicTerm/LogicTerm.hpp"
 #include "Model.hpp"
-#include "version.h"
+#include "version.hpp"
 
 #include <iostream>
 #include <set>
