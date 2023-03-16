@@ -11,9 +11,8 @@ project(
   VERSION 1.3.5
   DESCRIPTION "lb-core")
 
-configure_file(
-  "${${PROJECT_NAME}_SOURCE_DIR}/include/version.h.in"
-  "${${PROJECT_NAME}_SOURCE_DIR}/include/version.h")
+configure_file("${${PROJECT_NAME}_SOURCE_DIR}/include/version.h.in"
+               "${${PROJECT_NAME}_SOURCE_DIR}/include/version.h")
 
 # enable organization of targets into folders
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
