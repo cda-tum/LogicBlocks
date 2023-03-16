@@ -18,7 +18,7 @@ add_library(
   ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicUtil/util_logicblock.hpp
   ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/logging.hpp
   ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/csv_util.hpp
-  ${${PROJECT_NAME}_SOURCE_DIR}/include/version.h)
+  ${${PROJECT_NAME}_SOURCE_DIR}/include/version.hpp)
 
 # set include directories
 target_include_directories(LogicTerm_lib PUBLIC ${PROJECT_SOURCE_DIR}/include)
