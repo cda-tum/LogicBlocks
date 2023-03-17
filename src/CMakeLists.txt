@@ -17,7 +17,8 @@ add_library(
   ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicUtil/util_logicterm.hpp
   ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicUtil/util_logicblock.hpp
   ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/logging.hpp
-  ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/csv_util.hpp)
+  ${${PROJECT_NAME}_SOURCE_DIR}/include/utils/csv_util.hpp
+  ${${PROJECT_NAME}_SOURCE_DIR}/include/version.hpp)
 
 # set include directories
 target_include_directories(LogicTerm_lib PUBLIC ${PROJECT_SOURCE_DIR}/include)
@@ -74,7 +75,9 @@ add_library(
   SMTLibLogic
   ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/LogicBlock.hpp
   ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/SMTLibLogicBlock.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/LogicBlock/SMTLibLogicBlock.cpp)
+  ${CMAKE_CURRENT_SOURCE_DIR}/LogicBlock/SMTLibLogicBlock.cpp
+  ${${PROJECT_NAME}_SOURCE_DIR}/include/LogicBlock/SMTLibLogicModel.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/LogicBlock/SMTLibLogicModel.cpp)
 target_link_libraries(SMTLibLogic PUBLIC LogicTerm_lib)
 add_library(logicblocks::SMTLibLogic ALIAS SMTLibLogic)
 
