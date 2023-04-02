@@ -248,7 +248,7 @@ bool TermImpl::deepEquals(const TermImpl& other) const {
             return false;
         }
     }
-    return this->getID() == other.getID();
+    return true;
 }
 void TermImpl::prettyPrint(std::ostream& os, int32_t printDepth, bool isNeg, bool printNL, bool lastNL) const {
     if (!isNeg) {
