@@ -22,7 +22,7 @@ namespace z3logic {
         std::unordered_map<uint64_t, std::vector<std::pair<bool, z3::expr>>> variables;
         std::unordered_map<LogicTerm, std::vector<std::pair<bool, z3::expr>>, TermHash,
                            TermHash>
-                     cache{};
+                                     cache{};
         std::shared_ptr<z3::context> ctx;
 
         bool producedInstance = false;
@@ -63,7 +63,7 @@ namespace z3logic {
     class Z3LogicBlock: public LogicBlock, public Z3Base {
     protected:
         std::shared_ptr<z3::solver> solver;
-        void        internalReset() override;
+        void                        internalReset() override;
 
     public:
         Z3LogicBlock(std::shared_ptr<z3::context> context, std::shared_ptr<z3::solver> sol, bool convert = true):
@@ -91,7 +91,7 @@ namespace z3logic {
     class Z3LogicOptimizer: public LogicBlockOptimizer, public Z3Base {
     private:
         std::shared_ptr<z3::optimize> optimizer;
-        void          internalReset() override;
+        void                          internalReset() override;
 
     public:
         Z3LogicOptimizer(std::shared_ptr<z3::context> context, std::shared_ptr<z3::optimize> opt,

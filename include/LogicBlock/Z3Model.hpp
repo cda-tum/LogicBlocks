@@ -11,7 +11,7 @@ namespace z3logic {
 
     class Z3Model: public Model {
     protected:
-        std::shared_ptr<z3::model>    model;
+        std::shared_ptr<z3::model>   model;
         std::shared_ptr<z3::context> ctx;
 
     public:

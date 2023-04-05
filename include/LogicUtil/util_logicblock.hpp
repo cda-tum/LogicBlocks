@@ -93,9 +93,9 @@ namespace logicutil {
 
     inline std::unique_ptr<LogicBlock> getZ3LogicBlock(bool& success, bool convertWhenAssert, const Params& params = Params()) {
 #ifdef Z3_FOUND
-        auto c = std::make_shared<z3::context>();
-        auto slv = std::make_shared<z3::solver>(*c);
-        z3::params         p(*c);
+        auto       c   = std::make_shared<z3::context>();
+        auto       slv = std::make_shared<z3::solver>(*c);
+        z3::params p(*c);
         setZ3Params(p, params);
         slv->set(p);
         success = true;
@@ -109,9 +109,9 @@ namespace logicutil {
 
     inline std::unique_ptr<LogicBlockOptimizer> getZ3LogicOptimizer(bool& success, bool convertWhenAssert, const Params& params = Params()) {
 #ifdef Z3_FOUND
-        auto c = std::make_shared<z3::context>();
-        auto opt = std::make_shared<z3::optimize>(*c);
-        z3::params          p(*c);
+        auto       c   = std::make_shared<z3::context>();
+        auto       opt = std::make_shared<z3::optimize>(*c);
+        z3::params p(*c);
         setZ3Params(p, params);
         opt->set(p);
         success = true;

@@ -1,5 +1,6 @@
-#include "LogicBlock/Z3Logic.hpp"
 #include "LogicBlock/Z3Model.hpp"
+
+#include "LogicBlock/Z3Logic.hpp"
 
 #include <z3++.h>
 
