@@ -14,8 +14,8 @@ protected:
 TEST(TestZ3Opt, ConstructDestruct) {
     using namespace logicbase;
 
-    z3::context  ctx{};
-    z3::optimize opt{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::optimize> opt = std::make_shared<z3::optimize>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicOptimizer> z3logic = std::make_unique<z3logic::Z3LogicOptimizer>(ctx, opt, false);
 
@@ -37,8 +37,8 @@ TEST(TestZ3Opt, ConstructDestruct) {
 TEST(TestZ3Opt, SimpleTrue) {
     using namespace logicbase;
 
-    z3::context  ctx{};
-    z3::optimize opt{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::optimize> opt = std::make_shared<z3::optimize>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicOptimizer> z3logic = std::make_unique<z3logic::Z3LogicOptimizer>(ctx, opt, false);
 
@@ -157,8 +157,8 @@ TEST(TestZ3Opt, SimpleTrue) {
 TEST(TestZ3Opt, SimpleFalse) {
     using namespace logicbase;
 
-    z3::context  ctx{};
-    z3::optimize opt{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::optimize> opt = std::make_shared<z3::optimize>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicOptimizer> z3logic = std::make_unique<z3logic::Z3LogicOptimizer>(ctx, opt, false);
 
@@ -304,8 +304,8 @@ TEST(TestZ3Opt, SimpleFalse) {
 TEST(TestZ3Opt, IntBase) {
     using namespace logicbase;
 
-    z3::context  ctx{};
-    z3::optimize opt{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::optimize> opt = std::make_shared<z3::optimize>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicOptimizer> z3logic = std::make_unique<z3logic::Z3LogicOptimizer>(ctx, opt, false);
 
@@ -419,8 +419,8 @@ TEST(TestZ3Opt, IntBase) {
 TEST(TestZ3Opt, IntNumbers) {
     using namespace logicbase;
 
-    z3::context  ctx{};
-    z3::optimize opt{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::optimize> opt = std::make_shared<z3::optimize>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicOptimizer> z3logic = std::make_unique<z3logic::Z3LogicOptimizer>(ctx, opt, false);
 
@@ -536,9 +536,8 @@ TEST(TestZ3Opt, IntNumbers) {
 TEST(TestZ3Opt, AMOAndExactlyOneNaive) {
     {
         using namespace logicbase;
-
-        z3::context  ctx{};
-        z3::optimize opt{ctx};
+        std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+        std::shared_ptr<z3::optimize> opt = std::make_shared<z3::optimize>(*ctx);
 
         std::unique_ptr<z3logic::Z3LogicOptimizer> z3logic = std::make_unique<z3logic::Z3LogicOptimizer>(ctx, opt, false);
 

@@ -14,8 +14,9 @@ protected:
 TEST(TestZ3, ConstructDestruct) {
     using namespace logicbase;
 
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, false);
 
@@ -26,8 +27,8 @@ TEST(TestZ3, ConstructDestruct) {
 TEST(TestZ3, TestPrint) {
     using namespace logicbase;
 
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, false);
 
@@ -48,8 +49,8 @@ TEST(TestZ3, TestPrint) {
 TEST(TestZ3, SimpleTrue) {
     using namespace logicbase;
 
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     z3logic::Z3LogicBlock z3logic(ctx, solver, true);
 
@@ -194,8 +195,8 @@ TEST(TestZ3, SimpleTrue) {
 TEST(TestZ3, SimpleFalse) {
     using namespace logicbase;
 
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     z3logic::Z3LogicBlock z3logic(ctx, solver, false);
 
@@ -341,8 +342,8 @@ TEST(TestZ3, SimpleFalse) {
 TEST(TestZ3, IntBase) {
     using namespace logicbase;
 
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     z3logic::Z3LogicBlock z3logic(ctx, solver, false);
 
@@ -456,8 +457,9 @@ TEST(TestZ3, IntBase) {
 TEST(TestZ3, IntNumbers) {
     using namespace logicbase;
 
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     z3logic::Z3LogicBlock z3logic(ctx, solver, false);
 
@@ -573,8 +575,8 @@ TEST(TestZ3, IntNumbers) {
 TEST(TestZ3, AMOAndExactlyOneNaive) {
     using namespace logicbase;
 
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, false);
 
@@ -618,8 +620,8 @@ TEST(TestZ3, AMOAndExactlyOneCMDR) {
 
     int n = 22;
 
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, false);
 
@@ -663,8 +665,8 @@ TEST(TestZ3, AMOAndExactlyOneBimander) {
 
     int n = 11;
 
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, false);
 
@@ -708,8 +710,8 @@ TEST(TestZ3, BuildBDDTest) {
 
     int n = 23;
 
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, false);
 
@@ -741,8 +743,8 @@ TEST(TestZ3, BuildBDDTest) {
 TEST(TestZ3, TestBasicModel) {
     using namespace logicbase;
 
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, false);
 
@@ -777,9 +779,9 @@ TEST(TestZ3, TestBasicModel) {
 
 TEST(TestZ3, TestVariableConversionsToBool) {
     using namespace logicbase;
-
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+    
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, true);
 
@@ -802,8 +804,8 @@ TEST(TestZ3, TestVariableConversionsToBool) {
 TEST(TestZ3, TestVariableConversionsToBV) {
     using namespace logicbase;
 
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, true);
 
@@ -826,8 +828,8 @@ TEST(TestZ3, TestVariableConversionsToBV) {
 TEST(TestZ3, TestVariableConversionsToInt) {
     using namespace logicbase;
 
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, true);
 
@@ -849,8 +851,8 @@ TEST(TestZ3, TestVariableConversionsToInt) {
 TEST(TestZ3, TestVariableConversionsToReal) {
     using namespace logicbase;
 
-    z3::context ctx{};
-    z3::solver  solver{ctx};
+    std::shared_ptr<z3::context> ctx = std::make_shared<z3::context>();
+    std::shared_ptr<z3::solver> solver = std::make_shared<z3::solver>(*ctx);
 
     std::unique_ptr<z3logic::Z3LogicBlock> z3logic = std::make_unique<z3logic::Z3LogicBlock>(ctx, solver, true);
 
