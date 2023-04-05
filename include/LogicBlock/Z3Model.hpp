@@ -11,11 +11,11 @@ namespace z3logic {
 
     class Z3Model: public Model {
     protected:
-        z3::model    model;
-        z3::context& ctx;
+        std::shared_ptr<z3::model>    model;
+        std::shared_ptr<z3::context> ctx;
 
     public:
-        Z3Model(z3::context& ctx, const z3::model& model):
+        Z3Model(std::shared_ptr<z3::context> ctx, const std::shared_ptr<z3::model>& model):
             model(model), ctx(ctx) {}
         int       getIntValue(const LogicTerm& a, LogicBlock* lb) override;
         LogicTerm getValue(const LogicTerm& a, LogicBlock* lb) override;

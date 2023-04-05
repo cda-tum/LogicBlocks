@@ -23,17 +23,17 @@ namespace z3logic {
         std::unordered_map<LogicTerm, std::vector<std::pair<bool, z3::expr>>, TermHash,
                            TermHash>
                      cache{};
-        z3::context& ctx;
+        std::shared_ptr<z3::context> ctx;
 
         bool producedInstance = false;
 
     public:
-        explicit Z3Base(z3::context& context):
+        explicit Z3Base(std::shared_ptr<z3::context> context):
             ctx(context) {}
         virtual ~Z3Base() = default;
 
         z3::expr     convert(const LogicTerm& a, CType toType = CType::ERRORTYPE);
-        z3::context& getContext() { return ctx; }
+        z3::context& getContext() { return *ctx; }
 
         static z3::expr getExprTerm(uint64_t id, CType type, Z3Base* z3base);
 
@@ -62,11 +62,11 @@ namespace z3logic {
 
     class Z3LogicBlock: public LogicBlock, public Z3Base {
     protected:
-        z3::solver& solver;
+        std::shared_ptr<z3::solver> solver;
         void        internalReset() override;
 
     public:
-        Z3LogicBlock(z3::context& context, z3::solver& sol, bool convert = true):
+        Z3LogicBlock(std::shared_ptr<z3::context> context, std::shared_ptr<z3::solver> sol, bool convert = true):
             LogicBlock(convert), Z3Base(context), solver(sol) {}
         ~Z3LogicBlock() override {
             variables.clear();
@@ -80,7 +80,7 @@ namespace z3logic {
             std::stringstream ss;
             ss << solver;
             try {
-                ctx.check_error();
+                ctx->check_error();
             } catch (const z3::exception& e) {
                 std::cerr << "Z3 reported an exception while trying to dump the internal state: " << e.msg() << std::endl;
             }
@@ -90,11 +90,11 @@ namespace z3logic {
 
     class Z3LogicOptimizer: public LogicBlockOptimizer, public Z3Base {
     private:
-        z3::optimize& optimizer;
+        std::shared_ptr<z3::optimize> optimizer;
         void          internalReset() override;
 
     public:
-        Z3LogicOptimizer(z3::context& context, z3::optimize& opt,
+        Z3LogicOptimizer(std::shared_ptr<z3::context> context, std::shared_ptr<z3::optimize> opt,
                          bool convert = true):
             LogicBlockOptimizer(convert),
             Z3Base(context),
@@ -116,7 +116,7 @@ namespace z3logic {
             std::stringstream ss;
             ss << optimizer;
             try {
-                ctx.check_error();
+                ctx->check_error();
             } catch (const z3::exception& e) {
                 std::cerr << "Z3 reported an exception while trying to dump the internal state: " << e.msg() << std::endl;
             }
