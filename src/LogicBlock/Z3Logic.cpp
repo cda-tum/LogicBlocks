@@ -175,13 +175,13 @@ namespace z3logic {
             for (const auto& clause: a.getNodes()) {
                 clauses.insert(clause);
                 if (convertWhenAssert) {
-                    this->solver->add(convert(clause, CType::BOOL));
+                    this->solver->add(convert(clause, CType::BOOL).simplify());
                 }
             }
         } else {
             clauses.insert(a);
             if (convertWhenAssert) {
-                this->solver->add(convert(a, CType::BOOL));
+                this->solver->add(convert(a, CType::BOOL).simplify());
             }
         }
     }
@@ -193,7 +193,7 @@ namespace z3logic {
 
     void Z3LogicBlock::produceInstance() {
         for (const auto& clause: clauses) {
-            solver->add(convert(clause, CType::BOOL));
+            solver->add(convert(clause, CType::BOOL).simplify());
         }
     }
 
@@ -379,24 +379,24 @@ namespace z3logic {
 
     bool Z3LogicOptimizer::makeMinimize() {
         for (const auto& [term, weight]: weightedTerms) {
-            optimizer->add(convert(LogicTerm::neg(term), CType::BOOL), static_cast<unsigned>(weight));
+            optimizer->add(convert(LogicTerm::neg(term), CType::BOOL).simplify(), static_cast<unsigned>(weight));
         }
         return false;
     }
 
     bool Z3LogicOptimizer::makeMaximize() {
         for (const auto& [term, weight]: weightedTerms) {
-            optimizer->add(convert(term, CType::BOOL), static_cast<unsigned>(weight));
+            optimizer->add(convert(term, CType::BOOL).simplify(), static_cast<unsigned>(weight));
         }
         return false;
     }
 
     bool Z3LogicOptimizer::maximize(const LogicTerm& term) {
-        optimizer->maximize(convert(term, CType::REAL));
+        optimizer->maximize(convert(term, CType::REAL).simplify());
         return true;
     }
     bool Z3LogicOptimizer::minimize(const LogicTerm& term) {
-        optimizer->minimize(convert(term, CType::REAL));
+        optimizer->minimize(convert(term, CType::REAL).simplify());
         return true;
     }
 
@@ -405,13 +405,13 @@ namespace z3logic {
             for (const auto& clause: a.getNodes()) {
                 clauses.insert(clause);
                 if (convertWhenAssert) {
-                    optimizer->add(convert(clause, CType::BOOL));
+                    optimizer->add(convert(clause, CType::BOOL).simplify());
                 }
             }
         } else {
             clauses.insert(a);
             if (convertWhenAssert) {
-                optimizer->add(convert(a, CType::BOOL));
+                optimizer->add(convert(a, CType::BOOL).simplify());
             }
         }
     }
@@ -423,7 +423,7 @@ namespace z3logic {
 
     void Z3LogicOptimizer::produceInstance() {
         for (const auto& clause: clauses) {
-            optimizer->add(convert(clause, CType::BOOL));
+            optimizer->add(convert(clause, CType::BOOL).simplify());
         }
     }
 
