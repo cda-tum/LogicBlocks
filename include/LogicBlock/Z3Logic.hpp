@@ -78,7 +78,7 @@ namespace z3logic {
         void        dumpZ3State(std::ostream& stream);
         std::string dumpInternalSolver() override {
             std::stringstream ss;
-            ss << solver;
+            ss << (*solver);
             try {
                 ctx->check_error();
             } catch (const z3::exception& e) {
@@ -114,7 +114,7 @@ namespace z3logic {
         bool        minimize(const LogicTerm& term) override;
         std::string dumpInternalSolver() override {
             std::stringstream ss;
-            ss << optimizer;
+            ss << (*optimizer);
             try {
                 ctx->check_error();
             } catch (const z3::exception& e) {
