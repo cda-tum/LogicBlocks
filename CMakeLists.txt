@@ -73,7 +73,7 @@ endif()
 add_subdirectory(src)
 
 # add test code
-option(BUILD_LB_TESTS "Also build tests for LogicBlocks project")
+option(BUILD_LB_TESTS "Also build tests for LogicBlocks project" ON)
 if(BUILD_LB_TESTS)
   enable_testing()
   include(GoogleTest)
