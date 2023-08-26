@@ -1,9 +1,5 @@
 # set required cmake version
-cmake_minimum_required(VERSION 3.19)
-
-# This avoids googletest complaining that this (IPO) policy is not set
-cmake_policy(SET CMP0069 NEW)
-set(CMAKE_POLICY_DEFAULT_CMP0069 NEW)
+cmake_minimum_required(VERSION 3.19...3.27)
 
 project(
   logicblocks
@@ -18,16 +14,20 @@ configure_file("${${PROJECT_NAME}_SOURCE_DIR}/cmake/version.hpp.in"
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # configuration options
-option(DEPLOY "Configure for deployment")
 option(COVERAGE "Configure for coverage report generation")
 option(GENERATE_POSITION_INDEPENDENT_CODE "Generate position independent code")
-option(BUILD_LB_TESTS "Also build tests for LogicBlocks project")
 
+option(DEPLOY "Configure for deployment")
 if(DEFINED ENV{DEPLOY})
   set(DEPLOY
       $ENV{DEPLOY}
       CACHE BOOL "Use deployment configuration from environment" FORCE)
   message(STATUS "Setting deployment configuration to '${DEPLOY}' from environment")
+elseif(DEFINED ENV{CI})
+  set(DEPLOY
+      ON
+      CACHE BOOL "Set deployment configuration to ON for CI" FORCE)
+  message(STATUS "Setting deployment configuration to '${DEPLOY}' for CI")
 endif()
 
 # set deployment specific options
@@ -66,11 +66,14 @@ check_submodule_present(plog)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # search for Z3
-find_package(Z3 4.8.15.0)
+if(NOT Z3_FOUND)
+  find_package(Z3 4.8.15)
+endif()
 
 add_subdirectory(src)
 
 # add test code
+option(BUILD_LB_TESTS "Also build tests for LogicBlocks project")
 if(BUILD_LB_TESTS)
   enable_testing()
   include(GoogleTest)
