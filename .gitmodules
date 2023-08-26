@@ -1,6 +1,10 @@
 [submodule "extern/plog"]
 	path = extern/plog
 	url = https://github.com/SergiusTheBest/plog.git
+	branch = master
+	shallow = true
 [submodule "extern/googletest"]
 	path = extern/googletest
 	url = https://github.com/google/googletest.git
+	branch = main
+	shallow = true
