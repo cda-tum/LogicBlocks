@@ -70,8 +70,6 @@ find_package(Z3 4.8.15.0)
 
 add_subdirectory(src)
 
-add_subdirectory(app)
-
 # add test code
 if(BUILD_LB_TESTS)
   enable_testing()
