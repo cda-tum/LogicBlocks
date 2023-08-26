@@ -14,7 +14,7 @@ configure_file("${${PROJECT_NAME}_SOURCE_DIR}/cmake/version.hpp.in"
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # configuration options
-option(COVERAGE "Configure for coverage report generation")
+option(ENABLE_COVERAGE "Configure for coverage report generation")
 option(GENERATE_POSITION_INDEPENDENT_CODE "Generate position independent code")
 
 option(DEPLOY "Configure for deployment")
