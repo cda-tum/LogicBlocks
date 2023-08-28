@@ -42,13 +42,6 @@ repos:
       - id: rst-directive-colons
       - id: rst-inline-touching-normal
 
-  # Run ruff (subsumes pyupgrade, isort, flake8+plugins, and more)
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.0.285
-    hooks:
-      - id: ruff
-        args: ["--fix"]
-
   # Check for spelling
   - repo: https://github.com/codespell-project/codespell
     rev: "v2.2.5"
