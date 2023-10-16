@@ -323,8 +323,8 @@ namespace z3logic {
     }
 
     z3::expr Z3Base::convertOperator(const LogicTerm& a,
-                                     z3::expr (*op)(const z3::expr&),
-                                     CType toType) {
+                                     z3::expr         (*op)(const z3::expr&),
+                                     CType            toType) {
         if (toType == CType::ERRORTYPE) {
             toType = a.getCType();
         }
@@ -334,7 +334,7 @@ namespace z3logic {
     z3::expr Z3Base::convertOperator(const LogicTerm& a, const LogicTerm& b,
                                      z3::expr (*op)(const z3::expr&,
                                                     const z3::expr&),
-                                     CType toType) {
+                                     CType    toType) {
         if (toType == CType::ERRORTYPE) {
             toType = logicutil::getTargetCType(a, b, OpType::None);
         }
@@ -343,16 +343,16 @@ namespace z3logic {
     z3::expr Z3Base::convertOperator(
             const LogicTerm& a, const LogicTerm& b, const LogicTerm& c,
             z3::expr (*op)(const z3::expr&, const z3::expr&, const z3::expr&),
-            CType toType) {
+            CType    toType) {
         toType = logicutil::getTargetCType(a, b, OpType::None);
         toType = logicutil::getTargetCType(toType, c);
         return op(convert(a, CType::BOOL), convert(b, toType), convert(c, toType));
     }
 
     z3::expr Z3Base::convertOperator(const std::vector<LogicTerm>& terms,
-                                     z3::expr (*op)(const z3::expr&,
+                                     z3::expr                      (*op)(const z3::expr&,
                                                     const z3::expr&),
-                                     CType toType) {
+                                     CType                         toType) {
         z3::expr res = convert(static_cast<LogicTerm>(*terms.begin()), toType);
         for (auto it = (terms.begin() + 1); it != terms.end(); ++it) {
             res = op(res, convert(static_cast<LogicTerm>(*it), toType));
