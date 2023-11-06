@@ -45,17 +45,17 @@ namespace z3logic {
 
         z3::expr convertOperator(const LogicTerm& a, const LogicTerm& b,
                                  z3::expr (*op)(const z3::expr&, const z3::expr&),
-                                 CType    toType);
-        z3::expr convertOperator(const LogicTerm& a, z3::expr (*op)(const z3::expr&),
                                  CType toType);
+        z3::expr convertOperator(const LogicTerm& a, z3::expr (*op)(const z3::expr&),
+                                 CType            toType);
         z3::expr convertOperator(const LogicTerm& a, const LogicTerm& b,
                                  const LogicTerm& c,
-                                 z3::expr         (*op)(const z3::expr&, const z3::expr&,
+                                 z3::expr (*op)(const z3::expr&, const z3::expr&,
                                                 const z3::expr&),
-                                 CType            toType);
+                                 CType toType);
         z3::expr convertOperator(const std::vector<LogicTerm>& terms,
-                                 z3::expr                      (*op)(const z3::expr&, const z3::expr&),
-                                 CType                         toType);
+                                 z3::expr (*op)(const z3::expr&, const z3::expr&),
+                                 CType toType);
 
         z3::expr convertConstant(const LogicTerm& a, CType toType);
     };
