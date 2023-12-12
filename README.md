@@ -3,6 +3,9 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/cda-tum/LogicBlocks/ci.yml?branch=main&style=flat-square&logo=github&label=c%2B%2B)](https://github.com/cda-tum/LogicBlocks/actions/workflows/ci.yml)
 [![codecov](https://img.shields.io/codecov/c/github/cda-tum/LogicBlocks?style=flat-square&logo=codecov)](https://codecov.io/gh/cda-tum/LogicBlocks)
 
+> [!NOTE]
+> This project is currently in low maintenance mode. We will still fix bugs and accept pull requests, but we will not actively develop new features.
+
 # LogicBlocks - A Interface Library for SAT/SMT Abstractions written in C++
 
 A interface library for the abstraction of several methods of interaction with SAT/SMT Solvers developed by the [Chair for Design Automation](https://www.cda.cit.tum.de/) at the [Technical University of Munich](https://www.tum.de/).
