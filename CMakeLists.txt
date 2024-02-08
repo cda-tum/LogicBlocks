@@ -1,5 +1,5 @@
 # set required cmake version
-cmake_minimum_required(VERSION 3.19...3.27)
+cmake_minimum_required(VERSION 3.19...3.28)
 
 project(
   logicblocks
@@ -13,9 +13,29 @@ configure_file("${${PROJECT_NAME}_SOURCE_DIR}/cmake/version.hpp.in"
 # enable organization of targets into folders
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+# Set a default build type if none was specified
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to 'Release' as none was specified.")
+  set(CMAKE_BUILD_TYPE
+      Release
+      CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui, ccmake
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel"
+                                               "RelWithDebInfo")
+endif()
+
+# Require C++ standard
+set_property(GLOBAL PROPERTY CMAKE_CXX_STANDARD_REQUIRED ON)
+set_property(GLOBAL PROPERTY CXX_EXTENSIONS OFF)
+
 # configuration options
 option(ENABLE_COVERAGE "Configure for coverage report generation")
-option(GENERATE_POSITION_INDEPENDENT_CODE "Generate position independent code")
+option(GENERATE_POSITION_INDEPENDENT_CODE "Generate position independent code" ON)
+
+# Generate compile_commands.json to make it easier to work with clang based tools
+set(CMAKE_EXPORT_COMPILE_COMMANDS
+    ON
+    CACHE BOOL "Export compile commands" FORCE)
 
 option(DEPLOY "Configure for deployment")
 if(DEFINED ENV{DEPLOY})
@@ -38,42 +58,16 @@ if(DEPLOY)
       CACHE STRING "" FORCE)
 endif()
 
-# check whether the submodule ``modulename`` is correctly cloned in the ``/extern`` directory.
-macro(CHECK_SUBMODULE_PRESENT modulename)
-  if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/${modulename}/CMakeLists.txt")
-    message(
-      FATAL_ERROR
-        "${modulename} submodule not cloned properly. \
-        Please run `git submodule update --init --recursive` \
-        from the main project directory")
-  endif()
-endmacro()
-
-# Set a default build type if none was specified
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message(STATUS "Setting build type to 'Release' as none was specified.")
-  set(CMAKE_BUILD_TYPE
-      Release
-      CACHE STRING "Choose the type of build." FORCE)
-  # Set the possible values of build type for cmake-gui, ccmake
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel"
-                                               "RelWithDebInfo")
-endif()
-
-check_submodule_present(plog)
-
 # Add path for custom modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-# search for Z3
-if(NOT Z3_FOUND)
-  find_package(Z3 4.8.15)
-endif()
+option(BUILD_LB_TESTS "Also build tests for LogicBlocks project" ON)
+
+include(cmake/ExternalDependencies.cmake)
 
 add_subdirectory(src)
 
 # add test code
-option(BUILD_LB_TESTS "Also build tests for LogicBlocks project" ON)
 if(BUILD_LB_TESTS)
   enable_testing()
   include(GoogleTest)

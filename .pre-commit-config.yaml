@@ -30,7 +30,7 @@ repos:
 
   # Handling unwanted unicode characters
   - repo: https://github.com/sirosen/texthooks
-    rev: 0.6.3
+    rev: 0.6.4
     hooks:
       - id: fix-ligatures
       - id: fix-smartquotes
@@ -62,8 +62,6 @@ repos:
     rev: v0.6.13
     hooks:
       - id: cmake-format
-        additional_dependencies: [pyyaml]
-      - id: cmake-lint
         additional_dependencies: [pyyaml]
 
   # Format configuration files with prettier

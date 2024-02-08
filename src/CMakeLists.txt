@@ -1,10 +1,3 @@
-# add logging library target
-add_subdirectory("${PROJECT_SOURCE_DIR}/extern/plog" "extern/plog")
-# the following sets the SYSTEM flag for the include dirs of the plog libs to suppress warnings
-# cmake-lint: disable=C0307
-set_target_properties(plog PROPERTIES INTERFACE_SYSTEM_INCLUDE_DIRECTORIES
-                                      $<TARGET_PROPERTY:plog,INTERFACE_INCLUDE_DIRECTORIES>)
-
 add_library(
   LogicTerm_lib
   ${CMAKE_CURRENT_SOURCE_DIR}/LogicTerm/TermImpl.cpp
@@ -24,11 +17,10 @@ add_library(
 target_include_directories(LogicTerm_lib PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 # add logging library
-target_link_libraries(LogicTerm_lib PUBLIC plog)
+target_link_libraries(LogicTerm_lib PUBLIC plog::plog)
 
 # set required C++ standard and disable compiler specific extensions
 target_compile_features(LogicTerm_lib PUBLIC cxx_std_17)
-set_target_properties(LogicTerm_lib PROPERTIES CMAKE_CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
 
 # enable interprocedural optimization if it is supported
 include(CheckIPOSupported)
@@ -42,11 +34,7 @@ endif()
 if(MSVC)
   target_compile_options(LogicTerm_lib PUBLIC /utf-8)
 else()
-  target_compile_options(LogicTerm_lib PUBLIC -Wall -Wextra $<$<CONFIG:DEBUG>:-Og>)
-  if(BINDINGS)
-    # adjust visibility settings for building Python bindings
-    target_compile_options(LogicTerm_lib PUBLIC -fvisibility=hidden)
-  endif()
+  target_compile_options(LogicTerm_lib PUBLIC -Wall -Wextra -g)
   if(NOT DEPLOY)
     # only include machine-specific optimizations when building for the host machine
     include(CheckCXXCompilerFlag)
@@ -68,12 +56,6 @@ endif()
 if(ENABLE_COVERAGE)
   target_compile_options(LogicTerm_lib PUBLIC --coverage)
   target_link_libraries(LogicTerm_lib PUBLIC --coverage)
-endif()
-
-if(BINDINGS)
-  include(CheckPIESupported)
-  check_pie_supported()
-  set_target_properties(LogicTerm_lib PROPERTIES INTERFACE_POSITION_INDEPENDENT_CODE ON)
 endif()
 
 add_library(
