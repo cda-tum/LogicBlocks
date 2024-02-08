@@ -42,7 +42,7 @@ endif()
 if(MSVC)
   target_compile_options(LogicTerm_lib PUBLIC /utf-8)
 else()
-  target_compile_options(LogicTerm_lib PUBLIC -Wall -Wextra $<$<CONFIG:DEBUG>:-Og>)
+  target_compile_options(LogicTerm_lib PUBLIC -Wall -Wextra -g)
   if(NOT DEPLOY)
     # only include machine-specific optimizations when building for the host machine
     include(CheckCXXCompilerFlag)
