@@ -43,10 +43,6 @@ if(MSVC)
   target_compile_options(LogicTerm_lib PUBLIC /utf-8)
 else()
   target_compile_options(LogicTerm_lib PUBLIC -Wall -Wextra $<$<CONFIG:DEBUG>:-Og>)
-  if(BINDINGS)
-    # adjust visibility settings for building Python bindings
-    target_compile_options(LogicTerm_lib PUBLIC -fvisibility=hidden)
-  endif()
   if(NOT DEPLOY)
     # only include machine-specific optimizations when building for the host machine
     include(CheckCXXCompilerFlag)
