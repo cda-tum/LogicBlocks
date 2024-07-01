@@ -24,7 +24,7 @@ namespace encodings {
 
     struct NestedVar {
         explicit NestedVar(LogicTerm v):
-            var(std::move(v)), list(){};
+            var(std::move(v)), list() {};
         NestedVar(LogicTerm v, std::vector<NestedVar> l):
             var(std::move(v)), list(std::move(l)) {}
         LogicTerm              var = LogicTerm::noneTerm();
