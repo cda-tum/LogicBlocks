@@ -22,7 +22,7 @@ namespace logicbase {
         virtual bool      getBoolValue(const LogicTerm& a, LogicBlock* lb) = 0;
         virtual double    getRealValue(const LogicTerm& a, LogicBlock* lb) = 0;
         virtual uint64_t  getBitvectorValue(const LogicTerm& a,
-                                            LogicBlock*      lb)                = 0;
+                                            LogicBlock*      lb)           = 0;
     };
 } // namespace logicbase
 #endif // LOGICBLOCK_MODEL_H
